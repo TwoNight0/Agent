@@ -15,6 +15,7 @@ public class PlayerControllor : MonoBehaviour
     // ----
 
     // -- variable --
+    [SerializeField, Range(0f, 1f)] float m_fDistanceToGround;
     private float m_verticalVelocity = 0;
     private float m_gravity = 9.81f;
     public float mouseSensitivity = 100f;
@@ -43,10 +44,16 @@ public class PlayerControllor : MonoBehaviour
 
     // -- Status
     private float m_dmgPaladin = 30.0f;
+    private float m_moveSpeed = 2f;
     private float maxhp = 400f;
     private float hp = 0f;
-    private float m_moveSpeed = 2f;
-    [SerializeField, Range(0f, 1f)] float m_fDistanceToGround;
+    
+    //데미지 공식
+    // ((플레이어 기본데미지 + (무기데미지 * 크리티컬함수) + ( 마법데미지 * 크리티컬함수 ) * 악세서리 추가데미지 ) 
+
+
+
+
     // ---
 
     // -- keySetting -- 변경하는함수도 만들자
