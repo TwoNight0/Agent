@@ -11,19 +11,19 @@ using UnityEngine.UI;
 // - x 버튼을 눌러 닫기
 // 
 
+
 public class InventoryUIMng : MonoBehaviour
 {
     public static InventoryUIMng Instance;
-    //private DataArmorItem DataArmorItem = new DataArmorItem();
-    //private DataWeaponItem DataWeaponItem = new DataWeaponItem();
 
     //실제적인 인벤토리공간 이걸 capacity 만큼만 운용되게 만들어야해
     public List<ItemSlotScript> ListSlot = new List<ItemSlotScript>();
     private EventSystem m_eventSystem;
-
     //
+
     ItemSlotScript firstItemSlot = null;
     ItemSlotScript secondItemSlot = null;
+    public RectTransform DragImage = new RectTransform();
 
     private void Awake()
     {
@@ -127,22 +127,15 @@ public class InventoryUIMng : MonoBehaviour
                 //아이템 창이 가득 찼다고 알리고 아이템을 먹지안도록해야함
             }
         }
-        
-
-        //ItemSlotScript itemSlot = GetComponent<ItemSlotScript>();
-        //itemSlot.icon = data.icon;
-        //itemSlot.PubItemCode = _itemCode;
     }
 
     //레이케스트를 쏨 -> 슬롯을 선택 슬롯에 대한 스크립트를 가져옴 -> 선택된슬롯이라는 곳에 잠시저장. 이후선택된애를 교환
-    private void slotMove()
-    {
-   
+    private void slotMove(){
+        
         PointerEventData pointEvent = new PointerEventData(m_eventSystem);
-
+        
         //첫번째 슬롯
         if (Input.GetMouseButtonDown(0)){
-            //ItemSlotScript fristItemSlot = null;
             pointEvent.position = Input.mousePosition;
             List<RaycastResult> raycastResults = new List<RaycastResult>(); //레이케스트 리스트
 
@@ -162,9 +155,20 @@ public class InventoryUIMng : MonoBehaviour
             // 마우스 up => 도착위치 선택 , 시작위치와 도착위치에 있는 슬롯의 정보를 서로 바꿈(바꿔야 할 것 : 아이템code, 아이템 account, 아이템icon)
         }
 
+        if (Input.GetMouseButton(0)){ //마우스를 누르고있으면 이미지가 계속따라오는 함수
+            if (firstItemSlot != null) {
+                DragImage.gameObject.SetActive(true);
+                DragImage.position = Input.mousePosition;
+                Image DI = DragImage.GetComponent<Image>();
+                DI.sprite = firstItemSlot.icon.sprite;
+            }
+        }
+
+
+
         //두번째 슬롯
         if (Input.GetMouseButtonUp(0)){
-            //ItemSlotScript sceondItemSlot = null;
+            DragImage.gameObject.SetActive(false);
             pointEvent.position = Input.mousePosition;
             List<RaycastResult> raycastResults = new List<RaycastResult>(); //레이케스트 리스트
 
@@ -173,6 +177,7 @@ public class InventoryUIMng : MonoBehaviour
 
             if (result.gameObject == null)
             {//예외처리
+                firstItemSlot = null;
                 return;
             }
             else
@@ -203,10 +208,9 @@ public class InventoryUIMng : MonoBehaviour
                     firstItemSlot.icon.sprite = secondItemSlot.icon.sprite;
                     secondItemSlot.icon.sprite = tmpicon;
 
-
-
-
+                    firstItemSlot = null;
                 }
+                
             }
             
         }
