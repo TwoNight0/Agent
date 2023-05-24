@@ -74,7 +74,7 @@ public class InventoryUIMng : MonoBehaviour
     {
         for (int i = 0; i < capacity; i++)
         {
-            createItemSlot("itemSlot");
+            createItemSlot("ItemSlot");
         }
     }
 
@@ -155,8 +155,6 @@ public class InventoryUIMng : MonoBehaviour
             }
         }
 
-
-
         //두번째 슬롯
         if (Input.GetMouseButtonUp(0)){
             DragImage.gameObject.SetActive(false);
@@ -176,25 +174,57 @@ public class InventoryUIMng : MonoBehaviour
 
                 if ((firstItemSlot != secondItemSlot))
                 {
-                    //코드 교환
-                    int temp = firstItemSlot.PubItemCode;
-                    firstItemSlot.PubItemCode = secondItemSlot.PubItemCode;
-                    secondItemSlot.PubItemCode = temp;
+                    //아이템슬롯의 아이템일때
+                    if (secondItemSlot.gameObject.name.Contains("ItemSlot"))
+                    {
+                        //코드 교환
+                        int temp = firstItemSlot.PubItemCode;
+                        firstItemSlot.PubItemCode = secondItemSlot.PubItemCode;
+                        secondItemSlot.PubItemCode = temp;
 
-                    //갯수 교환
-                    int tmp = firstItemSlot.PubAccount;
-                    firstItemSlot.PubAccount = secondItemSlot.PubAccount;
-                    secondItemSlot.PubAccount = tmp;
+                        //갯수 교환
+                        int tmp = firstItemSlot.PubAccount;
+                        firstItemSlot.PubAccount = secondItemSlot.PubAccount;
+                        secondItemSlot.PubAccount = tmp;
 
-                    //텍스트 교환
-                    firstItemSlot.PubText.text = firstItemSlot.PubAccount.ToString();
-                    secondItemSlot.PubText.text = secondItemSlot.PubAccount.ToString();
+                        //텍스트 교환
+                        firstItemSlot.PubText.text = firstItemSlot.PubAccount.ToString();
+                        secondItemSlot.PubText.text = secondItemSlot.PubAccount.ToString();
 
-                    //이미지 교환
-                    Sprite tmpicon;
-                    tmpicon = firstItemSlot.icon.sprite;
-                    firstItemSlot.icon.sprite = secondItemSlot.icon.sprite;
-                    secondItemSlot.icon.sprite = tmpicon;
+                        //이미지 교환
+                        Sprite tmpicon;
+                        tmpicon = firstItemSlot.icon.sprite;
+                        firstItemSlot.icon.sprite = secondItemSlot.icon.sprite;
+                        secondItemSlot.icon.sprite = tmpicon;
+
+                        
+                    }
+
+                    //장비일때
+                    if (secondItemSlot.gameObject.name.Contains("equip"))
+                    {
+                        //코드 교환
+                        int temp = firstItemSlot.PubItemCode;
+                        firstItemSlot.PubItemCode = secondItemSlot.PubItemCode;
+                        secondItemSlot.PubItemCode = temp;
+
+                        //이미지 교환 (1개라면 교환), 1보다많다면 복사
+                        if(firstItemSlot.PubAccount == 1)
+                        {
+                            Sprite tmpicon;
+                            tmpicon = firstItemSlot.icon.sprite;
+                            firstItemSlot.icon.sprite = secondItemSlot.icon.sprite;
+                            secondItemSlot.icon.sprite = tmpicon;
+                        }
+                        else //복사
+                        {
+                            secondItemSlot.icon.sprite = firstItemSlot.icon.sprite;
+                        }
+
+                        //갯수 변경 (1개만 빼야함) 및 다시 텍스트 수정
+                        firstItemSlot.PubAccount--;
+                        firstItemSlot.PubText.text = firstItemSlot.PubAccount.ToString();
+                    }
 
                     firstItemSlot = null;
                 }
@@ -210,6 +240,8 @@ public class InventoryUIMng : MonoBehaviour
     //    ((IDragHandler)Instance).OnDrag(eventData);
     //}
 
+    
+    //마우스포인터가 있는 위치를 레이케스트로 쏘고 리스트에 담고 리스트에서 테그가 같은 것을 골라 알려줌
     public RaycastResult findRaycastObject(PointerEventData pointEvent, string tag_name)
     {
         pointEvent.position = Input.mousePosition;

@@ -11,7 +11,7 @@ public class ItemSlotScript : MonoBehaviour
     [SerializeField] private int Account = 0;
     [SerializeField] public Sprite slotIcon;
     public Image icon;
-    private TextMeshProUGUI text;
+    [SerializeField]  private TextMeshProUGUI text;
 
     public void changeImage(Sprite _sprite) {
         icon.sprite = _sprite;

@@ -2,6 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
+
 public class ItemMng : MonoBehaviour
 {
     public static ItemMng Instance;
@@ -23,12 +24,12 @@ public class ItemMng : MonoBehaviour
     public List<DataWeaponItem> WeaponList = new List<DataWeaponItem>();
 
     #region DataArmor
-    public DataArmorItem fabric_top = new DataArmorItem();
-    public DataArmorItem fabric_bottom = new DataArmorItem();
-    public DataArmorItem leather_top = new DataArmorItem();
-    public DataArmorItem leather_bottom = new DataArmorItem();
-    public DataArmorItem metal_top = new DataArmorItem();
-    public DataArmorItem metal_bottom = new DataArmorItem();
+    public DataArmorItem fabric_up = new DataArmorItem();
+    public DataArmorItem fabric_down = new DataArmorItem();
+    public DataArmorItem leather_up = new DataArmorItem();
+    public DataArmorItem leather_down = new DataArmorItem();
+    public DataArmorItem metal_up = new DataArmorItem();
+    public DataArmorItem metal_down = new DataArmorItem();
     public DataArmorItem shoes = new DataArmorItem();
     #endregion
     #region DataWeapon
@@ -48,12 +49,12 @@ public class ItemMng : MonoBehaviour
         initArmorData();
 
         //이것도 자동화하는 방법이 있긴할거야 제이슨에 이름만적으면되겠끔해서
-        AddItem(ArmorList, fabric_top);
-        AddItem(ArmorList, fabric_bottom);
-        AddItem(ArmorList, leather_top);
-        AddItem(ArmorList, leather_bottom);
-        AddItem(ArmorList, metal_top);
-        AddItem(ArmorList, metal_bottom);
+        AddItem(ArmorList, fabric_up);
+        AddItem(ArmorList, fabric_down);
+        AddItem(ArmorList, leather_up);
+        AddItem(ArmorList, leather_down);
+        AddItem(ArmorList, metal_up);
+        AddItem(ArmorList, metal_down);
         AddItem(ArmorList, shoes);
 
         AddItem(WeaponList, ShotSword);
@@ -74,36 +75,43 @@ public class ItemMng : MonoBehaviour
         _ItemList.Add(_item);
     }
 
-
+    /// <summary>
+    /// 아이템 코드 구성
+    /// 0~1000      재료
+    /// 1001~2000   메인 무기 : 근접(1001~1500), 원거리(1501~2000)  
+    /// 2001~3000   보조 무기 : 근접(2001~2500), 원거리(2501~3000)
+    /// 3001~4000   방어구 : 머리(3001~3200), 바디업(3201~3400), 바디다운(3401~3600), 신발(3601~3800)
+    /// 4001~5000   장신구 : 반지(4001~4500), 목걸이(4501~5000)
+    /// 6001~7000   포션 // 세부포션은 나중에 생각하자
+    /// </summary>
     private void initArmorData()
     {
-        fabric_top.itemCode = 2001;
-        fabric_top.itemName = "fabic_top";
-        fabric_top.defense_magic = 6;
-        fabric_top.icon = Resources.Load<Sprite>("fabricTop");
+        fabric_up.itemCode = 3201;
+        fabric_up.itemName = "fabic_up";
+        fabric_up.defense_magic = 6;
+        fabric_up.icon = Resources.Load<Sprite>("fabricTop");
 
-        fabric_bottom.itemCode = 2011;
-        fabric_bottom.itemName = "fabric_bottom";
-        fabric_bottom.defense_magic = 4;
+        fabric_down.itemCode = 3401;
+        fabric_down.itemName = "fabric_down";
+        fabric_down.defense_magic = 4;
 
-        leather_top.itemCode = 2101;
-        leather_top.itemName = "leather_top";
-        leather_top.defense_physical = 4;
-        leather_top.defense_magic = 4;
+        leather_up.itemCode = 3202;
+        leather_up.itemName = "leather_up";
+        leather_up.defense_physical = 4;
+        leather_up.defense_magic = 4;
 
-        leather_bottom.itemCode = 2111;
-        leather_bottom.itemName = "leather_bottom";
-        leather_bottom.defense_physical = 3;
-        leather_bottom.defense_magic = 3;
+        leather_down.itemCode = 3402;
+        leather_down.itemName = "leather_down";
+        leather_down.defense_physical = 3;
+        leather_down.defense_magic = 3;
 
-        metal_top.itemCode = 2201;
-        metal_top.itemName = "metal_top";
-        metal_top.defense_physical = 10;
+        metal_up.itemCode = 3203;
+        metal_up.itemName = "metal_top";
+        metal_up.defense_physical = 10;
 
-        metal_bottom.itemCode = 2211;
-        metal_bottom.itemName = "metal_bottom";
-        metal_bottom.defense_physical = 8;
-
+        metal_down.itemCode = 3403;
+        metal_down.itemName = "metal_bottom";
+        metal_down.defense_physical = 8;
     }
 
     private void initWeaponData()
