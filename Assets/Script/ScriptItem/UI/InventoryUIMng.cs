@@ -136,12 +136,7 @@ public class InventoryUIMng : MonoBehaviour
         
         //첫번째 슬롯
         if (Input.GetMouseButtonDown(0)){
-            pointEvent.position = Input.mousePosition;
-            List<RaycastResult> raycastResults = new List<RaycastResult>(); //레이케스트 리스트
-
-            EventSystem.current.RaycastAll(pointEvent, raycastResults); //레이케스트로 선택된친구를 리스트에 반환
-            RaycastResult result = raycastResults.Find(x => x.gameObject.tag == "ItemSlot");//리스트 중에서 tag가 ItemSlot인것을 찾음
-
+            RaycastResult result = findRaycastObject(pointEvent, "ItemSlot");//리스트 중에서 tag가 ItemSlot인것을 찾음
             if (result.gameObject == null) {//예외처리
                 return;
             }
@@ -149,10 +144,6 @@ public class InventoryUIMng : MonoBehaviour
                 Debug.Log("첫번째 슬롯 :" + result);
                 firstItemSlot = result.gameObject.GetComponent<ItemSlotScript>();
             }
-
-            // 마우스 donw => 이동 아이템 시작위치 선택
-            // 드래그 중 => 아이콘을 붙들고있게하고
-            // 마우스 up => 도착위치 선택 , 시작위치와 도착위치에 있는 슬롯의 정보를 서로 바꿈(바꿔야 할 것 : 아이템code, 아이템 account, 아이템icon)
         }
 
         if (Input.GetMouseButton(0)){ //마우스를 누르고있으면 이미지가 계속따라오는 함수
@@ -169,11 +160,8 @@ public class InventoryUIMng : MonoBehaviour
         //두번째 슬롯
         if (Input.GetMouseButtonUp(0)){
             DragImage.gameObject.SetActive(false);
-            pointEvent.position = Input.mousePosition;
-            List<RaycastResult> raycastResults = new List<RaycastResult>(); //레이케스트 리스트
 
-            EventSystem.current.RaycastAll(pointEvent, raycastResults); //레이케스트로 선택된친구를 리스트에 반환
-            RaycastResult result = raycastResults.Find(x => x.gameObject.tag == "ItemSlot");//리스트 중에서 tag가 ItemSlot인것을 찾음
+            RaycastResult result = findRaycastObject(pointEvent, "ItemSlot");
 
             if (result.gameObject == null)
             {//예외처리
@@ -221,4 +209,13 @@ public class InventoryUIMng : MonoBehaviour
     //{
     //    ((IDragHandler)Instance).OnDrag(eventData);
     //}
+
+    public RaycastResult findRaycastObject(PointerEventData pointEvent, string tag_name)
+    {
+        pointEvent.position = Input.mousePosition;
+        List<RaycastResult> raycastResults = new List<RaycastResult>(); //레이케스트 리스트
+
+        EventSystem.current.RaycastAll(pointEvent, raycastResults); //레이케스트로 선택된친구를 리스트에 반환
+        return  raycastResults.Find(x => x.gameObject.tag == tag_name);//리스트 중에서 tag가 ItemSlot인것을 찾음
+    }
 }
