@@ -58,15 +58,53 @@ public class InventoryUIMng : MonoBehaviour
     }
 
     //아이템코드가 있는지 찾기 : 물건검색
-    public DataWeaponItem findWeaponitemcode(int _itemCode){
-        DataWeaponItem data = ItemMng.Instance.WeaponList.Find(x => x.itemCode == _itemCode);
-        return data;
-    }
-    public DataArmorItem findArmoritemcode(int _itemCode)
-    {
-        DataArmorItem data = ItemMng.Instance.ArmorList.Find(x => x.itemCode == _itemCode);
-        return data;
-    }
+    //public DataWeaponItem findWeaponitemcode(int _itemCode)
+    //{
+        
+    //    return data;
+    //}
+
+    //public DataArmorItem findArmoritemcode(int _itemCode)
+    //{
+        
+    //    return data;
+    //}
+    // 아이템 대분류 
+    // 
+    /// <summary>
+    /// 아이템 코드 구성
+    /// 0~1000      재료
+    /// 1001~2000   메인 무기 : 근접(1001~1500), 원거리(1501~2000)  
+    /// 2001~3000   보조 무기 : 근접(2001~2500), 원거리(2501~3000)
+    /// 3001~4000   방어구 : 머리(3001~3200), 바디업(3201~3400), 바디다운(3401~3600), 신발(3601~3800)
+    /// 4001~5000   장신구 : 반지(4001~4500), 목걸이(4501~5000)
+    /// 6001~7000   포션 // 세부포션은 나중에 생각하자
+    /// </summary>
+    /// 
+    //public (DataWeaponItem weapondata, DataArmorItem armordata) findObjData(int _itemCode)
+    //{
+    //    DataWeaponItem weapondata;
+    //    DataArmorItem armordata;
+    //    if (_itemCode > 0 && _itemCode < 1001) {//재료
+    //                                            //재료리스트 만들기
+    //    }
+    //    else if (_itemCode > 1000 && _itemCode < 3001) //메인무기
+    //    {
+    //        weapondata = ItemMng.Instance.WeaponList.Find(x => x.itemCode == _itemCode);
+
+    //    }
+    //    else if (_itemCode > 3000 && _itemCode < 4000) //방어구
+    //    {
+    //        armordata = ItemMng.Instance.ArmorList.Find(x => x.itemCode == _itemCode);
+    //    }
+    //    return (weapondata, armordata);
+
+    //}
+    //수정중
+    //public T covertClass<T>(T classname){
+        
+    //    return T data;
+    //}
 
 
     //초기 capacity만큼 인벤토리칸을 생성해주는 코드 
