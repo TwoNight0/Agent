@@ -40,12 +40,10 @@ public class InventoryUIMng : MonoBehaviour
     [SerializeField] private int capacity = 20; //인벤토리 칸 추후늘리면됨
     private int invencount = 0;
     
-    
     [SerializeField] private GameObject itemSlot;
 
     // 산하에 capacity
-    private void Start()
-    {
+    private void Start(){
         DontDestroyOnLoad(this);
 
         initInventory(); //인벤토리 생성
@@ -57,18 +55,6 @@ public class InventoryUIMng : MonoBehaviour
         slotMove();
     }
 
-    //아이템코드가 있는지 찾기 : 물건검색
-    //public DataWeaponItem findWeaponitemcode(int _itemCode)
-    //{
-        
-    //    return data;
-    //}
-
-    //public DataArmorItem findArmoritemcode(int _itemCode)
-    //{
-        
-    //    return data;
-    //}
     // 아이템 대분류 
     // 
     /// <summary>
@@ -81,33 +67,28 @@ public class InventoryUIMng : MonoBehaviour
     /// 6001~7000   포션 // 세부포션은 나중에 생각하자
     /// </summary>
     /// 
-    //public (DataWeaponItem weapondata, DataArmorItem armordata) findObjData(int _itemCode)
-    //{
-    //    DataWeaponItem weapondata;
-    //    DataArmorItem armordata;
-    //    if (_itemCode > 0 && _itemCode < 1001) {//재료
-    //                                            //재료리스트 만들기
-    //    }
-    //    else if (_itemCode > 1000 && _itemCode < 3001) //메인무기
-    //    {
-    //        weapondata = ItemMng.Instance.WeaponList.Find(x => x.itemCode == _itemCode);
+    public (DataWeaponItem weapondata, DataArmorItem armordata) findObjData(int _itemCode)
+    {
+        DataWeaponItem weapondata = null;
+        DataArmorItem armordata = null;
+        if (_itemCode > 0 && _itemCode < 1001)
+        {//재료
+         //재료리스트 만들기
+        }
+        else if (_itemCode > 1000 && _itemCode < 3001) //메인무기
+        {
+            weapondata = ItemMng.Instance.WeaponList.Find(x => x.itemCode == _itemCode);
 
-    //    }
-    //    else if (_itemCode > 3000 && _itemCode < 4000) //방어구
-    //    {
-    //        armordata = ItemMng.Instance.ArmorList.Find(x => x.itemCode == _itemCode);
-    //    }
-    //    return (weapondata, armordata);
-
-    //}
-    //수정중
-    //public T covertClass<T>(T classname){
-        
-    //    return T data;
-    //}
+        }
+        else if (_itemCode > 3000 && _itemCode < 4000) //방어구
+        {
+            armordata = ItemMng.Instance.ArmorList.Find(x => x.itemCode == _itemCode);
+        }
+        return (weapondata, armordata);
+    }
 
 
-    //초기 capacity만큼 인벤토리칸을 생성해주는 코드 
+        //초기 capacity만큼 인벤토리칸을 생성해주는 코드 
     private void initInventory()
     {
         for (int i = 0; i < capacity; i++)
@@ -132,7 +113,7 @@ public class InventoryUIMng : MonoBehaviour
     //슬롯에다가 아이템의 정보를 넘겨줘야함 
     public void giveDataItemSlot(int _itemCode)
     {
-        DataWeaponItem data = findWeaponitemcode(_itemCode); // 오브젝트찾음 
+        (DataWeaponItem, DataArmorItem) data = findObjData(_itemCode); // 각종 리스트들 중에서 원하는 오브젝트찾음 
         
         //List에서 아이템코드가 같은게 있는지 item을 찾음
         ItemSlotScript item = ListSlot.Find(x => x.PubItemCode == _itemCode);
@@ -154,7 +135,15 @@ public class InventoryUIMng : MonoBehaviour
                     item.PubAccount = 1;
                     item.PubText.text = item.PubAccount.ToString();
                     // 인벤토리 아이콘과 수량표시를 변경해야함
-                    item.changeImage(data.icon);
+                    if (_itemCode > 1000 && _itemCode < 3001)
+                    {
+                        item.changeImage(data.Item1.icon);
+                    }
+                    else if (_itemCode > 3000 && _itemCode < 4001)
+                    {
+                        item.changeImage(data.Item2.icon);
+                    }
+                   
                     findit = true;
                     break;
                 }
@@ -239,29 +228,41 @@ public class InventoryUIMng : MonoBehaviour
                     }
 
                     //장비일때
-                    if (secondItemSlot.gameObject.name.Contains("equip"))
+                    else if (firstItemSlot.PubItemCode > 1000 && firstItemSlot.PubItemCode < 2001 && secondItemSlot.gameObject.name.Contains("equip_mainweapon"))
                     {
-                        //코드 교환
-                        int temp = firstItemSlot.PubItemCode;
-                        firstItemSlot.PubItemCode = secondItemSlot.PubItemCode;
-                        secondItemSlot.PubItemCode = temp;
-
-                        //이미지 교환 (1개라면 교환), 1보다많다면 복사
-                        if(firstItemSlot.PubAccount == 1)
-                        {
-                            Sprite tmpicon;
-                            tmpicon = firstItemSlot.icon.sprite;
-                            firstItemSlot.icon.sprite = secondItemSlot.icon.sprite;
-                            secondItemSlot.icon.sprite = tmpicon;
-                        }
-                        else //복사
-                        {
-                            secondItemSlot.icon.sprite = firstItemSlot.icon.sprite;
-                        }
-
-                        //갯수 변경 (1개만 빼야함) 및 다시 텍스트 수정
-                        firstItemSlot.PubAccount--;
-                        firstItemSlot.PubText.text = firstItemSlot.PubAccount.ToString();
+                        fillequipSlot(firstItemSlot, secondItemSlot);
+                    }
+                    else if (firstItemSlot.PubItemCode > 2000 && firstItemSlot.PubItemCode < 3001 && secondItemSlot.gameObject.name.Contains("equip_subWaepon"))
+                    {
+                        fillequipSlot(firstItemSlot, secondItemSlot);
+                    }
+                    else if (firstItemSlot.PubItemCode > 3000 && firstItemSlot.PubItemCode < 3201 && secondItemSlot.gameObject.name.Contains("equip_head"))
+                    {
+                        fillequipSlot(firstItemSlot, secondItemSlot);
+                    }
+                    else if (firstItemSlot.PubItemCode > 3200 && firstItemSlot.PubItemCode < 3401 && secondItemSlot.gameObject.name.Contains("equip_bodyUp"))
+                    {
+                        fillequipSlot(firstItemSlot, secondItemSlot);
+                    }
+                    else if (firstItemSlot.PubItemCode > 3400 && firstItemSlot.PubItemCode < 3601 && secondItemSlot.gameObject.name.Contains("equip_bodydown"))
+                    {
+                        fillequipSlot(firstItemSlot, secondItemSlot);
+                    }
+                    else if (firstItemSlot.PubItemCode > 3600 && firstItemSlot.PubItemCode < 3801 && secondItemSlot.gameObject.name.Contains("equip_shoes"))
+                    {
+                        fillequipSlot(firstItemSlot, secondItemSlot);
+                    }
+                    else if (firstItemSlot.PubItemCode > 4000 && firstItemSlot.PubItemCode < 4501 && secondItemSlot.gameObject.name.Contains("equip_ring"))
+                    {
+                        fillequipSlot(firstItemSlot, secondItemSlot);
+                    }
+                    else if (firstItemSlot.PubItemCode > 4500 && firstItemSlot.PubItemCode < 5000 && secondItemSlot.gameObject.name.Contains("equip_necklace"))
+                    {
+                        fillequipSlot(firstItemSlot, secondItemSlot);
+                    }
+                    else
+                    {
+                        return;
                     }
 
                     firstItemSlot = null;
@@ -277,6 +278,40 @@ public class InventoryUIMng : MonoBehaviour
     //{
     //    ((IDragHandler)Instance).OnDrag(eventData);
     //}
+    public void fillequipSlot(ItemSlotScript first, ItemSlotScript second){
+        //코드 교환
+        int temp = first.PubItemCode;
+        first.PubItemCode = second.PubItemCode;
+        second.PubItemCode = temp;
+
+        //이미지 교환 (1개라면 교환), 1보다많다면 복사
+        if (first.PubAccount == 1)
+        {
+            Sprite tmpicon;
+            tmpicon = first.icon.sprite;
+            first.icon.sprite = second.icon.sprite;
+            second.icon.sprite = tmpicon;
+
+            //투명도 변경
+            Color color = second.icon.color;
+            color.a = 1.0f;
+            second.icon.color = color;
+        }
+        else //복사
+        {
+            //투명도변경
+            second.icon.sprite = first.icon.sprite;
+            Color color = second.icon.color;
+            color.a = 1.0f;
+            second.icon.color = color;
+        }
+
+        //갯수 변경 (1개만 빼야함) 및 다시 텍스트 수정
+        first.PubAccount--; //한개 빼기
+        first.PubText.text = first.PubAccount.ToString();
+
+    }
+
 
     
     //마우스포인터가 있는 위치를 레이케스트로 쏘고 리스트에 담고 리스트에서 테그가 같은 것을 골라 알려줌

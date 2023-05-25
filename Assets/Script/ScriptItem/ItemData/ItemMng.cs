@@ -129,13 +129,13 @@ public class ItemMng : MonoBehaviour
         LongSword.Attack_speed = 1;
 
 
-        Wand.itemCode = 1101;
+        Wand.itemCode = 1501;
         Wand.itemName = "Wand";
         Wand.Dmg_magic = 8;
         Wand.Attack_speed = 3;
 
 
-        Stick.itemCode = 1102;
+        Stick.itemCode = 1502;
         Stick.itemName = "Stick";
         Stick.Dmg_magic = 6;
         Stick.Attack_speed = 2;
