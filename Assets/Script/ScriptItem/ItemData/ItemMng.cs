@@ -33,10 +33,10 @@ public class ItemMng : MonoBehaviour
     public DataArmorItem shoes = new DataArmorItem();
     #endregion
     #region DataWeapon
-    public DataWeaponItem ShotSword = new DataWeaponItem();
-    public DataWeaponItem LongSword = new DataWeaponItem();
-    public DataWeaponItem Wand = new DataWeaponItem();
-    public DataWeaponItem Stick = new DataWeaponItem();
+    public DataWeaponItem shotsword = new DataWeaponItem();
+    public DataWeaponItem longsword = new DataWeaponItem();
+    public DataWeaponItem wand = new DataWeaponItem();
+    public DataWeaponItem stick = new DataWeaponItem();
     #endregion
 
 
@@ -57,10 +57,10 @@ public class ItemMng : MonoBehaviour
         AddItem(ArmorList, metal_down);
         AddItem(ArmorList, shoes);
 
-        AddItem(WeaponList, ShotSword);
-        AddItem(WeaponList, LongSword);
-        AddItem(WeaponList, Wand);
-        AddItem(WeaponList, Stick);
+        AddItem(WeaponList, shotsword);
+        AddItem(WeaponList, longsword);
+        AddItem(WeaponList, wand);
+        AddItem(WeaponList, stick);
     }
 
     private void Update()
@@ -87,9 +87,9 @@ public class ItemMng : MonoBehaviour
     private void initArmorData()
     {
         fabric_up.itemCode = 3201;
-        fabric_up.itemName = "fabic_up";
+        fabric_up.itemName = "fabric_up";
+        fabric_up.icon = Resources.Load<Sprite>("armor/fabric_up");
         fabric_up.defense_magic = 6;
-        fabric_up.icon = Resources.Load<Sprite>("fabricTop");
 
         fabric_down.itemCode = 3401;
         fabric_down.itemName = "fabric_down";
@@ -97,6 +97,7 @@ public class ItemMng : MonoBehaviour
 
         leather_up.itemCode = 3202;
         leather_up.itemName = "leather_up";
+        leather_up.icon = Resources.Load<Sprite>("armor/leather_up");
         leather_up.defense_physical = 4;
         leather_up.defense_magic = 4;
 
@@ -107,6 +108,7 @@ public class ItemMng : MonoBehaviour
 
         metal_up.itemCode = 3203;
         metal_up.itemName = "metal_top";
+        metal_up.icon = Resources.Load<Sprite>("armor/metal_up");
         metal_up.defense_physical = 10;
 
         metal_down.itemCode = 3403;
@@ -116,29 +118,31 @@ public class ItemMng : MonoBehaviour
 
     private void initWeaponData()
     {
-        ShotSword.itemCode = 1001;
-        ShotSword.itemName = "ShotSword";
-        ShotSword.Dmg_physic = 2;
-        ShotSword.Attack_speed = 2;
+        shotsword.itemCode = 1001;
+        shotsword.itemName = "shotsword";
+        shotsword.icon = Resources.Load<Sprite>("weapon/shotsword");
+        shotsword.Dmg_physic = 2;
+        shotsword.Attack_speed = 2;
 
 
-        LongSword.itemCode = 1002;
-        LongSword.itemName = "LongSword";
-        LongSword.icon = Resources.Load<Sprite>("LongSword");
-        LongSword.Dmg_physic = 4;
-        LongSword.Attack_speed = 1;
+        longsword.itemCode = 1002;
+        longsword.itemName = "longsword";
+        longsword.icon = Resources.Load<Sprite>("weapon/longsword");
+        longsword.Dmg_physic = 4;
+        longsword.Attack_speed = 1;
 
 
-        Wand.itemCode = 1501;
-        Wand.itemName = "Wand";
-        Wand.Dmg_magic = 8;
-        Wand.Attack_speed = 3;
+        wand.itemCode = 1501;
+        wand.itemName = "wand";
+        wand.icon = Resources.Load<Sprite>("weapon/wand");
+        wand.Dmg_magic = 8;
+        wand.Attack_speed = 3;
 
 
-        Stick.itemCode = 1502;
-        Stick.itemName = "Stick";
-        Stick.Dmg_magic = 6;
-        Stick.Attack_speed = 2;
+        stick.itemCode = 1502;
+        stick.itemName = "stick";
+        stick.Dmg_magic = 6;
+        stick.Attack_speed = 2;
     }
 
     private void createItem()

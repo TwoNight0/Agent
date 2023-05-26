@@ -33,9 +33,11 @@ public class PlayerControllor : MonoBehaviour
     private bool m_pressJump = false;
     private bool m_isGround = false;
     public bool m_isSlope = false;
-
     private bool m_dashcheck = false;
+    public bool invenflag = false;
     // ----
+
+    private GameObject UI;
 
     // -- Timer --
     private float m_timerDash = 10.0f;
@@ -76,6 +78,10 @@ public class PlayerControllor : MonoBehaviour
     void Start(){
         //m_cameraMng = CameraManager.Instance;
         //m_camFps = m_cameraMng.GetCamera(enumCamera.CamFps);
+
+
+        UI = GameObject.Find("UI");
+
         m_rotationValue = transform.rotation.eulerAngles;
         hp = maxhp;//피 최대로 초기화
     }
@@ -96,6 +102,9 @@ public class PlayerControllor : MonoBehaviour
         //checkSlopeVelocity();
         checkGravity();
         //DoAttack();
+
+        inventoryopen();
+
 
         // ----
 
@@ -247,7 +256,26 @@ public class PlayerControllor : MonoBehaviour
             m_animator.Play("Two Hand Club Combo");
         }
     }
+    private void inventoryopen()
+    {
+        if (Input.GetKeyDown(KeyCode.Tab))
+        {
+            invenflag = !invenflag;
 
+            //Debug.Log(invenflag);
+            
+        }
+
+        if (invenflag)//트루면 켜짐
+        {
+            UI.SetActive(true);
+        }
+        else//false면 꺼짐
+        {
+            UI.SetActive(false);
+        }
+
+    }
 
     private void TakeDamage(float dmg) {
         hp -= dmg;

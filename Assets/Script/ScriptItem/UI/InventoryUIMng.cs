@@ -5,13 +5,7 @@ using System.IO;
 using UnityEngine.EventSystems;
 using UnityEngine.UI;
 
-
 // 인벤토리에있는 UI를 관리 (보여지는 부분) inventory와 상호작용하는 스크립트
-// - 헤더 잡고이동
-// - x 버튼을 눌러 닫기
-// 
-
-
 public class InventoryUIMng : MonoBehaviour
 {
     public static InventoryUIMng Instance;
@@ -21,9 +15,19 @@ public class InventoryUIMng : MonoBehaviour
     private EventSystem m_eventSystem;
     //
 
+    //슬롯 선택시 사용하는 변수들
     ItemSlotScript firstItemSlot = null;
     ItemSlotScript secondItemSlot = null;
     public RectTransform DragImage = new RectTransform();
+    //
+
+    //버튼
+    [SerializeField] public Button btn_inven;
+    [SerializeField] public Button btn_stat;
+    [SerializeField] public Button btn_skill;
+    [SerializeField] public Button btn_Exit;
+
+
 
     private void Awake()
     {
@@ -47,7 +51,8 @@ public class InventoryUIMng : MonoBehaviour
         DontDestroyOnLoad(this);
 
         initInventory(); //인벤토리 생성
-        
+        addbuttonAction(); //버튼액션 지정
+
     }
 
     private void Update()
@@ -111,6 +116,7 @@ public class InventoryUIMng : MonoBehaviour
     }
 
     //슬롯에다가 아이템의 정보를 넘겨줘야함 
+
     public void giveDataItemSlot(int _itemCode)
     {
         (DataWeaponItem, DataArmorItem) data = findObjData(_itemCode); // 각종 리스트들 중에서 원하는 오브젝트찾음 
@@ -155,130 +161,129 @@ public class InventoryUIMng : MonoBehaviour
             }
         }
     }
+    
 
     //레이케스트를 쏨 -> 슬롯을 선택 슬롯에 대한 스크립트를 가져옴 -> 선택된슬롯이라는 곳에 잠시저장. 이후선택된애를 교환
-    private void slotMove(){
-        
-        PointerEventData pointEvent = new PointerEventData(m_eventSystem);
-        
-        //첫번째 슬롯
-        if (Input.GetMouseButtonDown(0)){
-            RaycastResult result = findRaycastObject(pointEvent, "ItemSlot");//리스트 중에서 tag가 ItemSlot인것을 찾음
-            if (result.gameObject == null) {//예외처리
-                return;
-            }
-            else{
-                Debug.Log("첫번째 슬롯 :" + result);
-                firstItemSlot = result.gameObject.GetComponent<ItemSlotScript>();
-            }
-        }
+    private void slotMove(){     
+            PointerEventData pointEvent = new PointerEventData(m_eventSystem);
 
-        if (Input.GetMouseButton(0)){ //마우스를 누르고있으면 이미지가 계속따라오는 함수
-            if (firstItemSlot != null) {
-                DragImage.gameObject.SetActive(true);
-                DragImage.position = Input.mousePosition;
-                Image DI = DragImage.GetComponent<Image>();
-                DI.sprite = firstItemSlot.icon.sprite;
-            }
-        }
-
-        //두번째 슬롯
-        if (Input.GetMouseButtonUp(0)){
-            DragImage.gameObject.SetActive(false);
-
-            RaycastResult result = findRaycastObject(pointEvent, "ItemSlot");
-
-            if (result.gameObject == null)
-            {//예외처리
-                firstItemSlot = null;
-                return;
-            }
-            else
+            //첫번째 슬롯
+            if (Input.GetMouseButtonDown(0))
             {
-                Debug.Log("두번째 슬롯 : " + result);
-                secondItemSlot = result.gameObject.GetComponent<ItemSlotScript>(); // 스크립트 가져왔음
-                //스크립트 교환
-
-                if ((firstItemSlot != secondItemSlot))
-                {
-                    //아이템슬롯의 아이템일때
-                    if (secondItemSlot.gameObject.name.Contains("ItemSlot"))
-                    {
-                        //코드 교환
-                        int temp = firstItemSlot.PubItemCode;
-                        firstItemSlot.PubItemCode = secondItemSlot.PubItemCode;
-                        secondItemSlot.PubItemCode = temp;
-
-                        //갯수 교환
-                        int tmp = firstItemSlot.PubAccount;
-                        firstItemSlot.PubAccount = secondItemSlot.PubAccount;
-                        secondItemSlot.PubAccount = tmp;
-
-                        //텍스트 교환
-                        firstItemSlot.PubText.text = firstItemSlot.PubAccount.ToString();
-                        secondItemSlot.PubText.text = secondItemSlot.PubAccount.ToString();
-
-                        //이미지 교환
-                        Sprite tmpicon;
-                        tmpicon = firstItemSlot.icon.sprite;
-                        firstItemSlot.icon.sprite = secondItemSlot.icon.sprite;
-                        secondItemSlot.icon.sprite = tmpicon;
-
-                        
-                    }
-
-                    //장비일때
-                    else if (firstItemSlot.PubItemCode > 1000 && firstItemSlot.PubItemCode < 2001 && secondItemSlot.gameObject.name.Contains("equip_mainweapon"))
-                    {
-                        fillequipSlot(firstItemSlot, secondItemSlot);
-                    }
-                    else if (firstItemSlot.PubItemCode > 2000 && firstItemSlot.PubItemCode < 3001 && secondItemSlot.gameObject.name.Contains("equip_subWaepon"))
-                    {
-                        fillequipSlot(firstItemSlot, secondItemSlot);
-                    }
-                    else if (firstItemSlot.PubItemCode > 3000 && firstItemSlot.PubItemCode < 3201 && secondItemSlot.gameObject.name.Contains("equip_head"))
-                    {
-                        fillequipSlot(firstItemSlot, secondItemSlot);
-                    }
-                    else if (firstItemSlot.PubItemCode > 3200 && firstItemSlot.PubItemCode < 3401 && secondItemSlot.gameObject.name.Contains("equip_bodyUp"))
-                    {
-                        fillequipSlot(firstItemSlot, secondItemSlot);
-                    }
-                    else if (firstItemSlot.PubItemCode > 3400 && firstItemSlot.PubItemCode < 3601 && secondItemSlot.gameObject.name.Contains("equip_bodydown"))
-                    {
-                        fillequipSlot(firstItemSlot, secondItemSlot);
-                    }
-                    else if (firstItemSlot.PubItemCode > 3600 && firstItemSlot.PubItemCode < 3801 && secondItemSlot.gameObject.name.Contains("equip_shoes"))
-                    {
-                        fillequipSlot(firstItemSlot, secondItemSlot);
-                    }
-                    else if (firstItemSlot.PubItemCode > 4000 && firstItemSlot.PubItemCode < 4501 && secondItemSlot.gameObject.name.Contains("equip_ring"))
-                    {
-                        fillequipSlot(firstItemSlot, secondItemSlot);
-                    }
-                    else if (firstItemSlot.PubItemCode > 4500 && firstItemSlot.PubItemCode < 5000 && secondItemSlot.gameObject.name.Contains("equip_necklace"))
-                    {
-                        fillequipSlot(firstItemSlot, secondItemSlot);
-                    }
-                    else
-                    {
-                        return;
-                    }
-
-                    firstItemSlot = null;
+                RaycastResult result = findRaycastObject(pointEvent, "ItemSlot");//리스트 중에서 tag가 ItemSlot인것을 찾음
+                if (result.gameObject == null)
+                {//예외처리
+                    return;
                 }
-                
+                else
+                {
+                    Debug.Log("첫번째 슬롯 :" + result);
+                    firstItemSlot = result.gameObject.GetComponent<ItemSlotScript>();
+                }
             }
-            
-        }
 
+            if (Input.GetMouseButton(0))
+            { //마우스를 누르고있으면 이미지가 계속따라오는 함수
+                if (firstItemSlot != null)
+                {
+                    DragImage.gameObject.SetActive(true);
+                    DragImage.position = Input.mousePosition;
+                    Image DI = DragImage.GetComponent<Image>();
+                    DI.sprite = firstItemSlot.icon.sprite;
+                }
+            }
+
+            //두번째 슬롯
+            if (Input.GetMouseButtonUp(0))
+            {
+                DragImage.gameObject.SetActive(false);
+
+                RaycastResult result = findRaycastObject(pointEvent, "ItemSlot");
+
+                if (result.gameObject == null)
+                {//예외처리
+                    firstItemSlot = null;
+                    return;
+                }
+                else
+                {
+                    Debug.Log("두번째 슬롯 : " + result);
+                    secondItemSlot = result.gameObject.GetComponent<ItemSlotScript>(); // 스크립트 가져왔음
+                                                                                       //스크립트 교환
+
+                    if ((firstItemSlot != secondItemSlot))
+                    {
+                        //아이템슬롯의 아이템일때
+                        if (secondItemSlot.gameObject.name.Contains("ItemSlot"))
+                        {
+                            //코드 교환
+                            int temp = firstItemSlot.PubItemCode;
+                            firstItemSlot.PubItemCode = secondItemSlot.PubItemCode;
+                            secondItemSlot.PubItemCode = temp;
+
+                            //갯수 교환
+                            int tmp = firstItemSlot.PubAccount;
+                            firstItemSlot.PubAccount = secondItemSlot.PubAccount;
+                            secondItemSlot.PubAccount = tmp;
+
+                            //텍스트 교환
+                            firstItemSlot.PubText.text = firstItemSlot.PubAccount.ToString();
+                            secondItemSlot.PubText.text = secondItemSlot.PubAccount.ToString();
+
+                            //이미지 교환
+                            Sprite tmpicon;
+                            tmpicon = firstItemSlot.icon.sprite;
+                            firstItemSlot.icon.sprite = secondItemSlot.icon.sprite;
+                            secondItemSlot.icon.sprite = tmpicon;
+
+
+                        }
+
+                        //장비일때
+                        else if (firstItemSlot.PubItemCode > 1000 && firstItemSlot.PubItemCode < 2001 && secondItemSlot.gameObject.name.Contains("equip_mainweapon"))
+                        {
+                            fillequipSlot(firstItemSlot, secondItemSlot);
+                        }
+                        else if (firstItemSlot.PubItemCode > 2000 && firstItemSlot.PubItemCode < 3001 && secondItemSlot.gameObject.name.Contains("equip_subWaepon"))
+                        {
+                            fillequipSlot(firstItemSlot, secondItemSlot);
+                        }
+                        else if (firstItemSlot.PubItemCode > 3000 && firstItemSlot.PubItemCode < 3201 && secondItemSlot.gameObject.name.Contains("equip_head"))
+                        {
+                            fillequipSlot(firstItemSlot, secondItemSlot);
+                        }
+                        else if (firstItemSlot.PubItemCode > 3200 && firstItemSlot.PubItemCode < 3401 && secondItemSlot.gameObject.name.Contains("equip_bodyUp"))
+                        {
+                            fillequipSlot(firstItemSlot, secondItemSlot);
+                        }
+                        else if (firstItemSlot.PubItemCode > 3400 && firstItemSlot.PubItemCode < 3601 && secondItemSlot.gameObject.name.Contains("equip_bodydown"))
+                        {
+                            fillequipSlot(firstItemSlot, secondItemSlot);
+                        }
+                        else if (firstItemSlot.PubItemCode > 3600 && firstItemSlot.PubItemCode < 3801 && secondItemSlot.gameObject.name.Contains("equip_shoes"))
+                        {
+                            fillequipSlot(firstItemSlot, secondItemSlot);
+                        }
+                        else if (firstItemSlot.PubItemCode > 4000 && firstItemSlot.PubItemCode < 4501 && secondItemSlot.gameObject.name.Contains("equip_ring"))
+                        {
+                            fillequipSlot(firstItemSlot, secondItemSlot);
+                        }
+                        else if (firstItemSlot.PubItemCode > 4500 && firstItemSlot.PubItemCode < 5000 && secondItemSlot.gameObject.name.Contains("equip_necklace"))
+                        {
+                            fillequipSlot(firstItemSlot, secondItemSlot);
+                        }
+                        else
+                        {
+                            return;
+                        }
+                        firstItemSlot = null;
+                    }
+                }
+            }
     }
-    //집에가서 이거 찾아볼것
-    //public void OnDrag(PointerEventData eventData)
-    //{
-    //    ((IDragHandler)Instance).OnDrag(eventData);
-    //}
-    public void fillequipSlot(ItemSlotScript first, ItemSlotScript second){
+
+
+    private void fillequipSlot(ItemSlotScript first, ItemSlotScript second){
         //코드 교환
         int temp = first.PubItemCode;
         first.PubItemCode = second.PubItemCode;
@@ -312,8 +317,6 @@ public class InventoryUIMng : MonoBehaviour
 
     }
 
-
-    
     //마우스포인터가 있는 위치를 레이케스트로 쏘고 리스트에 담고 리스트에서 테그가 같은 것을 골라 알려줌
     public RaycastResult findRaycastObject(PointerEventData pointEvent, string tag_name)
     {
@@ -323,4 +326,15 @@ public class InventoryUIMng : MonoBehaviour
         EventSystem.current.RaycastAll(pointEvent, raycastResults); //레이케스트로 선택된친구를 리스트에 반환
         return  raycastResults.Find(x => x.gameObject.tag == tag_name);//리스트 중에서 tag가 ItemSlot인것을 찾음
     }
+
+    private void addbuttonAction()
+    {
+        btn_Exit.onClick.AddListener(offInventory);
+    }
+
+    public void offInventory()
+    {
+        
+    }
+
 }
