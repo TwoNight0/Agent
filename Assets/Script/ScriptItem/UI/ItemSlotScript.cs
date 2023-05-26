@@ -38,4 +38,22 @@ public class ItemSlotScript : MonoBehaviour
 
     }
 
+  
 }
+
+public class SaveForm {
+    public int Sitemcode;
+    public int SAccount;
+    //public int PubItemCode
+    //{
+    //    get => Sitemcode;
+    //    set => Sitemcode = value;
+    //}
+
+    //public int PubAccount
+    //{
+    //    get => SAccount;
+    //    set => SAccount = value;
+    //}
+}
+

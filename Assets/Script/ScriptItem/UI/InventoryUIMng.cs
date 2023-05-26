@@ -11,8 +11,10 @@ public class InventoryUIMng : MonoBehaviour
     public static InventoryUIMng Instance;
 
     //실제적인 인벤토리공간 이걸 capacity 만큼만 운용되게 만들어야해
-    public List<ItemSlotScript> ListSlot = new List<ItemSlotScript>();
+    public List<ItemSlotScript> ListSlot = new List<ItemSlotScript>(); //인벤토리안의 리스트
+    //public List<SaveForm> saveList = new List<SaveForm>();
     private EventSystem m_eventSystem;
+    PlayerControllor player;
     //
 
     //슬롯 선택시 사용하는 변수들
@@ -49,15 +51,16 @@ public class InventoryUIMng : MonoBehaviour
     // 산하에 capacity
     private void Start(){
         DontDestroyOnLoad(this);
-
+        player = FindObjectOfType<PlayerControllor>();
         initInventory(); //인벤토리 생성
         addbuttonAction(); //버튼액션 지정
-
+        
     }
 
     private void Update()
     {
         slotMove();
+        
     }
 
     // 아이템 대분류 
@@ -110,7 +113,9 @@ public class InventoryUIMng : MonoBehaviour
         {
             GameObject obj = Instantiate(itemSlot, transform);
             ListSlot.Add(obj.GetComponent<ItemSlotScript>()); //listSlot에 등록해서 아이템스크립트들을 등록했음
+            //saveList.Add(obj.GetComponent<SaveForm>()); //저장될리스트도 같은 개수로 만듬 
             obj.name = _name+ invencount;
+
             invencount++;
         }
     }
@@ -127,6 +132,8 @@ public class InventoryUIMng : MonoBehaviour
         {
             item.PubAccount++;
             item.PubText.text = item.PubAccount.ToString();
+            List<SaveForm> saveList = ItemMng.Instance.ListCopy(ListSlot);
+            ItemMng.Instance.inventorysave(saveList);
         }
         else //만약 item이 없다면
         {
@@ -149,7 +156,8 @@ public class InventoryUIMng : MonoBehaviour
                     {
                         item.changeImage(data.Item2.icon);
                     }
-                   
+                    List<SaveForm> saveList = ItemMng.Instance.ListCopy(ListSlot);
+                    ItemMng.Instance.inventorysave(saveList);
                     findit = true;
                     break;
                 }
@@ -329,12 +337,16 @@ public class InventoryUIMng : MonoBehaviour
 
     private void addbuttonAction()
     {
-        btn_Exit.onClick.AddListener(offInventory);
+        btn_Exit.onClick.AddListener(player.SwichingActive); //playctrl에 있는 함수를 등록
     }
 
-    public void offInventory()
+    public void printInventroy(List<SaveForm> _ListSlot)
     {
-        
+        foreach (SaveForm a in _ListSlot) {
+            Debug.Log(a.SAccount);
+        }
     }
+
+ 
 
 }

@@ -80,7 +80,7 @@ public class PlayerControllor : MonoBehaviour
         //m_camFps = m_cameraMng.GetCamera(enumCamera.CamFps);
 
 
-        UI = GameObject.Find("UI");
+        UI = GameObject.Find("UI_Inventory");
 
         m_rotationValue = transform.rotation.eulerAngles;
         hp = maxhp;//피 최대로 초기화
@@ -275,6 +275,12 @@ public class PlayerControllor : MonoBehaviour
             UI.SetActive(false);
         }
 
+    }
+
+    public void SwichingActive()
+    {
+        invenflag = !invenflag;
+        UI.SetActive(invenflag);
     }
 
     private void TakeDamage(float dmg) {

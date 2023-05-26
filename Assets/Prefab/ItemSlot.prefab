@@ -93,7 +93,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   itemCode: 0
   Account: 0
-  slotIcon: {fileID: 0}
+  slotIcon: {fileID: 21300000, guid: 4ee78aabd5a24114f9a72dd719954d37, type: 3}
   icon: {fileID: 7637389468227270045}
   text: {fileID: 4981014548926876358}
 --- !u!1 &8805079377755035037

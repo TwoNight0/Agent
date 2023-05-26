@@ -1,11 +1,13 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-
+using Newtonsoft.Json;
 
 public class ItemMng : MonoBehaviour
 {
     public static ItemMng Instance;
+    private List<SaveForm> Inventory;
+    
     private int itemCode;
 
     private void Awake()
@@ -43,24 +45,12 @@ public class ItemMng : MonoBehaviour
     private void Start()
     {
         DontDestroyOnLoad(this);
-        createItem();
-
-        initWeaponData(); // 나중에 itemMng스크립트로 옮기자
+        initWeaponData(); 
         initArmorData();
+        // ----
 
-        //이것도 자동화하는 방법이 있긴할거야 제이슨에 이름만적으면되겠끔해서
-        AddItem(ArmorList, fabric_up);
-        AddItem(ArmorList, fabric_down);
-        AddItem(ArmorList, leather_up);
-        AddItem(ArmorList, leather_down);
-        AddItem(ArmorList, metal_up);
-        AddItem(ArmorList, metal_down);
-        AddItem(ArmorList, shoes);
+        createItem(); // 제작해야함 
 
-        AddItem(WeaponList, shotsword);
-        AddItem(WeaponList, longsword);
-        AddItem(WeaponList, wand);
-        AddItem(WeaponList, stick);
     }
 
     private void Update()
@@ -70,10 +60,6 @@ public class ItemMng : MonoBehaviour
 
 
     //아이템을 리스트에 등록하는 코드(코드로 식별하기 위함)
-    private void AddItem<T>(List<T> _ItemList, T _item)
-    {
-        _ItemList.Add(_item);
-    }
 
     /// <summary>
     /// 아이템 코드 구성
@@ -84,6 +70,43 @@ public class ItemMng : MonoBehaviour
     /// 4001~5000   장신구 : 반지(4001~4500), 목걸이(4501~5000)
     /// 6001~7000   포션 // 세부포션은 나중에 생각하자
     /// </summary>
+    private void AddItem<T>(List<T> _ItemList, T _item)
+    {
+        _ItemList.Add(_item);
+    }
+    private void initWeaponData()
+    {
+        shotsword.itemCode = 1001;
+        shotsword.itemName = "shotsword";
+        shotsword.icon = Resources.Load<Sprite>("weapon/shotsword");
+        shotsword.Dmg_physic = 2;
+        shotsword.Attack_speed = 2;
+
+
+        longsword.itemCode = 1002;
+        longsword.itemName = "longsword";
+        longsword.icon = Resources.Load<Sprite>("weapon/longsword");
+        longsword.Dmg_physic = 4;
+        longsword.Attack_speed = 1;
+
+
+        wand.itemCode = 1501;
+        wand.itemName = "wand";
+        wand.icon = Resources.Load<Sprite>("weapon/wand");
+        wand.Dmg_magic = 8;
+        wand.Attack_speed = 3;
+
+
+        stick.itemCode = 1502;
+        stick.itemName = "stick";
+        stick.Dmg_magic = 6;
+        stick.Attack_speed = 2;
+
+        AddItem(WeaponList, shotsword);
+        AddItem(WeaponList, longsword);
+        AddItem(WeaponList, wand);
+        AddItem(WeaponList, stick);
+    }
     private void initArmorData()
     {
         fabric_up.itemCode = 3201;
@@ -114,35 +137,14 @@ public class ItemMng : MonoBehaviour
         metal_down.itemCode = 3403;
         metal_down.itemName = "metal_bottom";
         metal_down.defense_physical = 8;
-    }
 
-    private void initWeaponData()
-    {
-        shotsword.itemCode = 1001;
-        shotsword.itemName = "shotsword";
-        shotsword.icon = Resources.Load<Sprite>("weapon/shotsword");
-        shotsword.Dmg_physic = 2;
-        shotsword.Attack_speed = 2;
-
-
-        longsword.itemCode = 1002;
-        longsword.itemName = "longsword";
-        longsword.icon = Resources.Load<Sprite>("weapon/longsword");
-        longsword.Dmg_physic = 4;
-        longsword.Attack_speed = 1;
-
-
-        wand.itemCode = 1501;
-        wand.itemName = "wand";
-        wand.icon = Resources.Load<Sprite>("weapon/wand");
-        wand.Dmg_magic = 8;
-        wand.Attack_speed = 3;
-
-
-        stick.itemCode = 1502;
-        stick.itemName = "stick";
-        stick.Dmg_magic = 6;
-        stick.Attack_speed = 2;
+        AddItem(ArmorList, fabric_up);
+        AddItem(ArmorList, fabric_down);
+        AddItem(ArmorList, leather_up);
+        AddItem(ArmorList, leather_down);
+        AddItem(ArmorList, metal_up);
+        AddItem(ArmorList, metal_down);
+        AddItem(ArmorList, shoes);
     }
 
     private void createItem()
@@ -150,6 +152,48 @@ public class ItemMng : MonoBehaviour
         //오브젝트 만들고 코드 부여, 박스(3d), 위치속성
     }
 
+    //세이브 하는 코드
+    public void inventorysave(List<SaveForm> _List)
+    {
+        Inventory = _List; //새로고침
+        string key = "inven";
+        
+        string invensave = JsonConvert.SerializeObject(Inventory);
+        PlayerPrefs.SetString(key, invensave);
+        InventoryUIMng.Instance.printInventroy(Inventory); //잘 저장했나 확인
+        Debug.Log("저장 : " + invensave);
 
+    }
+
+    //아이템이 저장되어야 할 시기
+
+    //아이템을 습득할때
+    //아이템을 옮길때
+    //아이템을 버릴때
+    public void inventoryload(string _jsonsaved)
+    {
+        string key = "inven";
+        Inventory = JsonConvert.DeserializeObject<List<SaveForm>>(_jsonsaved);
+        Debug.Log("불러옴 : ");
+        PlayerPrefs.GetString(key);
+        InventoryUIMng.Instance.printInventroy(Inventory); //잘 불러왔나 확인
+    }
+
+    //큰리스트의 일부정보를 스몰리스트에 옮겨담음
+    public List<SaveForm> ListCopy(List<ItemSlotScript> rawList)
+    {
+        List<SaveForm> copyList = new List<SaveForm>();
+        int len = rawList.Count;
+
+        for(int i = 0; i<len; i++)
+        {
+            SaveForm form = new SaveForm() { SAccount = rawList[i].PubAccount, Sitemcode = rawList[i].PubItemCode };
+            copyList.Add(form);
+            //copyList[i].Sitemcode = rawList[i].PubItemCode;
+            //copyList[i].SAccount = rawList[i].PubAccount;
+        }
+
+        return copyList;
+    }
   
 }
