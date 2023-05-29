@@ -4,7 +4,7 @@ using UnityEngine;
 
 public class PlayerControllor : MonoBehaviour
 {
-
+    public static PlayerControllor Instance;
     // -- Component --
     //private CameraManager m_cameraMng;
     //private Rigidbody m_rb;
@@ -47,35 +47,42 @@ public class PlayerControllor : MonoBehaviour
     // -- Status
     private float m_dmgPaladin = 30.0f;
     private float m_moveSpeed = 2f;
-    private float maxhp = 400f;
-    private float hp = 0f;
-    
+    private float hp_max = 400.0f;
+    [SerializeField] private float hp_cur = 0.0f;
+
     //데미지 공식
     // ((플레이어 기본데미지 + (무기데미지 * 크리티컬함수) + ( 마법데미지 * 크리티컬함수 ) * 악세서리 추가데미지 ) 
-
-
-
 
     // ---
 
     // -- keySetting -- 변경하는함수도 만들자
     // ----
 
-    private enum moveParameter{
+    private enum moveParameter {
         Move_vertical,
         Move_horizontal,
         Dash_shift,
     }
 
 
-    private void Awake(){
+    private void Awake() {
+        if (Instance == null)
+        {
+            Instance = this;
+        }
+        else
+        {
+            Destroy(this);
+        }
+
         //m_rb = this.transform.GetComponent<Rigidbody>();
         m_characterController = transform.GetComponent<CharacterController>();
         m_animator = GetComponent<Animator>();
         m_groundchecker = transform.GetComponentInChildren<Groundcheck>();
     }
 
-    void Start(){
+    void Start() {
+        DontDestroyOnLoad(this);
         //m_cameraMng = CameraManager.Instance;
         //m_camFps = m_cameraMng.GetCamera(enumCamera.CamFps);
 
@@ -83,11 +90,11 @@ public class PlayerControllor : MonoBehaviour
         UI = GameObject.Find("UI_Inventory");
 
         m_rotationValue = transform.rotation.eulerAngles;
-        hp = maxhp;//피 최대로 초기화
+        hp_cur = hp_max;//피 최대로 초기화
     }
 
 
-    private void Update(){
+    private void Update() {
         // -- 문제 없음 --
         Jump();
         Rotation();
@@ -112,7 +119,7 @@ public class PlayerControllor : MonoBehaviour
 
     }
 
-    private void OnAnimatorIK(int layerIndex){
+    private void OnAnimatorIK(int layerIndex) {
         m_animator.SetLookAtWeight(1); //0~1������ �켱����
         //m_animator.SetLookAtPosition(m_trsLookAtObj.position);
 
@@ -138,7 +145,7 @@ public class PlayerControllor : MonoBehaviour
         {
             Vector3 footPos = hit2.point;
             footPos.y += m_fDistanceToGround;
-            m_animator.SetIKPosition(AvatarIKGoal.RightFoot, footPos); 
+            m_animator.SetIKPosition(AvatarIKGoal.RightFoot, footPos);
 
             m_animator.SetIKRotation(AvatarIKGoal.RightFoot,
                 Quaternion.LookRotation(Vector3.ProjectOnPlane(transform.forward, hit2.normal), hit2.normal));
@@ -149,22 +156,22 @@ public class PlayerControllor : MonoBehaviour
     private void UpdateTimer() {
         if (m_timerDash < 2.0f) { // 2초쿨
             m_timerDash += Time.deltaTime;
-            if(m_timerDash > 1.9f){
+            if (m_timerDash > 1.9f) {
                 //Debug.Log($"대쉬가능 ={m_timerDash}");
-                
+
                 m_animator.SetBool(moveParameter.Dash_shift.ToString(), false);
 
             }
         }
     }
 
-    private void UpdateisGround(){
+    private void UpdateisGround() {
         this.m_isGround = m_groundchecker.getGround();
         //Debug.Log(m_isGround);
     }
 
     private void PlayDashAction() {
-        if (m_dashcheck){
+        if (m_dashcheck) {
             m_animator.Play("Stand To Roll");
             m_dashcheck = false;
         }
@@ -190,7 +197,7 @@ public class PlayerControllor : MonoBehaviour
     //-----
 
     //TODO 대쉬 돌아오기
-    private void Moving(){
+    private void Moving() {
         m_moveDir.x = Input.GetAxis("Horizontal");
         m_moveDir.z = Input.GetAxis("Vertical");
         m_moveDir = new Vector3(m_moveDir.x, 0f, m_moveDir.z).normalized;
@@ -203,7 +210,7 @@ public class PlayerControllor : MonoBehaviour
         //m_rb.AddForce(transform.rotation * m_moveDir * m_moveSpeed);
 
         //왜돌아옴?ㅋㅋㅋ
-        if (Input.GetKeyDown(KeyCode.LeftShift) && m_timerDash > m_dashDuration){
+        if (Input.GetKeyDown(KeyCode.LeftShift) && m_timerDash > m_dashDuration) {
 
             //Debug.Log($"대쉬불가 : {m_timerDash}");
             m_dashDirection = m_moveDir; //이걸해줘야 키를 때도 대쉬 방향이 유지됨 키 때면 대쉬 0.0 되버림
@@ -212,29 +219,29 @@ public class PlayerControllor : MonoBehaviour
             m_dashcheck = true;
         }
 
-        if(m_timerDash <= m_dashDuration){ //대쉬타이머가 듀레이션보다 작을작을때 작동 shift 누르면 작아짐
+        if (m_timerDash <= m_dashDuration) { //대쉬타이머가 듀레이션보다 작을작을때 작동 shift 누르면 작아짐
             m_characterController.Move(m_dashDirection * 4 * Time.deltaTime);//이동
             m_timerDash += Time.deltaTime;
-         
+
         }
 
 
-        if (m_isSlope){ //경사로일때 경사로 반대로 이동(미끄러짐)
+        if (m_isSlope) { //경사로일때 경사로 반대로 이동(미끄러짐)
             m_characterController.Move(-m_slopeVector * Time.deltaTime);
         }
-        else{ //기본 움직임
+        else { //기본 움직임
             m_characterController.Move(transform.rotation * m_moveDir * m_moveSpeed * Time.deltaTime);
         }
     }
 
-    private void Jump(){
+    private void Jump() {
         UpdateisGround();
-        if (m_isGround == true && Input.GetKeyDown(KeyCode.Space)){
+        if (m_isGround == true && Input.GetKeyDown(KeyCode.Space)) {
             m_pressJump = true;
         }
     }
 
-    private void Rotation(){
+    private void Rotation() {
         float MouseX = Input.GetAxisRaw("Mouse X") * mouseSensitivity * Time.deltaTime;
         float MouseY = Input.GetAxisRaw("Mouse Y") * mouseSensitivity * Time.deltaTime;
 
@@ -246,6 +253,20 @@ public class PlayerControllor : MonoBehaviour
         transform.rotation = Quaternion.Euler(0f, m_rotationValue.y, 0f);
         //m_camFps.transform.rotation = Quaternion.Euler(m_rotationValue.x, m_rotationValue.y, 0f);
     }
+
+    public float GetHp
+    {
+        get => hp_cur;
+        set => hp_cur = value;
+    }
+
+    public float GetMaxHp
+    {
+        get => hp_max;
+        set => hp_max = value;
+    }
+
+
 
     private void DoAttack() {
         //TODO : 정면으로안가고 사선으로감, 공격 및 데미지 주고받는거 적용시켜야함
@@ -284,9 +305,9 @@ public class PlayerControllor : MonoBehaviour
     }
 
     private void TakeDamage(float dmg) {
-        hp -= dmg;
+        hp_cur -= dmg;
 
-        if (hp <= 0)
+        if (hp_cur <= 0)
         {
             Kill();
         }
