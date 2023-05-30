@@ -2,9 +2,11 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class PlayerControllor : MonoBehaviour
+//캐릭터를 사용하데 필요한 공용 메서드 들을 가지고 있음
+
+public class PlayerMng : MonoBehaviour
 {
-    public static PlayerControllor Instance;
+    public static PlayerMng Instance;
     // -- Component --
     //private CameraManager m_cameraMng;
     //private Rigidbody m_rb;
@@ -13,12 +15,25 @@ public class PlayerControllor : MonoBehaviour
     private Groundcheck m_groundchecker;
     //private Camera m_camFps;
     // ----
+    private enum moveParameter
+    {
+        Move_vertical,
+        Move_horizontal,
+        Dash_shift,
+    }
+    public enum PlayAbleCharacter
+    {
+        Paladin,
+        Archer,
+    }
+    CharacterData Character = null;
+    public int Chosedcharacter = (int)PlayAbleCharacter.Archer; //나중에 캐릭터를 생성할때 여기서 건들이면될듯
 
     // -- variable --
     [SerializeField, Range(0f, 1f)] float m_fDistanceToGround;
     private float m_verticalVelocity = 0;
     private float m_gravity = 9.81f;
-    public float mouseSensitivity = 100f;
+    public float mouseSensitivity = 650.0f;
     public float m_jumpForce = 5f;
     // ----
 
@@ -45,24 +60,21 @@ public class PlayerControllor : MonoBehaviour
     //----
 
     // -- Status
-    private float m_dmgPaladin = 30.0f;
-    private float m_moveSpeed = 2f;
-    private float hp_max = 400.0f;
+    private float dmg;
+    private float magic = 0;
+    private float hp_max;
+    private float m_moveSpeed;
+    private float defense_physical;
+    private float defense_magic;
+
+    private float skill_hill_cool = 5.0f;
+    private float skill_nomal_cool;
+    private float skill_Ultimate_cool;
     [SerializeField] private float hp_cur = 0.0f;
-
-    //데미지 공식
-    // ((플레이어 기본데미지 + (무기데미지 * 크리티컬함수) + ( 마법데미지 * 크리티컬함수 ) * 악세서리 추가데미지 ) 
-
-    // ---
 
     // -- keySetting -- 변경하는함수도 만들자
     // ----
 
-    private enum moveParameter {
-        Move_vertical,
-        Move_horizontal,
-        Dash_shift,
-    }
 
 
     private void Awake() {
@@ -85,12 +97,15 @@ public class PlayerControllor : MonoBehaviour
         DontDestroyOnLoad(this);
         //m_cameraMng = CameraManager.Instance;
         //m_camFps = m_cameraMng.GetCamera(enumCamera.CamFps);
-
+        initCharacterData(Chosedcharacter);
 
         UI = GameObject.Find("UI_Inventory");
 
         m_rotationValue = transform.rotation.eulerAngles;
         hp_cur = hp_max;//피 최대로 초기화
+
+
+       
     }
 
 
@@ -267,7 +282,6 @@ public class PlayerControllor : MonoBehaviour
     }
 
 
-
     private void DoAttack() {
         //TODO : 정면으로안가고 사선으로감, 공격 및 데미지 주고받는거 적용시켜야함
         if (Input.GetMouseButtonDown(0)){// 공격 
@@ -295,7 +309,6 @@ public class PlayerControllor : MonoBehaviour
         {
             UI.SetActive(false);
         }
-
     }
 
     public void SwichingActive()
@@ -303,7 +316,32 @@ public class PlayerControllor : MonoBehaviour
         invenflag = !invenflag;
         UI.SetActive(invenflag);
     }
+    public void initCharacterData(int _character)
+    {
+        switch (Chosedcharacter)
+        {
+            case 0:
+                Character = new CharacterData(PlayAbleCharacter.Paladin);
+                break;
+            case 1:
+                Character = new CharacterData(PlayAbleCharacter.Archer);
+                break;
+        }
 
+        dmg = Character.Pubdmg;
+        magic = Character.Pubmagic;
+        hp_max = Character.PubHp_max;
+        m_moveSpeed = Character.Pubm_moveSpeed;
+        defense_physical = Character.PubDefense_physical;
+        defense_magic = Character.PubDefense_magical;
+        skill_hill_cool = Character.Pubskill_hill_cool;
+        skill_nomal_cool = Character.Pubskill_nomal_cool;
+        skill_Ultimate_cool = Character.Pubskill_Ultimate_cool;
+    }
+
+    //데미지 공식
+    // ((플레이어 기본데미지 + (무기데미지 * 크리티컬함수) + ( 마법데미지 * 크리티컬함수 ) * 악세서리 추가데미지 ) 
+    // 방어공식 실제데미지 = 데미지 * 100 / 100 + 방어력 
     private void TakeDamage(float dmg) {
         hp_cur -= dmg;
 
@@ -354,5 +392,7 @@ public class PlayerControllor : MonoBehaviour
             Destroy(temp.gameObject);//여기서 게임오브젝트까지 지워주지않으면 스크립트만 지워짐.
         }
     }
+
+    
 
 }

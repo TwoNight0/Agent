@@ -377,10 +377,13 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 4f37a80c3e1035d4baedc4421cdcc89b, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  m_fDistanceToGround: 0
   mouseSensitivity: 100
   m_jumpForce: 5
   m_isSlope: 0
-  m_fDistanceToGround: 0
+  invenflag: 0
+  m_dmg: 30
+  hp_cur: 0
 --- !u!1 &777692112365812997
 GameObject:
   m_ObjectHideFlags: 0
@@ -440,7 +443,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 817408505591747275}
   m_LocalRotation: {x: 0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: -0, y: 0, z: 0}
+  m_LocalPosition: {x: 0.38, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []

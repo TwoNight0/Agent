@@ -21,7 +21,7 @@ public class UserDisplay : MonoBehaviour
 
     private void hpUpdate()
     {
-        hp_cur.fillAmount = PlayerControllor.Instance.GetHp / PlayerControllor.Instance.GetMaxHp;
+        hp_cur.fillAmount = PlayerMng.Instance.GetHp / PlayerMng.Instance.GetMaxHp;
     }
 
 
