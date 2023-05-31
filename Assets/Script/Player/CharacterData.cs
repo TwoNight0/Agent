@@ -1,9 +1,10 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
 
 //각종 데이터와 캐릭터 스킬을 보유한 스크립트
-
+//여기값은 데이터들의 원형이기때문에 가져가기 만하고 이 안의 값을 (변경하면 안됨)
 public class CharacterData
 {
     public CharacterData(PlayerMng.PlayAbleCharacter _value)
@@ -19,6 +20,12 @@ public class CharacterData
                 skill_hill_cool = 5.0f;
                 skill_nomal_cool = 6.0f;
                 skill_Ultimate_cool = 25.0f;
+
+                //이미지 등록 
+                nomalSkillImg = Resources.Load<Sprite>("SkillIcon/Icon.6_26");
+                UltimateSkillImg = Resources.Load<Sprite>("SkillIcon/Icon.4_79");
+                MainWeaponImg = Resources.Load<Sprite>("SkillIcon/Icon.6_98");
+                SubWeaponImg = Resources.Load<Sprite>("SkillIcon/Icon.8_21");
                 break;
             case PlayerMng.PlayAbleCharacter.Archer:
                 Pubdmg = 20.0f;
@@ -29,6 +36,12 @@ public class CharacterData
                 skill_hill_cool = 8.0f;
                 skill_nomal_cool = 8.0f;
                 skill_Ultimate_cool = 22.0f;
+
+                //이미지 등록 (나중에 아쳐용 이미지로 바꾸자)
+                nomalSkillImg = Resources.Load<Sprite>("SkillIcon/Icon.6_26");
+                UltimateSkillImg = Resources.Load<Sprite>("SkillIcon/Icon.4_79");
+                MainWeaponImg = Resources.Load<Sprite>("SkillIcon/Icon.4_79");
+                SubWeaponImg = Resources.Load<Sprite>("SkillIcon/Icon.4_79");
                 break;
         }
     }
@@ -44,6 +57,11 @@ public class CharacterData
     private float skill_nomal_cool;
     private float skill_Ultimate_cool;
 
+    public Sprite hillImg = Resources.Load<Sprite>("SkillIcon/Icon.6_86"); //기본값 
+    public Sprite nomalSkillImg;
+    public Sprite UltimateSkillImg;
+    public Sprite MainWeaponImg;
+    public Sprite SubWeaponImg;
 
     public float Pubdmg
     {

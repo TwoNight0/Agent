@@ -27,7 +27,7 @@ public class PlayerMng : MonoBehaviour
         Archer,
     }
     CharacterData Character = null;
-    public int Chosedcharacter = (int)PlayAbleCharacter.Archer; //나중에 캐릭터를 생성할때 여기서 건들이면될듯
+    public int Chosedcharacter; //선택한 캐릭터의 클래스
 
     // -- variable --
     [SerializeField, Range(0f, 1f)] float m_fDistanceToGround;
@@ -59,7 +59,7 @@ public class PlayerMng : MonoBehaviour
     private float m_dashDuration = 2.0f;
     //----
 
-    // -- Status
+    // -- Status (characterData를 가져와서 변경해서 사용할 값들)
     private float dmg;
     private float magic = 0;
     private float hp_max;
@@ -69,9 +69,15 @@ public class PlayerMng : MonoBehaviour
 
     private float skill_hill_cool = 5.0f;
     private float skill_nomal_cool;
-    private float skill_Ultimate_cool;
+    private float skill_Ultimate_cool; 
     [SerializeField] private float hp_cur = 0.0f;
 
+    //--아이콘이미지
+    public Sprite hillImg;
+    public Sprite nomalSkillImg;
+    public Sprite UltimateSkillImg;
+    public Sprite MainWeaponImg;
+    public Sprite SubWeaponImg;
     // -- keySetting -- 변경하는함수도 만들자
     // ----
 
@@ -94,6 +100,7 @@ public class PlayerMng : MonoBehaviour
     }
 
     void Start() {
+        Chosedcharacter = (int)PlayAbleCharacter.Paladin; 
         DontDestroyOnLoad(this);
         //m_cameraMng = CameraManager.Instance;
         //m_camFps = m_cameraMng.GetCamera(enumCamera.CamFps);
@@ -102,7 +109,7 @@ public class PlayerMng : MonoBehaviour
         UI = GameObject.Find("UI_Inventory");
 
         m_rotationValue = transform.rotation.eulerAngles;
-        hp_cur = hp_max;//피 최대로 초기화
+        
 
 
        
@@ -337,6 +344,13 @@ public class PlayerMng : MonoBehaviour
         skill_hill_cool = Character.Pubskill_hill_cool;
         skill_nomal_cool = Character.Pubskill_nomal_cool;
         skill_Ultimate_cool = Character.Pubskill_Ultimate_cool;
+
+        hillImg = Character.hillImg;
+        nomalSkillImg = Character.nomalSkillImg;
+        UltimateSkillImg = Character.UltimateSkillImg;
+        MainWeaponImg = Character.MainWeaponImg;
+        SubWeaponImg = Character.SubWeaponImg;
+        hp_cur = hp_max;//피 최대로 초기화
     }
 
     //데미지 공식
@@ -351,6 +365,7 @@ public class PlayerMng : MonoBehaviour
         }
 
     }
+
     public void Kill()
     {
         Debug.Log("사망");
