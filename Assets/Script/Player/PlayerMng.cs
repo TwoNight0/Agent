@@ -78,10 +78,13 @@ public class PlayerMng : MonoBehaviour
     public Sprite UltimateSkillImg;
     public Sprite MainWeaponImg;
     public Sprite SubWeaponImg;
+
+    //--스킬 타이머
+    private float timer_hill;
+    private float timer_normal;
+    private float timer_Ultimate;
     // -- keySetting -- 변경하는함수도 만들자
     // ----
-
-
 
     private void Awake() {
         if (Instance == null)
@@ -246,8 +249,6 @@ public class PlayerMng : MonoBehaviour
             m_timerDash += Time.deltaTime;
 
         }
-
-
         if (m_isSlope) { //경사로일때 경사로 반대로 이동(미끄러짐)
             m_characterController.Move(-m_slopeVector * Time.deltaTime);
         }
@@ -351,8 +352,53 @@ public class PlayerMng : MonoBehaviour
         MainWeaponImg = Character.MainWeaponImg;
         SubWeaponImg = Character.SubWeaponImg;
         hp_cur = hp_max;//피 최대로 초기화
-    }
 
+        //쿨타임 초기화
+        timer_hill = skill_hill_cool;
+        timer_normal = skill_nomal_cool;
+        timer_Ultimate = skill_Ultimate_cool;
+    }
+    private void skillInput()
+    {
+        //스킬쿨 추가
+        if (skill_hill_cool > timer_hill) { timer_hill += Time.deltaTime; }
+        else//아이콘 초록색으로 변경
+        {
+
+        }
+        if (skill_nomal_cool > timer_normal) { timer_normal += Time.deltaTime; }
+        else
+        {
+
+        }
+        if (skill_Ultimate_cool > timer_Ultimate) { timer_Ultimate += Time.deltaTime; }
+        else
+        {
+
+        }
+
+        //스킬입력
+        if (Input.GetKeyDown(KeyCode.Q) && (skill_hill_cool <= timer_hill))
+        {
+            Debug.Log("Q");
+            Debug.Log(timer_hill);
+            timer_hill = 0;
+
+        }
+        //노말스킬
+        if (Input.GetKeyDown(KeyCode.F) && (skill_nomal_cool <= timer_normal))
+        {
+            Debug.Log("F");
+            timer_normal = 0;
+        }
+
+        //궁극기
+        if (Input.GetKeyDown(KeyCode.G) && (skill_Ultimate_cool <= timer_Ultimate))
+        {
+            Debug.Log("G");
+            timer_Ultimate = 0;
+        }
+    }
     //데미지 공식
     // ((플레이어 기본데미지 + (무기데미지 * 크리티컬함수) + ( 마법데미지 * 크리티컬함수 ) * 악세서리 추가데미지 ) 
     // 방어공식 실제데미지 = 데미지 * 100 / 100 + 방어력 
@@ -363,7 +409,6 @@ public class PlayerMng : MonoBehaviour
         {
             Kill();
         }
-
     }
 
     public void Kill()

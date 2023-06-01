@@ -25,7 +25,7 @@ public class CharacterData
                 nomalSkillImg = Resources.Load<Sprite>("SkillIcon/Icon.6_26");
                 UltimateSkillImg = Resources.Load<Sprite>("SkillIcon/Icon.4_79");
                 MainWeaponImg = Resources.Load<Sprite>("SkillIcon/Icon.6_98");
-                SubWeaponImg = Resources.Load<Sprite>("SkillIcon/Icon.8_21");
+                SubWeaponImg = Resources.Load<Sprite>("SkillIcon/Icons8_21");
                 break;
             case PlayerMng.PlayAbleCharacter.Archer:
                 Pubdmg = 20.0f;
@@ -37,11 +37,11 @@ public class CharacterData
                 skill_nomal_cool = 8.0f;
                 skill_Ultimate_cool = 22.0f;
 
-                //이미지 등록 (나중에 아쳐용 이미지로 바꾸자)
-                nomalSkillImg = Resources.Load<Sprite>("SkillIcon/Icon.6_26");
-                UltimateSkillImg = Resources.Load<Sprite>("SkillIcon/Icon.4_79");
-                MainWeaponImg = Resources.Load<Sprite>("SkillIcon/Icon.4_79");
-                SubWeaponImg = Resources.Load<Sprite>("SkillIcon/Icon.4_79");
+                //이미지 등록
+                nomalSkillImg = Resources.Load<Sprite>("SkillIcon/Icon.1_16");
+                UltimateSkillImg = Resources.Load<Sprite>("SkillIcon/Icon.4_62");
+                MainWeaponImg = Resources.Load<Sprite>("SkillIcon/Icon.4_60");
+                SubWeaponImg = Resources.Load<Sprite>("SkillIcon/Icons8_21");
                 break;
         }
     }

@@ -16,11 +16,12 @@ public class UserDisplay : MonoBehaviour
     [SerializeField] private Image ultimateImage;
     [SerializeField] private Image MainWeaponImage;
     [SerializeField] private Image SubWeaponImage;
-    
+
     void Start()
     {
+       
         hp_cur = transform.Find("Hp_Cur").GetComponentInChildren<Image>();
-        initUIImg();
+        initDisplay();
     }
 
     
@@ -35,7 +36,7 @@ public class UserDisplay : MonoBehaviour
     }
 
     //UI이미지들을 선택한 캐릭터의 스킬에 맞게 변경해주는 메서드
-    private void initUIImg()
+    private void initDisplay()
     {
         //오브젝트지정
         hill = GameObject.Find("Hill");
@@ -43,8 +44,8 @@ public class UserDisplay : MonoBehaviour
         ultimate = GameObject.Find("skill_Ultimate");
         Weapon = GameObject.Find("Weapon");
 
-        //이미지할당
-        hillImage.sprite = PlayerMng.Instance.hillImg;
+        //이미지할당 //playerMng가 이미지를 보내주고 그 이미지를 받았음
+        hillImage.sprite = PlayerMng.Instance.hillImg; 
         nomarlImage.sprite = PlayerMng.Instance.nomalSkillImg;
         ultimateImage.sprite = PlayerMng.Instance.UltimateSkillImg;
         MainWeaponImage.sprite = PlayerMng.Instance.MainWeaponImg;
@@ -55,8 +56,9 @@ public class UserDisplay : MonoBehaviour
         nomarlImage = nomarl.GetComponent<Image>();
         ultimateImage = ultimate.GetComponent<Image>();
         MainWeaponImage = Weapon.GetComponent<Image>();
+        SubWeaponImage = Weapon.GetComponent<Image>();
+
+        
+
     }
-
-
-
 }
