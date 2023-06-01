@@ -4,10 +4,8 @@ using UnityEngine;
 using UnityEngine.UI;
 using TMPro;
 
-public class PopupMng : MonoBehaviour
-{
+public class PopupMng : MonoBehaviour{
     public static PopupMng Instance;
-
 
     [SerializeField] private GameObject m_objPopup;
     [SerializeField] private TextMeshProUGUI m_textTitle;
@@ -21,23 +19,19 @@ public class PopupMng : MonoBehaviour
     [Tooltip("꺼지는 시간 조절")]public float m_fCloseTime = 1.0f;
 
 
-    private void Awake()
-    {
-        if(Instance == null)
-        {
+    private void Awake(){
+        if(Instance == null){
             Instance = this;
             DontDestroyOnLoad(Instance);    
         }
-        else
-        {
+        else{
             Destroy(Instance);
         }
 
     }
 
     // Start is called before the first frame update
-    private void Start()
-    {
+    private void Start(){
         init();
         ShowMessage(new cPopup("제목1", "내용1", null));
         ShowMessage(new cPopup("제목2", "내용2", null));
@@ -51,8 +45,7 @@ public class PopupMng : MonoBehaviour
 
     }
 
-    private void init()
-    {
+    private void init(){
         m_objPopup.SetActive(false);
         m_textTitle.text = string.Empty;
         m_textValue.text = string.Empty;
@@ -70,18 +63,16 @@ public class PopupMng : MonoBehaviour
 
     }
 
-    private void setTextAlpaha(TextMeshProUGUI _text, float _alpha)
-    {
+    //(TEXT) 투명도 조절
+    private void setTextAlpaha(TextMeshProUGUI _text, float _alpha){
         _alpha = Mathf.Clamp(_alpha, 0f, 1f); //최대 최소   
         Color color = _text.color;
         color.a = _alpha;
         _text.color = color;
-
-
     }
 
-    private void setImageAlpaha(Image _img, float _alpha)
-    {
+    //(Image) 투명도 조절
+    private void setImageAlpaha(Image _img, float _alpha){
         _alpha = Mathf.Clamp(_alpha, 0f, 1f); //최대 최소   
         Color color = _img.color;
         color.a = _alpha;
@@ -89,16 +80,14 @@ public class PopupMng : MonoBehaviour
 
     }
 
-    public void ShowMessage(cPopup _value)
-    {
+    
+    public void ShowMessage(cPopup _value){
         m_listMessages.Add(_value);
         showMessage();
     }
 
-    private void showMessage()
-    {
-        if (m_listMessages.Count == 0)
-        {
+    private void showMessage(){
+        if (m_listMessages.Count == 0){//0이면 리턴
             return;
         }
 
@@ -116,29 +105,22 @@ public class PopupMng : MonoBehaviour
 
     }
 
-    IEnumerator close()
-    {
+    IEnumerator close(){
         m_btnPopup.interactable = false;
         Color color = new Color(0, 0, 0, 1f);
-        while (true)
-        {
-
+        while (true){
             m_textTitle.color -= color * Time.deltaTime * (1/ m_fCloseTime); // 타이머는 1을 그시간동안 나누면됨
             m_textValue.color -= color * Time.deltaTime * (1 / m_fCloseTime);
             m_imgPopup.color -= color * Time.deltaTime * (1 / m_fCloseTime);
 
-            if (m_imgPopup.color.a > 0)
-            {
+            if (m_imgPopup.color.a > 0){
                 yield return null;
             }
-            else
-            {
+            else{
                 break;
             }
-
         }
-        if(m_listMessages[0].Action != null)
-        {
+        if(m_listMessages[0].Action != null){
             m_listMessages[0].Action.Invoke();
         }
         m_listMessages.RemoveAt(0);

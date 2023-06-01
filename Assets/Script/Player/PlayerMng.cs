@@ -2,48 +2,46 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-//캐릭터를 사용하데 필요한 공용 메서드 들을 가지고 있음
+// 클래스 설명 : 캐릭터를 사용하데 필요한 공용 메서드 들을 가지고 있음
 
-public class PlayerMng : MonoBehaviour
-{
+public class PlayerMng : MonoBehaviour{
+
+    #region (Component)
     public static PlayerMng Instance;
     // -- Component --
     //private CameraManager m_cameraMng;
+    //private Camera m_camFps;
     //private Rigidbody m_rb;
     private CharacterController m_characterController;
     private Animator m_animator;
     private Groundcheck m_groundchecker;
-    //private Camera m_camFps;
+    private CharacterData Character = null;
+    private GameObject UI;
     // ----
-    private enum moveParameter
-    {
+    #endregion
+
+    #region (Enum)(moveParameter, PlayAbleCharacter)
+    private enum moveParameter{
         Move_vertical,
         Move_horizontal,
         Dash_shift,
     }
-    public enum PlayAbleCharacter
-    {
+    public enum PlayAbleCharacter{
         Paladin,
         Archer,
     }
-    CharacterData Character = null;
-    public int Chosedcharacter; //선택한 캐릭터의 클래스
+    #endregion
 
-    // -- variable --
-    [SerializeField, Range(0f, 1f)] float m_fDistanceToGround;
-    private float m_verticalVelocity = 0;
-    private float m_gravity = 9.81f;
-    public float mouseSensitivity = 650.0f;
-    public float m_jumpForce = 5f;
-    // ----
-
+    #region (Vecter)
     // -- Vector --
     private Vector3 m_rotationValue;
     private Vector3 m_moveDir;
     private Vector3 m_dashDirection;
     private Vector3 m_slopeVector;
     // ---- 
+    #endregion
 
+    #region (Bool)
     // -- bool --
     private bool m_pressJump = false;
     private bool m_isGround = false;
@@ -51,99 +49,164 @@ public class PlayerMng : MonoBehaviour
     private bool m_dashcheck = false;
     public bool invenflag = false;
     // ----
+    #endregion
 
-    private GameObject UI;
-
-    // -- Timer --
-    private float m_timerDash = 10.0f;
-    private float m_dashDuration = 2.0f;
-    //----
-
-    // -- Status (characterData를 가져와서 변경해서 사용할 값들)
-    private float dmg;
-    private float magic = 0;
-    private float hp_max;
-    private float m_moveSpeed;
-    private float defense_physical;
-    private float defense_magic;
-
-    private float skill_hill_cool = 5.0f;
-    private float skill_nomal_cool;
-    private float skill_Ultimate_cool; 
-    [SerializeField] private float hp_cur = 0.0f;
-
+    #region (Sprite)아이콘이미지
     //--아이콘이미지
     public Sprite hillImg;
     public Sprite nomalSkillImg;
     public Sprite UltimateSkillImg;
     public Sprite MainWeaponImg;
     public Sprite SubWeaponImg;
+    public Sprite DashImg;
+    #endregion
 
-    //--스킬 타이머
+    #region [Timer]
+    //--Timer --
+    private float m_dashDuration = 2.0f;
+    private float timer_Dash = 10.0f;
     private float timer_hill;
     private float timer_normal;
     private float timer_Ultimate;
-    // -- keySetting -- 변경하는함수도 만들자
-    // ----
+    #endregion
 
+    #region [variable]
+    // -- variable --
+    [SerializeField, Range(0f, 1f)] float m_fDistanceToGround;
+    private float m_verticalVelocity = 0;
+    private float m_gravity = 9.81f;
+    public float mouseSensitivity = 650.0f;
+    public float m_jumpForce = 5f;
+    public int Chosedcharacter; //선택한 캐릭터의 클래스
+    // ----
+    #endregion
+
+    #region [Status] Player value
+    // -- Status (characterData를 가져와서 변경해서 사용할 값들)
+    private float dmg;
+    private float magic = 0;
+    [SerializeField] private float hp_cur = 0.0f;
+    private float hp_max;
+    private float m_moveSpeed;
+    private float defense_physical;
+    private float defense_magic;
+
+
+    // 초기에 characterData에서 복사한데이터로 이 데이터를 변경(증가, 감소)하여 사용
+    private float skill_hill_cool = 5.0f;
+    private float skill_nomal_cool;
+    private float skill_Ultimate_cool;
+    private float Dash_cool;
+    #endregion
+
+    #region (Get, Set)private value 넘김
+    public float GetHp
+    {
+        get => hp_cur;
+        set => hp_cur = value;
+    }
+
+    public float GetMaxHp
+    {
+        get => hp_max;
+        set => hp_max = value;
+    }
+    #endregion
+
+ // ---- [ Awake, start , Update ] ----
     private void Awake() {
-        if (Instance == null)
-        {
+        if (Instance == null){
             Instance = this;
         }
-        else
-        {
+        else{
             Destroy(this);
         }
+        initComponent();
+    }
 
+    void Start() {
+        DontDestroyOnLoad(this);
+        //캐릭터 선택
+        Chosedcharacter = (int)PlayAbleCharacter.Paladin; 
+        //--
+
+        initCharacterData(Chosedcharacter);
+    }
+
+    private void Update() {
+
+        // -- 문제 없음 --
+        Jump();
+        Rotation();
+        // ----
+
+
+        // -- 체크 중 ---
+        Moving();
+        UserInput();
+        //checkSlopeVelocity();
+        checkGravity();
+        //DoAttack();
+        inventoryopen();
+
+        // ----
+    }
+//  ---- ---- ---- ---- 
+
+    #region 초기화(init)
+    public void initCharacterData(int _character){
+        
+        switch (Chosedcharacter){
+            case 0:
+                Character = new CharacterData(PlayAbleCharacter.Paladin);
+                break;
+            case 1:
+                Character = new CharacterData(PlayAbleCharacter.Archer);
+                break;
+        }
+
+        //초기화(값 할당)
+        dmg = Character.Pubdmg;
+        magic = Character.Pubmagic;
+        hp_max = Character.PubHp_max;
+        m_moveSpeed = Character.Pubm_moveSpeed;
+        defense_physical = Character.PubDefense_physical;
+        defense_magic = Character.PubDefense_magical;
+        skill_hill_cool = Character.Pubskill_hill_cool;
+        skill_nomal_cool = Character.Pubskill_nomal_cool;
+        skill_Ultimate_cool = Character.Pubskill_Ultimate_cool;
+        Dash_cool = Character.PubDash;
+
+        //초기화(이미지)
+        hillImg = Character.hillImg;
+        nomalSkillImg = Character.nomalSkillImg;
+        UltimateSkillImg = Character.UltimateSkillImg;
+        MainWeaponImg = Character.MainWeaponImg;
+        SubWeaponImg = Character.SubWeaponImg;
+        DashImg = Character.DashImg;
+
+        //초기화(타이머)
+        timer_hill = skill_hill_cool;
+        timer_normal = skill_nomal_cool;
+        timer_Ultimate = skill_Ultimate_cool;
+        timer_Dash = Character.PubDash;
+
+        //초기화(체력)
+        hp_cur = hp_max;
+    }
+
+    private void initComponent() {
         //m_rb = this.transform.GetComponent<Rigidbody>();
         m_characterController = transform.GetComponent<CharacterController>();
         m_animator = GetComponent<Animator>();
         m_groundchecker = transform.GetComponentInChildren<Groundcheck>();
-    }
-
-    void Start() {
-        Chosedcharacter = (int)PlayAbleCharacter.Paladin; 
-        DontDestroyOnLoad(this);
         //m_cameraMng = CameraManager.Instance;
         //m_camFps = m_cameraMng.GetCamera(enumCamera.CamFps);
-        initCharacterData(Chosedcharacter);
-
         UI = GameObject.Find("UI_Inventory");
-
         m_rotationValue = transform.rotation.eulerAngles;
-        
-
-
-       
     }
-
-
-    private void Update() {
-        // -- 문제 없음 --
-        Jump();
-        Rotation();
-        //UpdateTimer();
-
-
-        // ----
-
-        // -- 체크 중 ---
-        Moving();
-        PlayDashAction();
-        //checkSlopeVelocity();
-        checkGravity();
-        //DoAttack();
-
-        inventoryopen();
-
-
-        // ----
-
-
-
-    }
-
+    #endregion
+    
     private void OnAnimatorIK(int layerIndex) {
         m_animator.SetLookAtWeight(1); //0~1������ �켱����
         //m_animator.SetLookAtPosition(m_trsLookAtObj.position);
@@ -175,53 +238,53 @@ public class PlayerMng : MonoBehaviour
             m_animator.SetIKRotation(AvatarIKGoal.RightFoot,
                 Quaternion.LookRotation(Vector3.ProjectOnPlane(transform.forward, hit2.normal), hit2.normal));
         }
-    }
+    }// 3D 부착 컴포넌트
 
-    //-- 갱신 코드 --
-    private void UpdateTimer() {
-        if (m_timerDash < 2.0f) { // 2초쿨
-            m_timerDash += Time.deltaTime;
-            if (m_timerDash > 1.9f) {
-                //Debug.Log($"대쉬가능 ={m_timerDash}");
-
-                m_animator.SetBool(moveParameter.Dash_shift.ToString(), false);
-
-            }
-        }
-    }
-
+    #region checker(그라운드, 그래비티, 슬로프)
+    //그라운드 체커
     private void UpdateisGround() {
         this.m_isGround = m_groundchecker.getGround();
         //Debug.Log(m_isGround);
     }
 
-    private void PlayDashAction() {
-        if (m_dashcheck) {
-            m_animator.Play("Stand To Roll");
-            m_dashcheck = false;
+    //중력 체커
+    private void checkGravity(){
+        if (m_groundchecker.getGround() == false){ // IsGround = false
+          //땅에 붙어있지않아 중력을 받아야 할 때
+            m_verticalVelocity -= m_gravity * Time.deltaTime; //수직속도를 계속 낮춰 중력을 받게함
+            m_pressJump = false;
         }
+        else{ // IsGround = true, space 눌를시 점프
+            if (m_pressJump)
+            {
+                m_verticalVelocity = m_jumpForce; //수직속도를 정상적으로 넣어서 작동하게함
+            }
+            else
+            { // pressJump가 눌리지않으면 점프 x
+                m_verticalVelocity = 0f;
+            }
+        }
+        //m_verticalVelocity -= m_gravity * Time.deltaTime;
+        m_characterController.Move(new Vector3(0, m_verticalVelocity, 0) * Time.deltaTime);
     }
 
-    public void checkSlopeVelocity()
-    {
-        if (Physics.Raycast(transform.position, Vector3.down, out RaycastHit hit, m_characterController.height * 0.7f)) //뭔가에 닿으면
-        {
+    //경사도 체커
+    public void checkSlopeVelocity(){
+        if (Physics.Raycast(transform.position, Vector3.down, out RaycastHit hit, m_characterController.height * 0.7f)){ //뭔가에 닿으면
             float angle = Vector3.Angle(hit.normal, Vector3.up);
             //Debug.Log(angle);
-            if (angle >= m_characterController.slopeLimit)
-            {
+            if (angle >= m_characterController.slopeLimit){
                 m_isSlope = true;
                 m_slopeVector = Vector3.ProjectOnPlane(new Vector3(0, m_gravity, 0), hit.normal);
             }
-            else
-            {
+            else{
                 m_isSlope = false;
             }
         }
     }
-    //-----
+    #endregion
 
-    //TODO 대쉬 돌아오기
+    #region Move, Jump, rotate
     private void Moving() {
         m_moveDir.x = Input.GetAxis("Horizontal");
         m_moveDir.z = Input.GetAxis("Vertical");
@@ -231,27 +294,26 @@ public class PlayerMng : MonoBehaviour
         m_animator.SetFloat(moveParameter.Move_vertical.ToString(), Input.GetAxis("Vertical"));
         m_animator.SetFloat(moveParameter.Move_horizontal.ToString(), Input.GetAxis("Horizontal"));
 
-
         //m_rb.AddForce(transform.rotation * m_moveDir * m_moveSpeed);
-
+        //TODO  : 대쉬 고치기
         //왜돌아옴?ㅋㅋㅋ
-        if (Input.GetKeyDown(KeyCode.LeftShift) && m_timerDash > m_dashDuration) {
+        if (Input.GetKeyDown(KeyCode.LeftShift) && timer_Dash > m_dashDuration) {
 
             //Debug.Log($"대쉬불가 : {m_timerDash}");
             m_dashDirection = m_moveDir; //이걸해줘야 키를 때도 대쉬 방향이 유지됨 키 때면 대쉬 0.0 되버림
             //Debug.Log(m_dashDirection);
-            m_timerDash = 0.0f;
+            timer_Dash = 0.0f;
             m_dashcheck = true;
         }
-
-        if (m_timerDash <= m_dashDuration) { //대쉬타이머가 듀레이션보다 작을작을때 작동 shift 누르면 작아짐
+        if (timer_Dash <= m_dashDuration) { //대쉬타이머가 듀레이션보다 작을작을때 작동 shift 누르면 작아짐
             m_characterController.Move(m_dashDirection * 4 * Time.deltaTime);//이동
-            m_timerDash += Time.deltaTime;
-
+            timer_Dash += Time.deltaTime;
         }
+
         if (m_isSlope) { //경사로일때 경사로 반대로 이동(미끄러짐)
             m_characterController.Move(-m_slopeVector * Time.deltaTime);
         }
+
         else { //기본 움직임
             m_characterController.Move(transform.rotation * m_moveDir * m_moveSpeed * Time.deltaTime);
         }
@@ -276,143 +338,30 @@ public class PlayerMng : MonoBehaviour
         transform.rotation = Quaternion.Euler(0f, m_rotationValue.y, 0f);
         //m_camFps.transform.rotation = Quaternion.Euler(m_rotationValue.x, m_rotationValue.y, 0f);
     }
+    #endregion
 
-    public float GetHp
-    {
-        get => hp_cur;
-        set => hp_cur = value;
-    }
-
-    public float GetMaxHp
-    {
-        get => hp_max;
-        set => hp_max = value;
-    }
-
-
-    private void DoAttack() {
+    #region PlayerInput(공격, 스킬, 상호작용(인벤토리))
+    private void DoAttack(){
         //TODO : 정면으로안가고 사선으로감, 공격 및 데미지 주고받는거 적용시켜야함
         if (Input.GetMouseButtonDown(0)){// 공격 
             m_animator.Play("Two Hand Club Combo");
         }
-        else if (Input.GetMouseButtonDown(1)) { //패링
+        else if (Input.GetMouseButtonDown(1)){ //TODO패링
             m_animator.Play("Two Hand Club Combo");
-        }
-    }
-    private void inventoryopen()
-    {
-        if (Input.GetKeyDown(KeyCode.Tab))
-        {
-            invenflag = !invenflag;
-
-            //Debug.Log(invenflag);
-            
-        }
-
-        if (invenflag)//트루면 켜짐
-        {
-            UI.SetActive(true);
-        }
-        else//false면 꺼짐
-        {
-            UI.SetActive(false);
-        }
-    }
-
-    public void SwichingActive()
-    {
-        invenflag = !invenflag;
-        UI.SetActive(invenflag);
-    }
-    public void initCharacterData(int _character)
-    {
-        switch (Chosedcharacter)
-        {
-            case 0:
-                Character = new CharacterData(PlayAbleCharacter.Paladin);
-                break;
-            case 1:
-                Character = new CharacterData(PlayAbleCharacter.Archer);
-                break;
-        }
-
-        dmg = Character.Pubdmg;
-        magic = Character.Pubmagic;
-        hp_max = Character.PubHp_max;
-        m_moveSpeed = Character.Pubm_moveSpeed;
-        defense_physical = Character.PubDefense_physical;
-        defense_magic = Character.PubDefense_magical;
-        skill_hill_cool = Character.Pubskill_hill_cool;
-        skill_nomal_cool = Character.Pubskill_nomal_cool;
-        skill_Ultimate_cool = Character.Pubskill_Ultimate_cool;
-
-        hillImg = Character.hillImg;
-        nomalSkillImg = Character.nomalSkillImg;
-        UltimateSkillImg = Character.UltimateSkillImg;
-        MainWeaponImg = Character.MainWeaponImg;
-        SubWeaponImg = Character.SubWeaponImg;
-        hp_cur = hp_max;//피 최대로 초기화
-
-        //쿨타임 초기화
-        timer_hill = skill_hill_cool;
-        timer_normal = skill_nomal_cool;
-        timer_Ultimate = skill_Ultimate_cool;
-    }
-    private void skillInput()
-    {
-        //스킬쿨 추가
-        if (skill_hill_cool > timer_hill) { timer_hill += Time.deltaTime; }
-        else//아이콘 초록색으로 변경
-        {
-
-        }
-        if (skill_nomal_cool > timer_normal) { timer_normal += Time.deltaTime; }
-        else
-        {
-
-        }
-        if (skill_Ultimate_cool > timer_Ultimate) { timer_Ultimate += Time.deltaTime; }
-        else
-        {
-
-        }
-
-        //스킬입력
-        if (Input.GetKeyDown(KeyCode.Q) && (skill_hill_cool <= timer_hill))
-        {
-            Debug.Log("Q");
-            Debug.Log(timer_hill);
-            timer_hill = 0;
-
-        }
-        //노말스킬
-        if (Input.GetKeyDown(KeyCode.F) && (skill_nomal_cool <= timer_normal))
-        {
-            Debug.Log("F");
-            timer_normal = 0;
-        }
-
-        //궁극기
-        if (Input.GetKeyDown(KeyCode.G) && (skill_Ultimate_cool <= timer_Ultimate))
-        {
-            Debug.Log("G");
-            timer_Ultimate = 0;
         }
     }
     //데미지 공식
     // ((플레이어 기본데미지 + (무기데미지 * 크리티컬함수) + ( 마법데미지 * 크리티컬함수 ) * 악세서리 추가데미지 ) 
     // 방어공식 실제데미지 = 데미지 * 100 / 100 + 방어력 
-    private void TakeDamage(float dmg) {
+    private void TakeDamage(float dmg){
         hp_cur -= dmg;
 
-        if (hp_cur <= 0)
-        {
+        if (hp_cur <= 0){
             Kill();
         }
     }
 
-    public void Kill()
-    {
+    public void Kill(){
         Debug.Log("사망");
         m_animator.Play("Explosion");
 
@@ -422,25 +371,72 @@ public class PlayerMng : MonoBehaviour
         Time.timeScale = 0.0f;
     }
 
-    private void checkGravity(){
-        if (m_groundchecker.getGround() == false){ // IsGround = false
-          //땅에 붙어있지않아 중력을 받아야 할 때
-            m_verticalVelocity -= m_gravity * Time.deltaTime; //수직속도를 계속 낮춰 중력을 받게함
-            m_pressJump = false;
+    // invenflag의 값에 따라 인벤을 열고 닫음
+    private void inventoryopen(){
+        if (Input.GetKeyDown(KeyCode.Tab)){
+            invenflag = !invenflag;
         }
-        else{ // IsGround = true, space 눌를시 점프
-            if (m_pressJump){
-                m_verticalVelocity = m_jumpForce; //수직속도를 정상적으로 넣어서 작동하게함
-            }
-            else{ // pressJump가 눌리지않으면 점프 x
-                m_verticalVelocity = 0f; 
-            }
+        if (invenflag){//트루면 켜짐
+            UI.SetActive(true);
         }
-
-        //m_verticalVelocity -= m_gravity * Time.deltaTime;
-        m_characterController.Move(new Vector3(0, m_verticalVelocity, 0) * Time.deltaTime);
+        else{//false면 꺼짐
+            UI.SetActive(false);
+        }
+    }
+    public void SwichingActive(){
+        invenflag = !invenflag;
+        UI.SetActive(invenflag);
     }
 
+    private void UserInput(){
+        //스킬쿨일때
+        if (skill_hill_cool > timer_hill) { timer_hill += Time.deltaTime; } 
+        else{ //스킬 쿨 다돌았을때
+            //TODO 아이콘 초록색으로 변경
+        }
+        if (skill_nomal_cool > timer_normal) { timer_normal += Time.deltaTime; }
+        else{
+
+        }
+        if (skill_Ultimate_cool > timer_Ultimate) { timer_Ultimate += Time.deltaTime; }
+        else{
+
+        }
+        if (Dash_cool > timer_Dash) { timer_Dash += Time.deltaTime; }
+        else{
+
+        }
+
+        //힐(Q)
+        if (Input.GetKeyDown(KeyCode.Q) && (skill_hill_cool <= timer_hill)){
+            Debug.Log("Q");
+            Debug.Log(timer_hill);
+            timer_hill = 0;
+
+        }
+        //노말스킬(F)
+        if (Input.GetKeyDown(KeyCode.F) && (skill_nomal_cool <= timer_normal)){
+            Debug.Log("F");
+            timer_normal = 0;
+        }
+
+        //궁극기(G)
+        if (Input.GetKeyDown(KeyCode.G) && (skill_Ultimate_cool <= timer_Ultimate)){
+            Debug.Log("G");
+            timer_Ultimate = 0;
+        }
+
+        //구르기(Dash, shift)
+        if (Input.GetKeyDown(KeyCode.LeftShift) && (Dash_cool <= timer_Dash)){
+            Debug.Log("Dash");
+            timer_Dash = 0;
+
+        }
+
+    }
+    #endregion
+
+    #region 충돌관리(아이템)
     private void OnTriggerEnter(Collider other)
     {
         if (other.transform.tag == "Item")
@@ -452,7 +448,5 @@ public class PlayerMng : MonoBehaviour
             Destroy(temp.gameObject);//여기서 게임오브젝트까지 지워주지않으면 스크립트만 지워짐.
         }
     }
-
-    
-
+    #endregion
 }

@@ -14,32 +14,28 @@ using UnityEngine;
 /// 6001~7000   포션 // 세부포션은 나중에 생각하자
 /// </summary>
 
-public class DataWeaponItem : DataEquipmentItem
-{
+public class DataWeaponItem : DataEquipmentItem{
     private int dmg_physic = 0;
     private int dmg_magic = 0;
     private float attack_speed = 1f;
 
-    public int Dmg_physic
-    {
+    #region (Get,Set)
+    public int Dmg_physic{
         get => dmg_physic;
         set => dmg_physic = value;
     }
 
-    public int Dmg_magic
-    {
-        get 
-        { 
+    public int Dmg_magic{
+        get { 
             return dmg_magic;
         }
         set => dmg_magic = value;
     }
 
-    public float Attack_speed
-    {
+    public float Attack_speed{
         get => attack_speed;
         set => attack_speed = value;
     }
-
+    #endregion
 
 }

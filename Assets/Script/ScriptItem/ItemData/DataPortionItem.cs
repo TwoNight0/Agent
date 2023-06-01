@@ -12,8 +12,7 @@ using UnityEngine;
 /// 4001~5000   장신구 : 반지(4001~4500), 목걸이(4501~5000)
 /// 6001~7000   포션 // 세부포션은 나중에 생각하자
 /// </summary>
-public class DataPortionItem : DataCountableItem
-{
+public class DataPortionItem : DataCountableItem{
     
 }
 

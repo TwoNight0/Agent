@@ -4,9 +4,9 @@ using UnityEngine;
 using UnityEngine.UI;
 using TMPro;
 
-//슬롯에 데이터를 넣기 위한 스크립트
-public class ItemSlotScript : MonoBehaviour
-{
+// 클래스 설명 : 인벤토리에 있는 슬롯을 관리 
+
+public class ItemSlotScript : MonoBehaviour{
     [SerializeField] private int itemCode = 0;
     [SerializeField] private int Account = 0;
     [SerializeField] public Sprite slotIcon;
@@ -17,43 +17,29 @@ public class ItemSlotScript : MonoBehaviour
         icon.sprite = _sprite;
     }
 
-
-
-    public int PubItemCode
-    {
+    #region (Get,Set)
+    public int PubItemCode{
         get => itemCode;
         set => itemCode = value;
     }
 
-    public int PubAccount
-    {
+    public int PubAccount{
         get => Account;
         set => Account = value;
     }
 
-    public TextMeshProUGUI PubText
-    {
+    public TextMeshProUGUI PubText{
         get => text;
         set => text = value;
 
     }
+    #endregion
 
-  
 }
 
-public class SaveForm {
+// 인벤토리를 Jason으로 저장하기 위한 ItemSlot의 Small 클래스
+public class SaveForm{
     public int Sitemcode;
     public int SAccount;
-    //public int PubItemCode
-    //{
-    //    get => Sitemcode;
-    //    set => Sitemcode = value;
-    //}
-
-    //public int PubAccount
-    //{
-    //    get => SAccount;
-    //    set => SAccount = value;
-    //}
 }
 

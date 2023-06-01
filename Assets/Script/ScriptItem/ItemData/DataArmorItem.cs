@@ -13,22 +13,16 @@ using UnityEngine;
 /// 6001~7000   포션 // 세부포션은 나중에 생각하자
 /// </summary>
 
-public class DataArmorItem : DataEquipmentItem
-{
+public class DataArmorItem : DataEquipmentItem{
     /// enum -> string 검색?
     // 방어력, 내구도, 무게, 등급
-
-    private enum material
-    {
+    private enum material{
         fabric, //천
         leather, //가죽
         metal,
     }
 
-
     public int defense_physical = 0;
     public int defense_magic = 0;
-
-    
     
 }
