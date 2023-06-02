@@ -19,10 +19,10 @@ public class CharacterData{
                 skill_Ultimate_cool = 25.0f;
 
                 //이미지 등록 
-                nomalSkillImg = Resources.Load<Sprite>("SkillIcon/Icon.6_26");
-                UltimateSkillImg = Resources.Load<Sprite>("SkillIcon/Icon.4_79");
-                MainWeaponImg = Resources.Load<Sprite>("SkillIcon/Icon.6_98");
-                SubWeaponImg = Resources.Load<Sprite>("SkillIcon/Icons8_21");
+                nomalSkillSprite = Resources.Load<Sprite>("SkillIcon/Icon.6_26");
+                UltimateSkillSprite = Resources.Load<Sprite>("SkillIcon/Icon.4_79");
+                MainWeaponSprite = Resources.Load<Sprite>("SkillIcon/Icon.6_98");
+                SubWeaponSprtie = Resources.Load<Sprite>("SkillIcon/Icons8_21");
                 break;
             case PlayerMng.PlayAbleCharacter.Archer:
                 Pubdmg = 20.0f;
@@ -35,10 +35,10 @@ public class CharacterData{
                 skill_Ultimate_cool = 22.0f;
 
                 //이미지 등록
-                nomalSkillImg = Resources.Load<Sprite>("SkillIcon/Icon.1_16");
-                UltimateSkillImg = Resources.Load<Sprite>("SkillIcon/Icon.4_62");
-                MainWeaponImg = Resources.Load<Sprite>("SkillIcon/Icon.4_60");
-                SubWeaponImg = Resources.Load<Sprite>("SkillIcon/Icons8_21");
+                nomalSkillSprite = Resources.Load<Sprite>("SkillIcon/Icon.1_16");
+                UltimateSkillSprite = Resources.Load<Sprite>("SkillIcon/Icon.4_62");
+                MainWeaponSprite = Resources.Load<Sprite>("SkillIcon/Icon.4_60");
+                SubWeaponSprtie = Resources.Load<Sprite>("SkillIcon/Icons8_21");
                 break;
         }
     }
@@ -60,12 +60,12 @@ public class CharacterData{
     #endregion
 
     #region (Sprite)
-    public Sprite hillImg = Resources.Load<Sprite>("SkillIcon/Icon.6_86"); //기본값 
-    public Sprite nomalSkillImg;
-    public Sprite UltimateSkillImg;
-    public Sprite MainWeaponImg;
-    public Sprite SubWeaponImg;
-    public Sprite DashImg = Resources.Load<Sprite>("SkillIcon/Icon.3_94");
+    public Sprite hillSprite = Resources.Load<Sprite>("SkillIcon/Icon.6_86"); //기본값 
+    public Sprite DashSprite = Resources.Load<Sprite>("SkillIcon/Icon.3_94");
+    public Sprite nomalSkillSprite;
+    public Sprite UltimateSkillSprite;
+    public Sprite MainWeaponSprite;
+    public Sprite SubWeaponSprtie;
     #endregion
 
     #region (Get,Set) PlayerData

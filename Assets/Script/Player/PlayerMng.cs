@@ -6,8 +6,9 @@ using UnityEngine;
 
 public class PlayerMng : MonoBehaviour{
 
-    #region (Component)
     public static PlayerMng Instance;
+
+    #region (Component)
     // -- Component --
     //private CameraManager m_cameraMng;
     //private Camera m_camFps;
@@ -75,7 +76,7 @@ public class PlayerMng : MonoBehaviour{
     [SerializeField, Range(0f, 1f)] float m_fDistanceToGround;
     private float m_verticalVelocity = 0;
     private float m_gravity = 9.81f;
-    public float mouseSensitivity = 650.0f;
+    public float mouseSensitivity = 400.0f;
     public float m_jumpForce = 5f;
     public int Chosedcharacter; //선택한 캐릭터의 클래스
     // ----
@@ -178,12 +179,12 @@ public class PlayerMng : MonoBehaviour{
         Dash_cool = Character.PubDash;
 
         //초기화(이미지)
-        hillImg = Character.hillImg;
-        nomalSkillImg = Character.nomalSkillImg;
-        UltimateSkillImg = Character.UltimateSkillImg;
-        MainWeaponImg = Character.MainWeaponImg;
-        SubWeaponImg = Character.SubWeaponImg;
-        DashImg = Character.DashImg;
+        hillImg = Character.hillSprite;
+        nomalSkillImg = Character.nomalSkillSprite;
+        UltimateSkillImg = Character.UltimateSkillSprite;
+        MainWeaponImg = Character.MainWeaponSprite;
+        SubWeaponImg = Character.SubWeaponSprtie;
+        DashImg = Character.DashSprite;
 
         //초기화(타이머)
         timer_hill = skill_hill_cool;
@@ -390,21 +391,21 @@ public class PlayerMng : MonoBehaviour{
 
     private void UserInput(){
         //스킬쿨일때
-        if (skill_hill_cool > timer_hill) { timer_hill += Time.deltaTime; } 
-        else{ //스킬 쿨 다돌았을때
-            //TODO 아이콘 초록색으로 변경
+        if (skill_hill_cool > timer_hill) {timer_hill += Time.deltaTime; } 
+        else{
+            UserDisplay.Instance.hillImage.color = Color.green;
         }
         if (skill_nomal_cool > timer_normal) { timer_normal += Time.deltaTime; }
         else{
-
+            UserDisplay.Instance.nomarlImage.color = Color.green;
         }
         if (skill_Ultimate_cool > timer_Ultimate) { timer_Ultimate += Time.deltaTime; }
         else{
-
+            UserDisplay.Instance.ultimateImage.color = Color.green;
         }
         if (Dash_cool > timer_Dash) { timer_Dash += Time.deltaTime; }
         else{
-
+            UserDisplay.Instance.DashImage.color = Color.green;
         }
 
         //힐(Q)
@@ -412,28 +413,44 @@ public class PlayerMng : MonoBehaviour{
             Debug.Log("Q");
             Debug.Log(timer_hill);
             timer_hill = 0;
-
+            UserDisplay.Instance.hillImage.color = Color.white;
         }
         //노말스킬(F)
         if (Input.GetKeyDown(KeyCode.F) && (skill_nomal_cool <= timer_normal)){
             Debug.Log("F");
             timer_normal = 0;
+            UserDisplay.Instance.nomarlImage.color = Color.white;
         }
 
         //궁극기(G)
         if (Input.GetKeyDown(KeyCode.G) && (skill_Ultimate_cool <= timer_Ultimate)){
             Debug.Log("G");
             timer_Ultimate = 0;
+            UserDisplay.Instance.ultimateImage.color = Color.white;
         }
 
         //구르기(Dash, shift)
         if (Input.GetKeyDown(KeyCode.LeftShift) && (Dash_cool <= timer_Dash)){
             Debug.Log("Dash");
             timer_Dash = 0;
-
+            UserDisplay.Instance.DashImage.color = Color.white;
         }
 
+        if (Input.GetKeyDown(KeyCode.Alpha1)){
+            //TMP도 바꿔야함 그리고 출력도해야하고 
+            Debug.Log("1");
+            Color color = UserDisplay.Instance.SubWeaponImage.color;
+            color.a = 0.0f;
+        }
+
+        if (Input.GetKeyDown(KeyCode.Alpha2)){
+            Debug.Log("2");
+            Color color = UserDisplay.Instance.SubWeaponImage.color;
+            color.a = 1.0f;
+        }
     }
+
+   
     #endregion
 
     #region 충돌관리(아이템)

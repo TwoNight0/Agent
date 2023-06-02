@@ -3555,6 +3555,7 @@ MonoBehaviour:
   MainWeaponImage: {fileID: 347992623}
   SubWeaponImage: {fileID: 1055907249}
   DashImage: {fileID: 642085208}
+  BulletTMP: {fileID: 192530644}
 --- !u!1 &960407360
 GameObject:
   m_ObjectHideFlags: 0
