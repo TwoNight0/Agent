@@ -185,6 +185,7 @@ public class PlayerMng : MonoBehaviour{
         MainWeaponImg = Character.MainWeaponSprite;
         SubWeaponImg = Character.SubWeaponSprtie;
         DashImg = Character.DashSprite;
+        UserDisplay.Instance.SubWeaponImage.enabled = false;
 
         //초기화(타이머)
         timer_hill = skill_hill_cool;
@@ -390,21 +391,41 @@ public class PlayerMng : MonoBehaviour{
     }
 
     private void UserInput(){
-        //스킬쿨일때
-        if (skill_hill_cool > timer_hill) {timer_hill += Time.deltaTime; } 
-        else{
+        
+        if (skill_hill_cool > timer_hill) {//스킬 쿨 일때
+            timer_hill += Time.deltaTime;
+            UserDisplay.Instance.Filter_Hill.fillAmount += (1 / skill_hill_cool) * Time.deltaTime;
+        } 
+        else{ //스킬 쿨 다돌았을 때
+            UserDisplay.Instance.Filter_Hill.fillAmount = 0.0f;
             UserDisplay.Instance.hillImage.color = Color.green;
         }
-        if (skill_nomal_cool > timer_normal) { timer_normal += Time.deltaTime; }
+
+        if (skill_nomal_cool > timer_normal) { 
+            timer_normal += Time.deltaTime;
+            UserDisplay.Instance.Filter_skill_nomal.fillAmount += (1 / skill_nomal_cool) * Time.deltaTime;
+        }
+
         else{
+            UserDisplay.Instance.Filter_skill_nomal.fillAmount = 0.0f;
             UserDisplay.Instance.nomarlImage.color = Color.green;
         }
-        if (skill_Ultimate_cool > timer_Ultimate) { timer_Ultimate += Time.deltaTime; }
+
+        if (skill_Ultimate_cool > timer_Ultimate) { 
+            timer_Ultimate += Time.deltaTime;
+            UserDisplay.Instance.Filter_skill_Ultimate.fillAmount += (1 / skill_Ultimate_cool) * Time.deltaTime;
+        }
         else{
+            UserDisplay.Instance.Filter_skill_Ultimate.fillAmount = 0.0f;
             UserDisplay.Instance.ultimateImage.color = Color.green;
         }
-        if (Dash_cool > timer_Dash) { timer_Dash += Time.deltaTime; }
+
+        if (Dash_cool > timer_Dash) { 
+            timer_Dash += Time.deltaTime;
+            UserDisplay.Instance.Filter_Dash.fillAmount += (1 / Dash_cool) * Time.deltaTime;
+        }
         else{
+            UserDisplay.Instance.Filter_Dash.fillAmount = 0.0f;
             UserDisplay.Instance.DashImage.color = Color.green;
         }
 
@@ -439,14 +460,38 @@ public class PlayerMng : MonoBehaviour{
         if (Input.GetKeyDown(KeyCode.Alpha1)){
             //TMP도 바꿔야함 그리고 출력도해야하고 
             Debug.Log("1");
-            Color color = UserDisplay.Instance.SubWeaponImage.color;
-            color.a = 0.0f;
+
+
+            //보이는 이미지 변경
+            //방법1.
+            UserDisplay.Instance.SubWeaponImage.enabled = false;
+            //방법2.
+            //Color color = UserDisplay.Instance.SubWeaponImage.color;
+            //color.a = 0.0f;
+            //UserDisplay.Instance.SubWeaponImage.color = color;
+
+            //텍스트 변경
+            UserDisplay.Instance.whichone.text = "<color=green>1</color> / 2";
+
+            //필터 적용
+
+
         }
 
         if (Input.GetKeyDown(KeyCode.Alpha2)){
             Debug.Log("2");
-            Color color = UserDisplay.Instance.SubWeaponImage.color;
-            color.a = 1.0f;
+
+            //보이는 이미지 변경
+            //방법1.
+            UserDisplay.Instance.SubWeaponImage.enabled = true;
+            //방법2.
+            //Color color = UserDisplay.Instance.SubWeaponImage.color;
+            //color.a = 1.0f;
+            //UserDisplay.Instance.SubWeaponImage.color = color;
+
+            //텍스트 변경
+            UserDisplay.Instance.whichone.text = "1 / <color=green>2</color>";
+
         }
     }
 

@@ -8,13 +8,6 @@ using TMPro;
 public class UserDisplay : MonoBehaviour{
     public static UserDisplay Instance;
 
-    #region (GameObject)(UI 아이콘)
-    private GameObject hill;
-    private GameObject nomarl;
-    private GameObject ultimate;
-    private GameObject Weapon;
-    private GameObject Dash;
-    #endregion
 
     #region (Image)(UI 아이콘)
     [SerializeField] public Image hp_cur;
@@ -24,10 +17,16 @@ public class UserDisplay : MonoBehaviour{
     [SerializeField] public Image MainWeaponImage;
     [SerializeField] public Image SubWeaponImage;
     [SerializeField] public Image DashImage;
+
+    public Image Filter_Hill;
+    public Image Filter_Dash;
+    public Image Filter_skill_nomal;
+    public Image Filter_skill_Ultimate;
     #endregion
 
     private int bullet;
 
+    [SerializeField] public TextMeshProUGUI whichone;
     [SerializeField] public TextMeshProUGUI BulletTMP;
 
     // ---- [ start , Update ] ----
@@ -42,8 +41,7 @@ public class UserDisplay : MonoBehaviour{
     void Start(){
         DontDestroyOnLoad(this);
         initDisplay();
-        MainWeaponImage.color = Color.blue;
-        SubWeaponImage.color = Color.blue;
+        
     }
     
     void Update(){
@@ -58,12 +56,10 @@ public class UserDisplay : MonoBehaviour{
     //UI이미지들을 선택한 캐릭터의 스킬에 맞게 변경해주는 메서드
     private void initDisplay(){
         //오브젝트지정
-        hp_cur = transform.Find("Hp_Cur").GetComponentInChildren<Image>();
-        hill = GameObject.Find("Hill");
-        nomarl = GameObject.Find("skill_nomal");
-        ultimate = GameObject.Find("skill_Ultimate");
-        Weapon = GameObject.Find("Weapon");
-        Dash = GameObject.Find("Dash");
+        Filter_Hill = transform.Find("Filter/Filter_Hill").GetComponent<Image>();
+        Filter_Dash = transform.Find("Filter/Filter_Dash").GetComponent<Image>();
+        Filter_skill_nomal = transform.Find("Filter/Filter_skill_nomal").GetComponent<Image>(); ;
+        Filter_skill_Ultimate = transform.Find("Filter/Filter_skill_Ultimate").GetComponent<Image>(); ;
 
         //이미지할당 //playerMng가 이미지를 보내주고 그 이미지를 받았음
         hillImage.sprite = PlayerMng.Instance.hillImg; 
@@ -73,19 +69,11 @@ public class UserDisplay : MonoBehaviour{
         SubWeaponImage.sprite = PlayerMng.Instance.SubWeaponImg;
         DashImage.sprite = PlayerMng.Instance.DashImg;
 
-        //오브젝트에 이미지를 할당
-        hillImage = hill.GetComponent<Image>();
-        nomarlImage = nomarl.GetComponent<Image>();
-        ultimateImage = ultimate.GetComponent<Image>();
-        MainWeaponImage = Weapon.GetComponent<Image>();
-        SubWeaponImage = Weapon.GetComponent<Image>();
-        DashImage = Dash.GetComponent<Image>();
+        //초기색 넣기
+        MainWeaponImage.color = Color.cyan;
+        SubWeaponImage.color = Color.cyan;
 
         bullet = 0;
-    }
-
-    private void applyColor(){
-
     }
 
     private void CrossHairUI(){

@@ -1,8 +1,4 @@
-using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
 using UnityEngine.Events;
-
 
 public class cPopup {
     public cPopup(string _tile, string _value, UnityAction _action){
