@@ -47,7 +47,6 @@ public class PlayerMng : MonoBehaviour{
     private bool m_pressJump = false;
     private bool m_isGround = false;
     public bool m_isSlope = false;
-    private bool m_dashcheck = false;
     public bool invenflag = false;
     // ----
     #endregion
@@ -297,20 +296,7 @@ public class PlayerMng : MonoBehaviour{
         m_animator.SetFloat(moveParameter.Move_horizontal.ToString(), Input.GetAxis("Horizontal"));
 
         //m_rb.AddForce(transform.rotation * m_moveDir * m_moveSpeed);
-        //TODO  : 대쉬 고치기
-        //왜돌아옴?ㅋㅋㅋ
-        if (Input.GetKeyDown(KeyCode.LeftShift) && timer_Dash > m_dashDuration) {
 
-            //Debug.Log($"대쉬불가 : {m_timerDash}");
-            m_dashDirection = m_moveDir; //이걸해줘야 키를 때도 대쉬 방향이 유지됨 키 때면 대쉬 0.0 되버림
-            //Debug.Log(m_dashDirection);
-            timer_Dash = 0.0f;
-            m_dashcheck = true;
-        }
-        if (timer_Dash <= m_dashDuration) { //대쉬타이머가 듀레이션보다 작을작을때 작동 shift 누르면 작아짐
-            m_characterController.Move(m_dashDirection * 4 * Time.deltaTime);//이동
-            timer_Dash += Time.deltaTime;
-        }
 
         if (m_isSlope) { //경사로일때 경사로 반대로 이동(미끄러짐)
             m_characterController.Move(-m_slopeVector * Time.deltaTime);
@@ -455,6 +441,7 @@ public class PlayerMng : MonoBehaviour{
             Debug.Log("Dash");
             timer_Dash = 0;
             UserDisplay.Instance.DashImage.color = Color.white;
+            //m_characterController.Move(m_dashDirection * 4 * Time.deltaTime);//이동
         }
 
         if (Input.GetKeyDown(KeyCode.Alpha1)){
