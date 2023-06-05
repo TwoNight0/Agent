@@ -16,12 +16,10 @@ public class ItemMng : MonoBehaviour{
     #endregion
 
     private void Awake(){
-        if (Instance == null)
-        {
+        if (Instance == null){
             Instance = this;
         }
-        else
-        {
+        else{ 
             Destroy(this);
         }
     }
@@ -52,8 +50,7 @@ public class ItemMng : MonoBehaviour{
     }
 
     
-    private void AddItem<T>(List<T> _ItemList, T _item)
-    {
+    private void AddItem<T>(List<T> _ItemList, T _item){
         _ItemList.Add(_item);
     }
 
@@ -73,28 +70,28 @@ public class ItemMng : MonoBehaviour{
         shotsword.itemCode = 1001;
         shotsword.itemName = "shotsword";
         shotsword.icon = Resources.Load<Sprite>("weapon/shotsword");
-        shotsword.Dmg_physic = 2;
-        shotsword.Attack_speed = 2;
+        shotsword.PubDmg_physic = 2;
+        shotsword.PubAttack_speed = 2;
 
 
         longsword.itemCode = 1002;
         longsword.itemName = "longsword";
         longsword.icon = Resources.Load<Sprite>("weapon/longsword");
-        longsword.Dmg_physic = 4;
-        longsword.Attack_speed = 1;
+        longsword.PubDmg_physic = 4;
+        longsword.PubAttack_speed = 1;
 
 
         wand.itemCode = 1501;
         wand.itemName = "wand";
         wand.icon = Resources.Load<Sprite>("weapon/wand");
-        wand.Dmg_magic = 8;
-        wand.Attack_speed = 3;
+        wand.PubDmg_magic = 8;
+        wand.PubAttack_speed = 3;
 
 
         stick.itemCode = 1502;
         stick.itemName = "stick";
-        stick.Dmg_magic = 6;
-        stick.Attack_speed = 2;
+        stick.PubDmg_magic = 6;
+        stick.PubAttack_speed = 2;
 
         AddItem(WeaponList, shotsword);
         AddItem(WeaponList, longsword);
@@ -105,31 +102,31 @@ public class ItemMng : MonoBehaviour{
         fabric_up.itemCode = 3201;
         fabric_up.itemName = "fabric_up";
         fabric_up.icon = Resources.Load<Sprite>("armor/fabric_up");
-        fabric_up.defense_magic = 6;
+        fabric_up.PubDefense_magical = 6.0f;
 
         fabric_down.itemCode = 3401;
         fabric_down.itemName = "fabric_down";
-        fabric_down.defense_magic = 4;
+        fabric_down.PubDefense_magical = 4.0f;
 
         leather_up.itemCode = 3202;
         leather_up.itemName = "leather_up";
         leather_up.icon = Resources.Load<Sprite>("armor/leather_up");
-        leather_up.defense_physical = 4;
-        leather_up.defense_magic = 4;
+        leather_up.PubDefense_physical = 4.0f;
+        leather_up.PubDefense_magical = 4.0f;
 
         leather_down.itemCode = 3402;
         leather_down.itemName = "leather_down";
-        leather_down.defense_physical = 3;
-        leather_down.defense_magic = 3;
+        leather_down.PubDefense_physical = 3.0f;
+        leather_down.PubDefense_magical = 3.0f;
 
         metal_up.itemCode = 3203;
         metal_up.itemName = "metal_top";
         metal_up.icon = Resources.Load<Sprite>("armor/metal_up");
-        metal_up.defense_physical = 10;
+        metal_up.PubDefense_physical = 10.0f;
 
         metal_down.itemCode = 3403;
         metal_down.itemName = "metal_bottom";
-        metal_down.defense_physical = 8;
+        metal_down.PubDefense_physical = 8.0f;
 
         AddItem(ArmorList, fabric_up);
         AddItem(ArmorList, fabric_down);
@@ -144,6 +141,32 @@ public class ItemMng : MonoBehaviour{
     private void createItem(){
         //오브젝트 만들고 코드 부여, 박스(3d), 위치속성
     }
+
+    public (float, float) giveDmgData(int _itemCode){
+        DataWeaponItem weaponItem;
+        float physic = 0.0f;
+        float magic = 0.0f;
+        if (WeaponList.Equals(_itemCode)) {
+            weaponItem = ItemMng.Instance.WeaponList.Find(x => x.itemCode == _itemCode);
+            physic = weaponItem.PubDmg_physic;
+            magic = weaponItem.PubDmg_magic;
+        }
+        return (physic, magic);
+    }
+
+    public (float, float) giveDefenseData(int _itemCode) {
+        DataArmorItem armorItem;
+        float physic = 0.0f;
+        float magic = 0.0f;
+        if (ArmorList.Equals(_itemCode)){
+            armorItem = ItemMng.Instance.ArmorList.Find(x => x.itemCode == _itemCode);
+            physic = armorItem.PubDefense_physical;
+            magic = armorItem.PubDefense_magical;
+        }
+        return (physic, magic);
+    }
+
+
 
     #region Save, Load
     //--- Save ---

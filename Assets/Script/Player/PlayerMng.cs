@@ -63,7 +63,6 @@ public class PlayerMng : MonoBehaviour{
 
     #region [Timer]
     //--Timer --
-    private float m_dashDuration = 2.0f;
     private float timer_Dash = 10.0f;
     private float timer_hill;
     private float timer_normal;
@@ -83,14 +82,24 @@ public class PlayerMng : MonoBehaviour{
 
     #region [Status] Player value
     // -- Status (characterData를 가져와서 변경해서 사용할 값들)
-    private float dmg;
-    private float magic = 0;
+    private float PlayerDmg_physical;
+    private float PlayerDmg_magical = 0;
     [SerializeField] private float hp_cur = 0.0f;
     private float hp_max;
-    private float m_moveSpeed;
-    private float defense_physical;
-    private float defense_magic;
+    private float PlayermoveSpeed;
+    private float Playerdefense_physical;
+    private float Playerdefense_magic;
 
+    // EqipmentItemCode
+    private int MainWeaponCode;
+    private int SubWeaponCode;
+    private int headCode;
+    private int bodyUpCode;
+    private int bodyDownCode;
+    private int shoesCode;
+    private int ringCode;
+    private int necklaceCode;
+    
 
     // 초기에 characterData에서 복사한데이터로 이 데이터를 변경(증가, 감소)하여 사용
     private float skill_hill_cool = 5.0f;
@@ -100,20 +109,79 @@ public class PlayerMng : MonoBehaviour{
     #endregion
 
     #region (Get, Set)private value 넘김
-    public float GetHp
-    {
+    public float GetHp{
         get => hp_cur;
         set => hp_cur = value;
     }
 
-    public float GetMaxHp
-    {
+    public float GetMaxHp{
         get => hp_max;
         set => hp_max = value;
     }
+    public float PubPlayerDmg_physical{
+        get => PlayerDmg_physical;
+        set => PlayerDmg_physical = value;
+    }
+
+    public float PubPlayerDmg_magical{
+        get => PlayerDmg_magical;
+        set => PlayerDmg_magical = value;
+    }
+
+
+    public float PubPlayerdefense_physical { 
+        get => Playerdefense_physical;
+        set => Playerdefense_physical = value;
+    }
+
+    public float PubPlayerdefense_magic{
+        get => Playerdefense_magic;
+        set => Playerdefense_magic = value;
+    }
+
+
+
+    //EqipmentItemCode
+    public int PubMainWeapon{
+        get => MainWeaponCode;
+        set => MainWeaponCode = value;
+    }
+
+    public int PubSubWeapon{
+        get => SubWeaponCode;
+        set => SubWeaponCode = value;
+    }
+    public int PubHead{
+        get => headCode;
+        set => headCode = value;
+    }
+    public int PubBodyUp{
+        get => bodyUpCode;
+        set => bodyUpCode = value;
+    }
+    public int PubBodyDown{
+        get => bodyDownCode;
+        set => bodyDownCode = value;
+    }
+    public int PubShoes{
+        get => shoesCode;
+        set => shoesCode = value;
+    }
+    public int PubRing
+    {
+        get => ringCode;
+        set => ringCode = value;
+    }
+    public int PubNecklace{
+        get => necklaceCode;
+        set => necklaceCode = value;
+    }
+
+
+
     #endregion
 
- // ---- [ Awake, start , Update ] ----
+    // ---- [ Awake, start , Update ] ----
     private void Awake() {
         if (Instance == null){
             Instance = this;
@@ -166,12 +234,12 @@ public class PlayerMng : MonoBehaviour{
         }
 
         //초기화(값 할당)
-        dmg = Character.Pubdmg;
-        magic = Character.Pubmagic;
+        PlayerDmg_physical = Character.Pubdmg;
+        PlayerDmg_magical  = Character.Pubmagic;
         hp_max = Character.PubHp_max;
-        m_moveSpeed = Character.Pubm_moveSpeed;
-        defense_physical = Character.PubDefense_physical;
-        defense_magic = Character.PubDefense_magical;
+        PlayermoveSpeed = Character.Pubm_moveSpeed;
+        Playerdefense_physical = Character.PubDefense_physical;
+        Playerdefense_magic = Character.PubDefense_magical;
         skill_hill_cool = Character.Pubskill_hill_cool;
         skill_nomal_cool = Character.Pubskill_nomal_cool;
         skill_Ultimate_cool = Character.Pubskill_Ultimate_cool;
@@ -301,9 +369,8 @@ public class PlayerMng : MonoBehaviour{
         if (m_isSlope) { //경사로일때 경사로 반대로 이동(미끄러짐)
             m_characterController.Move(-m_slopeVector * Time.deltaTime);
         }
-
         else { //기본 움직임
-            m_characterController.Move(transform.rotation * m_moveDir * m_moveSpeed * Time.deltaTime);
+            m_characterController.Move(transform.rotation * m_moveDir * PlayermoveSpeed * Time.deltaTime);
         }
     }
 
@@ -338,20 +405,69 @@ public class PlayerMng : MonoBehaviour{
             m_animator.Play("Two Hand Club Combo");
         }
     }
-    //데미지 공식
-    // ((플레이어 기본데미지 + (무기데미지 * 크리티컬함수) + ( 마법데미지 * 크리티컬함수 ) * 악세서리 추가데미지 ) 
-    // 방어공식 실제데미지 = 데미지 * 100 / 100 + 방어력 
-    private void TakeDamage(float dmg){
-        hp_cur -= dmg;
+    //고칠것
+    //방어력계산 (방어력공식 : 실제데미지 = 받은데미지 * 100 / 100 + 방어력)
+    public (float, float) PlayerDefenseStat(int Type){
+        float physic = 0.0f;
+        float magic = 0.0f;  
+                if(headCode != 0){
+                    physic = physic + ItemMng.Instance.giveDefenseData(headCode).Item1;
+                }
+                if(bodyUpCode != 0){
+                    physic  = physic + ItemMng.Instance.giveDefenseData(bodyUpCode).Item1;
+                }
+                if (bodyDownCode != 0) {
+                    physic = physic + ItemMng.Instance.giveDefenseData(bodyDownCode).Item1;
+                }
+                if(shoesCode != 0){
+                    physic = physic + ItemMng.Instance.giveDefenseData(shoesCode).Item1;
+                }
 
+        
+        return (physic, magic);
+    }
+    // 데미지 공식((플레이어 기본데미지 + (무기데미지* 크리티컬함수) + (마법데미지* 크리티컬함수 )* 악세서리 추가데미지 )
+    public (float, float) PlayerAttackStat(){
+        float physic = 0.0f;
+        float magic = 0.0f;
+
+        float weapon_physic = ItemMng.Instance.giveDmgData(MainWeaponCode).Item1;
+        float weapon_magic = ItemMng.Instance.giveDmgData(MainWeaponCode).Item2;
+        physic = Character.Pubdmg + weapon_physic;
+        magic = Character.Pubmagic + weapon_magic;
+
+        return (physic, magic);
+    }
+    
+    private void TakeDmg(float takedmg, int Type, float defense_physical, float defense_magical){//받는 데미지
+        //Type 0 : 물뎀, Type 1 : 마뎀 
+        float totalDmg = 0.0f;
+        switch (Type){
+            case 0: totalDmg = takedmg * 100 / (100 + defense_physical); break;
+            case 1: totalDmg = takedmg * 100 / (100 + defense_magical); break;
+        }
+        hp_cur -= totalDmg;
         if (hp_cur <= 0){
-            Kill();
+            KillPlayer();
         }
     }
 
-    public void Kill(){
+    private void AttackDmg(float Attackdmg, int Type, float dmg_physic, float dmg_magical, GameObject _target){//주는 데미지
+        //Type 0 : 물뎀, Type 1 : 마뎀 
+        float totalDmg = 0.0f;
+        switch (Type){
+            case 0: totalDmg = dmg_physic; break;
+            case 1: totalDmg = dmg_magical; break;
+        }
+        hp_cur -= totalDmg;
+        if (hp_cur <= 0)
+        {
+            KillPlayer();
+        }
+    }
+
+    public void KillPlayer(){
         Debug.Log("사망");
-        m_animator.Play("Explosion");
 
         //EventMng.ins.DeathPanel.SetActive(true);
         //SoundMng.ins.PlayEffect("Grenade Explosion");
@@ -377,7 +493,6 @@ public class PlayerMng : MonoBehaviour{
     }
 
     private void UserInput(){
-        
         if (skill_hill_cool > timer_hill) {//스킬 쿨 일때
             timer_hill += Time.deltaTime;
             UserDisplay.Instance.Filter_Hill.fillAmount += (1 / skill_hill_cool) * Time.deltaTime;
@@ -446,8 +561,7 @@ public class PlayerMng : MonoBehaviour{
 
         if (Input.GetKeyDown(KeyCode.Alpha1)){
             //TMP도 바꿔야함 그리고 출력도해야하고 
-            Debug.Log("1");
-
+            //Debug.Log("1");
 
             //보이는 이미지 변경
             //방법1.
@@ -459,15 +573,9 @@ public class PlayerMng : MonoBehaviour{
 
             //텍스트 변경
             UserDisplay.Instance.whichone.text = "<color=green>1</color> / 2";
-
-            //필터 적용
-
-
         }
-
         if (Input.GetKeyDown(KeyCode.Alpha2)){
-            Debug.Log("2");
-
+            //Debug.Log("2");
             //보이는 이미지 변경
             //방법1.
             UserDisplay.Instance.SubWeaponImage.enabled = true;
@@ -478,7 +586,6 @@ public class PlayerMng : MonoBehaviour{
 
             //텍스트 변경
             UserDisplay.Instance.whichone.text = "1 / <color=green>2</color>";
-
         }
     }
 

@@ -15,24 +15,24 @@ using UnityEngine;
 /// </summary>
 
 public class DataWeaponItem : DataEquipmentItem{
-    private int dmg_physic = 0;
-    private int dmg_magic = 0;
+    private float dmg_physical = 0;
+    private float dmg_magical = 0;
     private float attack_speed = 1f;
 
     #region (Get,Set)
-    public int Dmg_physic{
-        get => dmg_physic;
-        set => dmg_physic = value;
+    public float PubDmg_physic{
+        get => dmg_physical;
+        set => dmg_physical = value;
     }
 
-    public int Dmg_magic{
+    public float PubDmg_magic{
         get { 
-            return dmg_magic;
+            return dmg_magical;
         }
-        set => dmg_magic = value;
+        set => dmg_magical = value;
     }
 
-    public float Attack_speed{
+    public float PubAttack_speed{
         get => attack_speed;
         set => attack_speed = value;
     }

@@ -22,7 +22,17 @@ public class DataArmorItem : DataEquipmentItem{
         metal,
     }
 
-    public int defense_physical = 0;
-    public int defense_magic = 0;
+    private float defense_physical = 0;
+    private float defense_magical = 0;
     
+    public float PubDefense_physical { 
+        get => defense_physical;
+        set => defense_physical = value;
+    }
+
+    public float PubDefense_magical{
+        get => defense_physical;
+        set => defense_physical = value;
+    }
+
 }
