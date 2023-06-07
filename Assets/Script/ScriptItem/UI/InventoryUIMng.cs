@@ -15,11 +15,14 @@ public class InventoryUIMng : MonoBehaviour{
     //public List<SaveForm> saveList = new List<SaveForm>();
     private EventSystem m_eventSystem;
     PlayerMng playerMng;
+    
     //
 
     //슬롯 선택시 사용하는 변수들
     ItemSlotScript firstItemSlot = null;
     ItemSlotScript secondItemSlot = null;
+    
+    
     public RectTransform DragImage = new RectTransform();
     //
     [SerializeField] private int capacity = 20; //인벤토리 칸 추후늘리면됨
@@ -213,6 +216,7 @@ public class InventoryUIMng : MonoBehaviour{
                         else if (firstItemSlot.PubItemCode > 1000 && firstItemSlot.PubItemCode < 2001 && secondItemSlot.gameObject.name.Contains("equip_mainweapon")){
                             fillequipSlot(firstItemSlot, secondItemSlot);
                             PlayerMng.Instance.PubMainWeapon = secondItemSlot.PubItemCode; //코드넘겨받기
+                            
                             //장비를 장착했을 때 장착한 아이템만큼 자신의 공격력 수치가 변해야함
                         }
                         else if (firstItemSlot.PubItemCode > 2000 && firstItemSlot.PubItemCode < 3001 && secondItemSlot.gameObject.name.Contains("equip_subWaepon")){

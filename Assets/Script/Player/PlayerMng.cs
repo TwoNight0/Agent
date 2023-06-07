@@ -407,39 +407,42 @@ public class PlayerMng : MonoBehaviour{
     }
     //고칠것
     //방어력계산 (방어력공식 : 실제데미지 = 받은데미지 * 100 / 100 + 방어력)
-    public (float, float) PlayerDefenseStat(int Type){
+    public (float, float) PlayerDefenseStat(){
         float physic = 0.0f;
         float magic = 0.0f;  
-                if(headCode != 0){
-                    physic = physic + ItemMng.Instance.giveDefenseData(headCode).Item1;
-                }
-                if(bodyUpCode != 0){
-                    physic  = physic + ItemMng.Instance.giveDefenseData(bodyUpCode).Item1;
-                }
-                if (bodyDownCode != 0) {
-                    physic = physic + ItemMng.Instance.giveDefenseData(bodyDownCode).Item1;
-                }
-                if(shoesCode != 0){
-                    physic = physic + ItemMng.Instance.giveDefenseData(shoesCode).Item1;
-                }
-
-        
+        if(headCode != 0){
+            physic = physic + ItemMng.Instance.giveDefenseData(headCode).Item1;
+            magic = magic + ItemMng.Instance.giveDefenseData(headCode).Item2;
+        }
+        if(bodyUpCode != 0){
+            physic  = physic + ItemMng.Instance.giveDefenseData(bodyUpCode).Item1;
+            magic = magic + ItemMng.Instance.giveDefenseData(bodyUpCode).Item2;
+        }
+        if (bodyDownCode != 0) {
+            physic = physic + ItemMng.Instance.giveDefenseData(bodyDownCode).Item1;
+            magic = magic + ItemMng.Instance.giveDefenseData(bodyDownCode).Item2;
+        }
+        if(shoesCode != 0){
+            physic = physic + ItemMng.Instance.giveDefenseData(shoesCode).Item1;
+            magic = magic + ItemMng.Instance.giveDefenseData(shoesCode).Item2;
+        }
         return (physic, magic);
     }
-    // 데미지 공식((플레이어 기본데미지 + (무기데미지* 크리티컬함수) + (마법데미지* 크리티컬함수 )* 악세서리 추가데미지 )
+    // 데미지 공식((플레이어 기본데미지 + (무기데미지* 크리티컬함수) + (마법데미지* 크리티컬함수 )* 악세서리 추가데미지? )
     public (float, float) PlayerAttackStat(){
         float physic = 0.0f;
         float magic = 0.0f;
-
+        
         float weapon_physic = ItemMng.Instance.giveDmgData(MainWeaponCode).Item1;
         float weapon_magic = ItemMng.Instance.giveDmgData(MainWeaponCode).Item2;
+
         physic = Character.Pubdmg + weapon_physic;
         magic = Character.Pubmagic + weapon_magic;
 
         return (physic, magic);
     }
     
-    private void TakeDmg(float takedmg, int Type, float defense_physical, float defense_magical){//받는 데미지
+    private void TakeDmg(float takedmg, int Type, float defense_physical, float defense_magical){//받는 데미지 (PlayerDefenseStat().item1 , PlayerDefenseStat().item2) 
         //Type 0 : 물뎀, Type 1 : 마뎀 
         float totalDmg = 0.0f;
         switch (Type){
