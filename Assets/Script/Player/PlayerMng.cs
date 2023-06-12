@@ -18,6 +18,8 @@ public class PlayerMng : MonoBehaviour{
     private Groundcheck m_groundchecker;
     private CharacterData Character = null;
     private GameObject UI;
+    private GameObject weapon;
+    private MeshCollider weaponMeshCollider;
     // ----
     #endregion
 
@@ -223,7 +225,6 @@ public class PlayerMng : MonoBehaviour{
 
     #region 초기화(init)
     public void initCharacterData(int _character){
-        
         switch (Chosedcharacter){
             case 0:
                 Character = new CharacterData(PlayAbleCharacter.Paladin);
@@ -273,6 +274,9 @@ public class PlayerMng : MonoBehaviour{
         //m_camFps = m_cameraMng.GetCamera(enumCamera.CamFps);
         UI = GameObject.Find("UI_Inventory");
         m_rotationValue = transform.rotation.eulerAngles;
+        weapon = GameObject.Find("Paladin_J_Nordstrom_Sword");
+        weaponMeshCollider = weapon.GetComponent<MeshCollider>();
+        weaponMeshCollider.enabled = false;
     }
     #endregion
     
@@ -396,15 +400,6 @@ public class PlayerMng : MonoBehaviour{
     #endregion
 
     #region PlayerInput(공격, 스킬, 상호작용(인벤토리))
-    private void DoAttack(){
-        //TODO : 정면으로안가고 사선으로감, 공격 및 데미지 주고받는거 적용시켜야함
-        if (Input.GetMouseButtonDown(0)){// 공격 
-            m_animator.Play("Two Hand Club Combo");
-        }
-        else if (Input.GetMouseButtonDown(1)){ //TODO패링
-            m_animator.Play("Two Hand Club Combo");
-        }
-    }
     //고칠것
     //방어력계산 (방어력공식 : 실제데미지 = 받은데미지 * 100 / 100 + 방어력)
     public (float, float) PlayerDefenseStat(){
@@ -428,7 +423,7 @@ public class PlayerMng : MonoBehaviour{
         }
         return (physic, magic);
     }
-    // 데미지 공식((플레이어 기본데미지 + (무기데미지* 크리티컬함수) + (마법데미지* 크리티컬함수 )* 악세서리 추가데미지? )
+    // 데미지 공식((플레이어 기본데미지 + (무기데미지* 크리티컬함수) + (마법데미지* 크리티컬함수 )* 악세서리 추가데미지?)
     public (float, float) PlayerAttackStat(){
         float physic = 0.0f;
         float magic = 0.0f;
@@ -442,6 +437,7 @@ public class PlayerMng : MonoBehaviour{
         return (physic, magic);
     }
     
+    //데미지 받음
     private void TakeDmg(float takedmg, int Type, float defense_physical, float defense_magical){//받는 데미지 (PlayerDefenseStat().item1 , PlayerDefenseStat().item2) 
         //Type 0 : 물뎀, Type 1 : 마뎀 
         float totalDmg = 0.0f;
@@ -455,6 +451,7 @@ public class PlayerMng : MonoBehaviour{
         }
     }
 
+    //데미지 줌
     private void AttackDmg(float Attackdmg, int Type, float dmg_physic, float dmg_magical, GameObject _target){//주는 데미지
         //Type 0 : 물뎀, Type 1 : 마뎀 
         float totalDmg = 0.0f;
@@ -469,6 +466,12 @@ public class PlayerMng : MonoBehaviour{
         }
     }
 
+    //공격시작 ->칼의 콜라이더를 활성화 ->> 부딫히면 부딫힌  오브젝트 가져옴 -> 그 오브젝트에 내 공격력만큼 피를 깜(playerMng함수이용)
+    private void weaponColliderActivate() {
+        weaponMeshCollider.enabled = true;
+    }
+
+    
     public void KillPlayer(){
         Debug.Log("사망");
 
@@ -533,6 +536,16 @@ public class PlayerMng : MonoBehaviour{
             UserDisplay.Instance.DashImage.color = Color.green;
         }
 
+        //왼쪽마우스, mixamorig:Sword_joint
+        if (Input.GetMouseButtonDown(0)){// 공격 
+            m_animator.Play("Sword And Shield Slash");
+        }
+
+        //오른쪽마우스
+        if (Input.GetMouseButtonDown(1)){ //TODO패링
+            m_animator.Play("Standing Block Idle");
+        }
+
         //힐(Q)
         if (Input.GetKeyDown(KeyCode.Q) && (skill_hill_cool <= timer_hill)){
             Debug.Log("Q");
@@ -591,15 +604,12 @@ public class PlayerMng : MonoBehaviour{
             UserDisplay.Instance.whichone.text = "1 / <color=green>2</color>";
         }
     }
-
    
     #endregion
 
     #region 충돌관리(아이템)
-    private void OnTriggerEnter(Collider other)
-    {
-        if (other.transform.tag == "Item")
-        {
+    private void OnTriggerEnter(Collider other){
+        if (other.transform.tag == "Item"){
             Item temp = other.transform.GetComponent<Item>(); //스크립트를 가져온것
             int tempCode = temp.GetItemCode;
             InventoryUIMng.Instance.giveDataItemSlot(tempCode);
