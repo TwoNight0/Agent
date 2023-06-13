@@ -16,7 +16,9 @@ public class Monster : MonoBehaviour{
         dmg_physical = 10.0f;
     }
 
+    private void createitem(){
 
+    }
 
 
 }
