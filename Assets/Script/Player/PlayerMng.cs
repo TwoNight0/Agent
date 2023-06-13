@@ -19,7 +19,7 @@ public class PlayerMng : MonoBehaviour{
     private CharacterData Character = null;
     private GameObject UI;
     private GameObject weapon;
-    private MeshCollider weaponMeshCollider;
+    public MeshCollider weaponMeshCollider;
     // ----
     #endregion
 
@@ -423,6 +423,7 @@ public class PlayerMng : MonoBehaviour{
         }
         return (physic, magic);
     }
+
     // 데미지 공식((플레이어 기본데미지 + (무기데미지* 크리티컬함수) + (마법데미지* 크리티컬함수 )* 악세서리 추가데미지?)
     public (float, float) PlayerAttackStat(){
         float physic = 0.0f;
@@ -438,17 +439,18 @@ public class PlayerMng : MonoBehaviour{
     }
     
     //데미지 받음
-    private void TakeDmg(float takedmg, int Type, float defense_physical, float defense_magical){//받는 데미지 (PlayerDefenseStat().item1 , PlayerDefenseStat().item2) 
+    private void TakeDmg(float physical, float magical){//받는 데미지 (PlayerDefenseStat().item1 , PlayerDefenseStat().item2) 
         //Type 0 : 물뎀, Type 1 : 마뎀 
         float totalDmg = 0.0f;
-        switch (Type){
-            case 0: totalDmg = takedmg * 100 / (100 + defense_physical); break;
-            case 1: totalDmg = takedmg * 100 / (100 + defense_magical); break;
-        }
+        
+        totalDmg = physical * 100 / (100 + Playerdefense_physical); 
+        totalDmg = magical * 100 / (100 + Playerdefense_magic);
+        
         hp_cur -= totalDmg;
         if (hp_cur <= 0){
             KillPlayer();
         }
+
     }
 
     //데미지 줌
@@ -469,9 +471,14 @@ public class PlayerMng : MonoBehaviour{
     //공격시작 ->칼의 콜라이더를 활성화 ->> 부딫히면 부딫힌  오브젝트 가져옴 -> 그 오브젝트에 내 공격력만큼 피를 깜(playerMng함수이용)
     private void weaponColliderActivate() {
         weaponMeshCollider.enabled = true;
+        //Debug.Log(weaponMeshCollider.enabled);
+        //Debug.Log("on");
+    }
+    private void weaponColliderDeActivate(){
+        weaponMeshCollider.enabled = false;
+        //Debug.Log("off");
     }
 
-    
     public void KillPlayer(){
         Debug.Log("사망");
 
