@@ -19,7 +19,7 @@ public class PlayerMng : MonoBehaviour{
     private CharacterData Character = null;
     private GameObject UI;
     private GameObject weapon;
-    public MeshCollider weaponMeshCollider;
+    public BoxCollider weaponMeshCollider;
     // ----
     #endregion
 
@@ -274,8 +274,9 @@ public class PlayerMng : MonoBehaviour{
         //m_camFps = m_cameraMng.GetCamera(enumCamera.CamFps);
         UI = GameObject.Find("UI_Inventory");
         m_rotationValue = transform.rotation.eulerAngles;
-        weapon = GameObject.Find("Paladin_J_Nordstrom_Sword");
-        weaponMeshCollider = weapon.GetComponent<MeshCollider>();
+        //weapon = GameObject.Find("Paladin_J_Nordstrom_Sword");
+        weapon = GameObject.Find("SwordCollider");
+        weaponMeshCollider = weapon.GetComponent<BoxCollider>();
         weaponMeshCollider.enabled = false;
     }
     #endregion
@@ -611,7 +612,6 @@ public class PlayerMng : MonoBehaviour{
             UserDisplay.Instance.whichone.text = "1 / <color=green>2</color>";
         }
     }
-   
     #endregion
 
     #region 충돌관리(아이템)
