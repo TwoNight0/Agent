@@ -21,17 +21,14 @@ public class weaponCollider : MonoBehaviour{
 
     //데미지 만큼 몬스터의 피를까야해
 
-    private void OnTriggerEnter(Collider other)
-    {
-        if (other.tag == "Player")
-        {
+    private void OnTriggerEnter(Collider other){
+        if (other.tag == "Player"){
             return;
         }
 
         Debug.Log($"충돌 = {other.name}");
         if (other.CompareTag("Monster")){
-           
-            Debug.Log("몬스터 인식");
+            //Debug.Log("몬스터 인식");
             colorOn = true;
             tempMonster = other.transform.GetComponent<Monster>();
             //때릴때마다 데미지가 바뀔수도있는거니까
@@ -45,6 +42,16 @@ public class weaponCollider : MonoBehaviour{
 
             PlayerMng.Instance.weaponMeshCollider.enabled = false;
         }
+
+        if(other.name == "punching bag"){
+            //Debug.Log("샌드백");
+            PunchingBagScript punch;
+            punch = other.transform.GetComponent<PunchingBagScript>();
+            punch.changeColor(Color.red);
+            punch.reset = true;
+            punch.timer_reset = 0.0f;
+        }
+
     }
 
     // 공격받으면 불온 -> 타이머돌아감 -> 타이머가 일정으로 다되면 -> 다시 색 복원 -> 초 리셋, 불끄기

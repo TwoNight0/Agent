@@ -208,6 +208,7 @@ public class PlayerMng : MonoBehaviour{
         // -- 문제 없음 --
         Jump();
         Rotation();
+        inventoryopen();
         // ----
 
 
@@ -217,7 +218,6 @@ public class PlayerMng : MonoBehaviour{
         //checkSlopeVelocity();
         checkGravity();
         //DoAttack();
-        inventoryopen();
 
         // ----
     }
