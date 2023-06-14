@@ -65,25 +65,32 @@ public class Monster : MonoBehaviour{
     }
 
     public void LookAtTarget(){
-        //transform.LookAt(target);
-        uiRectHP.LookAt(target);
+        Vector3 relativePos = target.position - uiRectHP.position;
+        Vector3 testPos = new Vector3(target.position.x, uiRectHP.position.y, target.position.z);
+        Vector3 testPos2 = new Vector3(target.position.x, target.position.y, target.position.z);
+        
+        uiRectHP.LookAt(testPos2);
+        testPos2.x = 0;
+        testPos2.z = 0;
+        uiRectHP.Rotate(testPos2);
     }
 
     private void MonsterMove(){
         if (attackMode){
             vector_target = target.position;
             //transform.Translate(-vector_target * Time.deltaTime);
-            transform.position = Vector3.MoveTowards(transform.position, target.position, Speed * Time.deltaTime);
+            transform.Translate((target.position - transform.position) * Time.deltaTime);
+            //transform.position = Vector3.MoveTowards(transform.position, target.position, Speed * Time.deltaTime);
 
         }
     }
-    private void OnCollisionEnter(Collision collision)
-    {
-        if (collision.transform.tag == "Player")
-        {
-            Debug.Log("dz");// 키보드로 움직이면 안뜨고 직접 옮겨서부딫히면 뜸 뭐지..?
-            
-            
+    private void OnCollisionEnter(Collision collision){
+        if (collision.transform.tag == "Player"){
+            Debug.Log("플레이어와 충돌함");
+            PlayerMng.Instance.GetHp = PlayerMng.Instance.GetHp - dmg_magical;
+            PlayerMng.Instance.GetHp = PlayerMng.Instance.GetHp - dmg_physical;
+
+
         }
     }
 }
