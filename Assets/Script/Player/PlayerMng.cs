@@ -561,7 +561,7 @@ public class PlayerMng : MonoBehaviour{
 
         // 상호작용
         if (Input.GetKeyDown(KeyCode.E)){
-      
+            
         }
 
         //힐(Q)
