@@ -34,10 +34,8 @@ public class weaponCollider : MonoBehaviour{
             //때릴때마다 데미지가 바뀔수도있는거니까
             dmg_physical = PlayerMng.Instance.PlayerAttackStat().Item1; // 물뎀
             dmg_magical = PlayerMng.Instance.PlayerAttackStat().Item2; // 마뎀
-            tempMonster.cur_Hp = tempMonster.cur_Hp - dmg_physical;
-            tempMonster.cur_Hp = tempMonster.cur_Hp - dmg_magical;
             tempMonster.changeColor(Color.red);
-            
+            PlayerMng.Instance.AttackDmg(dmg_physical, dmg_magical, tempMonster);
 
 
             PlayerMng.Instance.weaponMeshCollider.enabled = false;

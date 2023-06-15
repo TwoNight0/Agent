@@ -9,6 +9,7 @@ TagManager:
   - ItemSlot
   - Equipment
   - Monster
+  - Npc
   layers:
   - Default
   - TransparentFX

@@ -64,15 +64,22 @@ public class Monster : MonoBehaviour{
         objectColor.material.color = color;
     }
 
-    public void LookAtTarget(){
-        Vector3 relativePos = target.position - uiRectHP.position;
+    public void LookAtTarget(){      
         Vector3 testPos = new Vector3(target.position.x, uiRectHP.position.y, target.position.z);
-        Vector3 testPos2 = new Vector3(target.position.x, target.position.y, target.position.z);
+        testPos.y = 3; //선생님이 생각하셨던 답은 이거같네
+        //Debug.Log(uiRectHP.position.y);
+        //Debug.Log(testPos);
+
+        //2. 룩엣할때 y좌표를 상수로 바꾸기 안됨.
         
-        uiRectHP.LookAt(testPos2);
-        testPos2.x = 0;
-        testPos2.z = 0;
-        uiRectHP.Rotate(testPos2);
+        uiRectHP.LookAt(testPos);
+
+
+        //uiRectHP.LookAt(target.position);
+        
+
+        //1. 특정각도로 회전하기 
+        //uiRectHP.rotation = Quaternion.Euler(0, 200, 0);
     }
 
     private void MonsterMove(){
@@ -87,8 +94,7 @@ public class Monster : MonoBehaviour{
     private void OnCollisionEnter(Collision collision){
         if (collision.transform.tag == "Player"){
             Debug.Log("플레이어와 충돌함");
-            PlayerMng.Instance.GetHp = PlayerMng.Instance.GetHp - dmg_magical;
-            PlayerMng.Instance.GetHp = PlayerMng.Instance.GetHp - dmg_physical;
+            PlayerMng.Instance.TakeDmg(dmg_physical, dmg_physical);
 
 
         }

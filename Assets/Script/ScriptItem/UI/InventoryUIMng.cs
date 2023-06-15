@@ -189,68 +189,78 @@ public class InventoryUIMng : MonoBehaviour{
                     secondItemSlot = result.gameObject.GetComponent<ItemSlotScript>(); // 스크립트 가져왔음
 
                 if ((firstItemSlot != secondItemSlot)){
-                        //아이템슬롯의 아이템일때
-                        if (secondItemSlot.gameObject.name.Contains("ItemSlot")){
-                            //코드 교환
-                            int temp = firstItemSlot.PubItemCode;
-                            firstItemSlot.PubItemCode = secondItemSlot.PubItemCode;
-                            secondItemSlot.PubItemCode = temp;
+                    //아이템슬롯의 아이템일때
+                    if (secondItemSlot.gameObject.name.Contains("ItemSlot")){
+                        //코드 교환
+                        int temp = firstItemSlot.PubItemCode;
+                        firstItemSlot.PubItemCode = secondItemSlot.PubItemCode;
+                        secondItemSlot.PubItemCode = temp;
 
-                            //갯수 교환
-                            int tmp = firstItemSlot.PubAccount;
-                            firstItemSlot.PubAccount = secondItemSlot.PubAccount;
-                            secondItemSlot.PubAccount = tmp;
+                        //갯수 교환
+                        int tmp = firstItemSlot.PubAccount;
+                        firstItemSlot.PubAccount = secondItemSlot.PubAccount;
+                        secondItemSlot.PubAccount = tmp;
 
-                            //텍스트 교환
-                            firstItemSlot.PubText.text = firstItemSlot.PubAccount.ToString();
-                            secondItemSlot.PubText.text = secondItemSlot.PubAccount.ToString();
+                        //텍스트 교환
+                        firstItemSlot.PubText.text = firstItemSlot.PubAccount.ToString();
+                        secondItemSlot.PubText.text = secondItemSlot.PubAccount.ToString();
 
-                            //이미지 교환
-                            Sprite tmpicon;
-                            tmpicon = firstItemSlot.icon.sprite;
-                            firstItemSlot.icon.sprite = secondItemSlot.icon.sprite;
-                            secondItemSlot.icon.sprite = tmpicon;
-                        }
+                        //이미지 교환
+                        Sprite tmpicon;
+                        tmpicon = firstItemSlot.icon.sprite;
+                        firstItemSlot.icon.sprite = secondItemSlot.icon.sprite;
+                        secondItemSlot.icon.sprite = tmpicon;
+                    }
 
-                        //장비일때
-                        else if (firstItemSlot.PubItemCode > 1000 && firstItemSlot.PubItemCode < 2001 && secondItemSlot.gameObject.name.Contains("equip_mainweapon")){
-                            fillequipSlot(firstItemSlot, secondItemSlot);
-                            PlayerMng.Instance.PubMainWeapon = secondItemSlot.PubItemCode; //코드넘겨받기
-                            
-                            //장비를 장착했을 때 장착한 아이템만큼 자신의 공격력 수치가 변해야함
-                        }
-                        else if (firstItemSlot.PubItemCode > 2000 && firstItemSlot.PubItemCode < 3001 && secondItemSlot.gameObject.name.Contains("equip_subWaepon")){
-                            fillequipSlot(firstItemSlot, secondItemSlot);
-                            PlayerMng.Instance.PubSubWeapon = secondItemSlot.PubItemCode;
-                        }
-                        else if (firstItemSlot.PubItemCode > 3000 && firstItemSlot.PubItemCode < 3201 && secondItemSlot.gameObject.name.Contains("equip_head")){
-                            fillequipSlot(firstItemSlot, secondItemSlot);
-                            PlayerMng.Instance.PubHead = secondItemSlot.PubItemCode;
-                        }
-                        else if (firstItemSlot.PubItemCode > 3200 && firstItemSlot.PubItemCode < 3401 && secondItemSlot.gameObject.name.Contains("equip_bodyUp")){
-                            fillequipSlot(firstItemSlot, secondItemSlot);
-                            PlayerMng.Instance.PubBodyUp = secondItemSlot.PubItemCode;
-                        }
-                        else if (firstItemSlot.PubItemCode > 3400 && firstItemSlot.PubItemCode < 3601 && secondItemSlot.gameObject.name.Contains("equip_bodydown")){
-                            fillequipSlot(firstItemSlot, secondItemSlot);
-                            PlayerMng.Instance.PubBodyDown = secondItemSlot.PubItemCode;
-                        }
-                        else if (firstItemSlot.PubItemCode > 3600 && firstItemSlot.PubItemCode < 3801 && secondItemSlot.gameObject.name.Contains("equip_shoes")){
-                            fillequipSlot(firstItemSlot, secondItemSlot);
-                            PlayerMng.Instance.PubShoes = secondItemSlot.PubItemCode;
-                        }
-                        else if (firstItemSlot.PubItemCode > 4000 && firstItemSlot.PubItemCode < 4501 && secondItemSlot.gameObject.name.Contains("equip_ring")){
-                            fillequipSlot(firstItemSlot, secondItemSlot);
-                            PlayerMng.Instance.PubRing = secondItemSlot.PubItemCode;
-                        }
-                        else if (firstItemSlot.PubItemCode > 4500 && firstItemSlot.PubItemCode < 5000 && secondItemSlot.gameObject.name.Contains("equip_necklace")){
-                            fillequipSlot(firstItemSlot, secondItemSlot);
-                            PlayerMng.Instance.PubNecklace = secondItemSlot.PubItemCode;
-                        }
-                        else{
-                            return;
-                        }
-                        firstItemSlot = null;
+                    //장비일때
+                    else if (firstItemSlot.PubItemCode > 1000 && firstItemSlot.PubItemCode < 2001 && secondItemSlot.gameObject.name.Contains("equip_mainweapon")){
+                        fillequipSlot(firstItemSlot, secondItemSlot);
+                        PlayerMng.Instance.PubMainWeapon = secondItemSlot.PubItemCode; //코드넘겨받기
+                        PlayerMng.Instance.setPlayerStat();//장비를 장착했을 때 장착한 아이템만큼 자신의 공격력 수치가 변해야함
+                    }
+                    else if (firstItemSlot.PubItemCode > 2000 && firstItemSlot.PubItemCode < 3001 && secondItemSlot.gameObject.name.Contains("equip_subWaepon")){
+                        fillequipSlot(firstItemSlot, secondItemSlot);
+                        PlayerMng.Instance.PubSubWeapon = secondItemSlot.PubItemCode;
+                        PlayerMng.Instance.setPlayerStat();
+                    }
+                    else if (firstItemSlot.PubItemCode > 3000 && firstItemSlot.PubItemCode < 3201 && secondItemSlot.gameObject.name.Contains("equip_head")){
+                        fillequipSlot(firstItemSlot, secondItemSlot);
+                        PlayerMng.Instance.PubHead = secondItemSlot.PubItemCode;
+                        PlayerMng.Instance.setPlayerStat();
+                    }
+                    else if (firstItemSlot.PubItemCode > 3200 && firstItemSlot.PubItemCode < 3401 && secondItemSlot.gameObject.name.Contains("equip_bodyUp")){
+                        fillequipSlot(firstItemSlot, secondItemSlot);
+                        PlayerMng.Instance.PubBodyUp = secondItemSlot.PubItemCode;
+                        PlayerMng.Instance.setPlayerStat();
+
+                    }
+                    else if (firstItemSlot.PubItemCode > 3400 && firstItemSlot.PubItemCode < 3601 && secondItemSlot.gameObject.name.Contains("equip_bodydown")){
+                        fillequipSlot(firstItemSlot, secondItemSlot);
+                        PlayerMng.Instance.PubBodyDown = secondItemSlot.PubItemCode;
+                        PlayerMng.Instance.setPlayerStat();
+ 
+                    }
+                    else if (firstItemSlot.PubItemCode > 3600 && firstItemSlot.PubItemCode < 3801 && secondItemSlot.gameObject.name.Contains("equip_shoes")){
+                        fillequipSlot(firstItemSlot, secondItemSlot);
+                        PlayerMng.Instance.PubShoes = secondItemSlot.PubItemCode;
+                        PlayerMng.Instance.setPlayerStat();
+     
+                    }
+                    else if (firstItemSlot.PubItemCode > 4000 && firstItemSlot.PubItemCode < 4501 && secondItemSlot.gameObject.name.Contains("equip_ring")){
+                        fillequipSlot(firstItemSlot, secondItemSlot);
+                        PlayerMng.Instance.PubRing = secondItemSlot.PubItemCode;
+                        PlayerMng.Instance.setPlayerStat();
+ 
+                    }
+                    else if (firstItemSlot.PubItemCode > 4500 && firstItemSlot.PubItemCode < 5000 && secondItemSlot.gameObject.name.Contains("equip_necklace")){
+                        fillequipSlot(firstItemSlot, secondItemSlot);
+                        PlayerMng.Instance.PubNecklace = secondItemSlot.PubItemCode;
+                        PlayerMng.Instance.setPlayerStat();
+                    }
+                    else{
+                        return;
+                    }
+                    firstItemSlot = null;
                     }
                 }
             }
@@ -299,7 +309,7 @@ public class InventoryUIMng : MonoBehaviour{
     //저장될 Jason 형태의 리스트를 프린트함(확인용)
     public void printInventroy(List<SaveForm> _ListSlot){
         foreach (SaveForm a in _ListSlot) {
-            Debug.Log(a.SAccount);
+            //Debug.Log(a.SAccount);
         }
     }
     #endregion

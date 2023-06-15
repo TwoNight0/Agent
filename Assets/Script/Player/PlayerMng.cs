@@ -204,7 +204,6 @@ public class PlayerMng : MonoBehaviour{
     }
 
     private void Update() {
-
         // -- 문제 없음 --
         Jump();
         Rotation();
@@ -425,6 +424,7 @@ public class PlayerMng : MonoBehaviour{
         return (physic, magic);
     }
 
+
     // 데미지 공식((플레이어 기본데미지 + (무기데미지* 크리티컬함수) + (마법데미지* 크리티컬함수 )* 악세서리 추가데미지?)
     public (float, float) PlayerAttackStat(){
         float physic = 0.0f;
@@ -438,14 +438,25 @@ public class PlayerMng : MonoBehaviour{
 
         return (physic, magic);
     }
-    
+    public void setPlayerStat(){
+        //공격력 적용
+        PlayerMng.Instance.PubPlayerDmg_physical = PlayerAttackStat().Item1;
+        PlayerMng.Instance.PubPlayerDmg_magical = PlayerAttackStat().Item2;
+        Debug.Log("물뎀 : " + PlayerMng.Instance.PubPlayerDmg_physical);
+        Debug.Log("마뎀 : " + PlayerMng.Instance.PubPlayerDmg_magical);
+        //방어력 적용
+        Playerdefense_physical = PlayerDefenseStat().Item1;
+        Playerdefense_magic = PlayerDefenseStat().Item2;
+        Debug.Log("물방 : " + PlayerMng.Instance.PubPlayerdefense_physical);
+        Debug.Log("마방 : " + PlayerMng.Instance.PubPlayerdefense_magic);
+    }
+
     //데미지 받음
-    private void TakeDmg(float physical, float magical){//받는 데미지 (PlayerDefenseStat().item1 , PlayerDefenseStat().item2) 
+    public void TakeDmg(float physical, float magical){//받는 데미지 (PlayerDefenseStat().item1 , PlayerDefenseStat().item2) 
         //Type 0 : 물뎀, Type 1 : 마뎀 
         float totalDmg = 0.0f;
-        
-        totalDmg = physical * 100 / (100 + Playerdefense_physical); 
-        totalDmg = magical * 100 / (100 + Playerdefense_magic);
+
+        totalDmg = (physical * 100 / (100 + Playerdefense_physical)) + (magical * 100 / (100 + Playerdefense_magic)); 
         
         hp_cur -= totalDmg;
         if (hp_cur <= 0){
@@ -455,17 +466,16 @@ public class PlayerMng : MonoBehaviour{
     }
 
     //데미지 줌
-    private void AttackDmg(float Attackdmg, int Type, float dmg_physic, float dmg_magical, GameObject _target){//주는 데미지
+    public void AttackDmg(float dmg_physic, float dmg_magical, Monster _target){//주는 데미지
         //Type 0 : 물뎀, Type 1 : 마뎀 
         float totalDmg = 0.0f;
-        switch (Type){
-            case 0: totalDmg = dmg_physic; break;
-            case 1: totalDmg = dmg_magical; break;
-        }
-        hp_cur -= totalDmg;
-        if (hp_cur <= 0)
-        {
-            KillPlayer();
+        
+        totalDmg = dmg_physic + dmg_magical; 
+       
+        _target.cur_Hp -= totalDmg;
+
+        if (_target.cur_Hp <= 0){
+            Debug.Log("몬스터가 죽음");
         }
     }
 
@@ -482,11 +492,6 @@ public class PlayerMng : MonoBehaviour{
 
     public void KillPlayer(){
         Debug.Log("사망");
-
-        //EventMng.ins.DeathPanel.SetActive(true);
-        //SoundMng.ins.PlayEffect("Grenade Explosion");
-        //TODO 코루틴 사용할것
-        Time.timeScale = 0.0f;
     }
 
     // invenflag의 값에 따라 인벤을 열고 닫음
@@ -552,6 +557,11 @@ public class PlayerMng : MonoBehaviour{
         //오른쪽마우스
         if (Input.GetMouseButtonDown(1)){ //TODO패링
             m_animator.Play("Standing Block Idle");
+        }
+
+        // 상호작용
+        if (Input.GetKeyDown(KeyCode.E)){
+      
         }
 
         //힐(Q)
