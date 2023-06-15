@@ -1,7 +1,7 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-
+using Cinemachine;
 // 클래스 설명 : 캐릭터를 사용하데 필요한 공용 메서드 들을 가지고 있음
 
 public class PlayerMng : MonoBehaviour{
@@ -20,6 +20,8 @@ public class PlayerMng : MonoBehaviour{
     private GameObject UI;
     private GameObject weapon;
     public BoxCollider weaponMeshCollider;
+
+    public CinemachineVirtualCamera virtualCamera;
     // ----
     #endregion
 
@@ -50,6 +52,7 @@ public class PlayerMng : MonoBehaviour{
     private bool m_isGround = false;
     public bool m_isSlope = false;
     public bool invenflag = false;
+    public bool Can_Attack = true;
     // ----
     #endregion
 
@@ -197,10 +200,11 @@ public class PlayerMng : MonoBehaviour{
     void Start() {
         DontDestroyOnLoad(this);
         //캐릭터 선택
-        Chosedcharacter = (int)PlayAbleCharacter.Paladin; 
+        Chosedcharacter = (int)PlayAbleCharacter.Paladin;
         //--
-
+        initComponent();
         initCharacterData(Chosedcharacter);
+        //Debug.Log(virtualCamera.name);
     }
 
     private void Update() {
@@ -277,6 +281,7 @@ public class PlayerMng : MonoBehaviour{
         weapon = GameObject.Find("SwordCollider");
         weaponMeshCollider = weapon.GetComponent<BoxCollider>();
         weaponMeshCollider.enabled = false;
+
     }
     #endregion
     
@@ -302,8 +307,7 @@ public class PlayerMng : MonoBehaviour{
         m_animator.SetIKRotationWeight(AvatarIKGoal.RightFoot, 1);
 
         if (Physics.Raycast(m_animator.GetIKPosition(AvatarIKGoal.RightFoot) + Vector3.up, Vector3.down,
-            out RaycastHit hit2, m_fDistanceToGround + 1f, LayerMask.GetMask("Ground")))
-        {
+            out RaycastHit hit2, m_fDistanceToGround + 1f, LayerMask.GetMask("Ground"))){
             Vector3 footPos = hit2.point;
             footPos.y += m_fDistanceToGround;
             m_animator.SetIKPosition(AvatarIKGoal.RightFoot, footPos);
@@ -394,7 +398,8 @@ public class PlayerMng : MonoBehaviour{
 
         m_rotationValue.x = Mathf.Clamp(m_rotationValue.x, -90f, 90f);
 
-        transform.rotation = Quaternion.Euler(0f, m_rotationValue.y, 0f);
+        transform.rotation = Quaternion.Euler(0f, virtualCamera.transform.eulerAngles.y, 0f);
+        //Debug.Log(virtualCamera.transform.rotation.y);
         //m_camFps.transform.rotation = Quaternion.Euler(m_rotationValue.x, m_rotationValue.y, 0f);
     }
     #endregion
@@ -438,18 +443,21 @@ public class PlayerMng : MonoBehaviour{
 
         return (physic, magic);
     }
-    public void setPlayerStat(){
+    public void setPlayerDmgStat(){
         //공격력 적용
         PlayerMng.Instance.PubPlayerDmg_physical = PlayerAttackStat().Item1;
         PlayerMng.Instance.PubPlayerDmg_magical = PlayerAttackStat().Item2;
         Debug.Log("물뎀 : " + PlayerMng.Instance.PubPlayerDmg_physical);
         Debug.Log("마뎀 : " + PlayerMng.Instance.PubPlayerDmg_magical);
-        //방어력 적용
-        Playerdefense_physical = PlayerDefenseStat().Item1;
-        Playerdefense_magic = PlayerDefenseStat().Item2;
+    }
+
+    public void setPlayerDefenseStat(){
+        PlayerMng.Instance.PubPlayerdefense_physical = PlayerDefenseStat().Item1;
+        PlayerMng.Instance.PubPlayerdefense_magic = PlayerDefenseStat().Item2;
         Debug.Log("물방 : " + PlayerMng.Instance.PubPlayerdefense_physical);
         Debug.Log("마방 : " + PlayerMng.Instance.PubPlayerdefense_magic);
     }
+
 
     //데미지 받음
     public void TakeDmg(float physical, float magical){//받는 데미지 (PlayerDefenseStat().item1 , PlayerDefenseStat().item2) 
@@ -498,6 +506,7 @@ public class PlayerMng : MonoBehaviour{
     private void inventoryopen(){
         if (Input.GetKeyDown(KeyCode.Tab)){
             invenflag = !invenflag;
+            Can_Attack = !Can_Attack;
         }
         if (invenflag){//트루면 켜짐
             UI.SetActive(true);
@@ -509,6 +518,13 @@ public class PlayerMng : MonoBehaviour{
     public void SwichingActive(){
         invenflag = !invenflag;
         UI.SetActive(invenflag);
+    }
+
+    private void OnDrawGizmos()
+    {
+        Gizmos.color = Color.red;
+        //Gizmos.DrawLine(transform.position + new Vector3(0,m_characterController.height * 0.5f,0), transform.TransformDirection(Vector3.forward) * 100.0f);
+        //Debug.DrawRay(transform.position, transform.TransformDirection(Vector3.forward) * 100.0f, Color.red);
     }
 
     private void UserInput(){
@@ -550,18 +566,42 @@ public class PlayerMng : MonoBehaviour{
         }
 
         //왼쪽마우스, mixamorig:Sword_joint
-        if (Input.GetMouseButtonDown(0)){// 공격 
+        if (Input.GetMouseButtonDown(0) && Can_Attack){// 공격 
             m_animator.Play("Sword And Shield Slash");
         }
 
         //오른쪽마우스
-        if (Input.GetMouseButtonDown(1)){ //TODO패링
+        if (Input.GetMouseButtonDown(1) && Can_Attack){ //TODO패링
             m_animator.Play("Standing Block Idle");
         }
 
+
         // 상호작용
         if (Input.GetKeyDown(KeyCode.E)){
-            
+            Debug.Log("e누름");
+
+            if(Physics.Raycast(transform.position + new Vector3(0, m_characterController.height * 0.5f, 0), transform.TransformDirection(Vector3.forward), out RaycastHit hit, 10.0f))
+            {
+                Debug.Log(hit.collider.name);
+                if (hit.collider.CompareTag("Npc") && hit.collider.name == "Npc_blacksmith")
+                {
+                    Debug.Log(hit.collider.name);
+                    //Npc_shop
+                }
+                else if(hit.collider.CompareTag("Npc") && hit.collider.name == "Npc_shop")
+                {
+                    Debug.Log(hit.collider.name);
+
+                    //Npc_shop
+                }
+                else if (hit.collider.CompareTag("Npc") && hit.collider.name == "ChestBox")
+                {
+                    Debug.Log(hit.collider.name);
+
+                    //Npc_shop
+                }
+
+            }
         }
 
         //힐(Q)

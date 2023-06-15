@@ -14,8 +14,8 @@ public class CameraScript : MonoBehaviour{
 
     // Update is called once per frame
     void Update(){
-        Rotation();
-        followcam();
+        //Rotation();
+        //followcam();
     }
     
     private void Rotation(){
@@ -36,6 +36,8 @@ public class CameraScript : MonoBehaviour{
     }
 
     private void followcam(){
-        transform.position = PlayerMng.Instance.transform.position + new Vector3(0, 5, -4);
+        Vector3 back = PlayerMng.Instance.transform.TransformDirection(Vector3.forward);
+        Vector3 addVector = new Vector3(0, 3, -1);
+        transform.position = PlayerMng.Instance.transform.position + (-back + addVector);
     }
 }

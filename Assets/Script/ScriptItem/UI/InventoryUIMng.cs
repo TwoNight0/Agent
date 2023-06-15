@@ -216,46 +216,46 @@ public class InventoryUIMng : MonoBehaviour{
                     else if (firstItemSlot.PubItemCode > 1000 && firstItemSlot.PubItemCode < 2001 && secondItemSlot.gameObject.name.Contains("equip_mainweapon")){
                         fillequipSlot(firstItemSlot, secondItemSlot);
                         PlayerMng.Instance.PubMainWeapon = secondItemSlot.PubItemCode; //코드넘겨받기
-                        PlayerMng.Instance.setPlayerStat();//장비를 장착했을 때 장착한 아이템만큼 자신의 공격력 수치가 변해야함
+                        PlayerMng.Instance.setPlayerDmgStat();//장비를 장착했을 때 장착한 아이템만큼 자신의 공격력 수치가 변해야함
                     }
                     else if (firstItemSlot.PubItemCode > 2000 && firstItemSlot.PubItemCode < 3001 && secondItemSlot.gameObject.name.Contains("equip_subWaepon")){
                         fillequipSlot(firstItemSlot, secondItemSlot);
                         PlayerMng.Instance.PubSubWeapon = secondItemSlot.PubItemCode;
-                        PlayerMng.Instance.setPlayerStat();
+                        PlayerMng.Instance.setPlayerDmgStat();
                     }
                     else if (firstItemSlot.PubItemCode > 3000 && firstItemSlot.PubItemCode < 3201 && secondItemSlot.gameObject.name.Contains("equip_head")){
                         fillequipSlot(firstItemSlot, secondItemSlot);
                         PlayerMng.Instance.PubHead = secondItemSlot.PubItemCode;
-                        PlayerMng.Instance.setPlayerStat();
+                        PlayerMng.Instance.setPlayerDefenseStat();
                     }
                     else if (firstItemSlot.PubItemCode > 3200 && firstItemSlot.PubItemCode < 3401 && secondItemSlot.gameObject.name.Contains("equip_bodyUp")){
                         fillequipSlot(firstItemSlot, secondItemSlot);
                         PlayerMng.Instance.PubBodyUp = secondItemSlot.PubItemCode;
-                        PlayerMng.Instance.setPlayerStat();
+                        PlayerMng.Instance.setPlayerDefenseStat();
 
                     }
                     else if (firstItemSlot.PubItemCode > 3400 && firstItemSlot.PubItemCode < 3601 && secondItemSlot.gameObject.name.Contains("equip_bodydown")){
                         fillequipSlot(firstItemSlot, secondItemSlot);
                         PlayerMng.Instance.PubBodyDown = secondItemSlot.PubItemCode;
-                        PlayerMng.Instance.setPlayerStat();
+                        PlayerMng.Instance.setPlayerDefenseStat();
  
                     }
                     else if (firstItemSlot.PubItemCode > 3600 && firstItemSlot.PubItemCode < 3801 && secondItemSlot.gameObject.name.Contains("equip_shoes")){
                         fillequipSlot(firstItemSlot, secondItemSlot);
                         PlayerMng.Instance.PubShoes = secondItemSlot.PubItemCode;
-                        PlayerMng.Instance.setPlayerStat();
+                        PlayerMng.Instance.setPlayerDefenseStat();
      
                     }
                     else if (firstItemSlot.PubItemCode > 4000 && firstItemSlot.PubItemCode < 4501 && secondItemSlot.gameObject.name.Contains("equip_ring")){
                         fillequipSlot(firstItemSlot, secondItemSlot);
                         PlayerMng.Instance.PubRing = secondItemSlot.PubItemCode;
-                        PlayerMng.Instance.setPlayerStat();
+                        PlayerMng.Instance.setPlayerDefenseStat();
  
                     }
                     else if (firstItemSlot.PubItemCode > 4500 && firstItemSlot.PubItemCode < 5000 && secondItemSlot.gameObject.name.Contains("equip_necklace")){
                         fillequipSlot(firstItemSlot, secondItemSlot);
                         PlayerMng.Instance.PubNecklace = secondItemSlot.PubItemCode;
-                        PlayerMng.Instance.setPlayerStat();
+                        PlayerMng.Instance.setPlayerDefenseStat();
                     }
                     else{
                         return;
@@ -316,6 +316,7 @@ public class InventoryUIMng : MonoBehaviour{
 
     private void addbuttonAction(){
         btn_Exit.onClick.AddListener(playerMng.SwichingActive); //playctrl에 있는 함수를 등록
+        PlayerMng.Instance.Can_Attack = true;
     }
 
 

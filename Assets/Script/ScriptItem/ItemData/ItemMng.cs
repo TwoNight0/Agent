@@ -5,7 +5,8 @@ using Newtonsoft.Json;
 
 //클래스 설명 : 아이템 저장, 아이템 불러오기, 아이템 등록
 //(보여지지 않는 부분)
-public class ItemMng : MonoBehaviour{
+public class ItemMng : MonoBehaviour
+{
     public static ItemMng Instance;
     private int itemCode;
 
@@ -15,11 +16,14 @@ public class ItemMng : MonoBehaviour{
     public List<DataWeaponItem> WeaponList = new List<DataWeaponItem>();
     #endregion
 
-    private void Awake(){
-        if (Instance == null){
+    private void Awake()
+    {
+        if (Instance == null)
+        {
             Instance = this;
         }
-        else{ 
+        else
+        {
             Destroy(this);
         }
     }
@@ -40,17 +44,19 @@ public class ItemMng : MonoBehaviour{
     public DataWeaponItem stick = new DataWeaponItem();
     #endregion
 
-    private void Start(){
+    private void Start()
+    {
         DontDestroyOnLoad(this);
-        initWeaponData(); 
+        initWeaponData();
         initArmorData();
         // ----
 
         createItem(); // 제작해야함 
     }
 
-    
-    private void AddItem<T>(List<T> _ItemList, T _item){
+
+    private void AddItem<T>(List<T> _ItemList, T _item)
+    {
         _ItemList.Add(_item);
     }
 
@@ -66,7 +72,8 @@ public class ItemMng : MonoBehaviour{
     /// 4001~5000   장신구 : 반지(4001~4500), 목걸이(4501~5000)
     /// 6001~7000   포션 // 세부포션은 나중에 생각하자
     /// </summary>
-    private void initWeaponData(){
+    private void initWeaponData()
+    {
         shotsword.itemCode = 1001;
         shotsword.itemName = "shotsword";
         shotsword.icon = Resources.Load<Sprite>("weapon/shotsword");
@@ -98,7 +105,8 @@ public class ItemMng : MonoBehaviour{
         AddItem(WeaponList, wand);
         AddItem(WeaponList, stick);
     }
-    private void initArmorData(){
+    private void initArmorData()
+    {
         fabric_up.itemCode = 3201;
         fabric_up.itemName = "fabric_up";
         fabric_up.icon = Resources.Load<Sprite>("armor/fabric_up");
@@ -138,31 +146,44 @@ public class ItemMng : MonoBehaviour{
     }
     #endregion
 
-    private void createItem(){
+    private void createItem()
+    {
         //오브젝트 만들고 코드 부여, 박스(3d), 위치속성
     }
 
     public (float, float) giveDmgData(int _itemCode){
-        DataWeaponItem weaponItem;
+        DataWeaponItem weaponItem = null;
         float physic = 0.0f;
         float magic = 0.0f;
-        if (WeaponList.Equals(_itemCode)) {
-            weaponItem = ItemMng.Instance.WeaponList.Find(x => x.itemCode == _itemCode);
-            physic = weaponItem.PubDmg_physic;
-            magic = weaponItem.PubDmg_magic;
-        }
+        
+        weaponItem = ItemMng.Instance.WeaponList.Find(x => x.itemCode == _itemCode);
+        
+        //List<DataWeaponItem> _WeaponList = ItemMng.Instance.WeaponList;
+        //int count = _WeaponList.Count;
+        //for (int iNum = 0; iNum < count; ++iNum)
+        //{
+        //    if (_WeaponList[iNum].itemCode == _itemCode)
+        //    {
+        //        weaponItem = _WeaponList[iNum];
+        //        break;
+        //    }
+        //}
+        
+        physic = weaponItem.PubDmg_physic;
+        magic = weaponItem.PubDmg_magic;
+        
         return (physic, magic);
     }
 
-    public (float, float) giveDefenseData(int _itemCode) {
+    public (float, float) giveDefenseData(int _itemCode){
         DataArmorItem armorItem;
         float physic = 0.0f;
         float magic = 0.0f;
-        if (ArmorList.Equals(_itemCode)){
-            armorItem = ItemMng.Instance.ArmorList.Find(x => x.itemCode == _itemCode);
-            physic = armorItem.PubDefense_physical;
-            magic = armorItem.PubDefense_magical;
-        }
+        
+        armorItem = ItemMng.Instance.ArmorList.Find(x => x.itemCode == _itemCode);
+        physic = armorItem.PubDefense_physical;
+        magic = armorItem.PubDefense_magical;
+        
         return (physic, magic);
     }
 
@@ -170,10 +191,11 @@ public class ItemMng : MonoBehaviour{
 
     #region Save, Load
     //--- Save ---
-    public void inventorysave(List<SaveForm> _List){
+    public void inventorysave(List<SaveForm> _List)
+    {
         Inventory = _List; //새로고침
         string key = "inven";
-        
+
         string invensave = JsonConvert.SerializeObject(Inventory);
         PlayerPrefs.SetString(key, invensave);
         InventoryUIMng.Instance.printInventroy(Inventory); //잘 저장했나 확인
@@ -182,10 +204,12 @@ public class ItemMng : MonoBehaviour{
     }
 
     //큰리스트의 일부정보를 스몰리스트에 옮겨담음(이미지는 Jason으로 저장할수 없기때문에 이미지를 제외한 클래스로 옮겨다음)
-    public List<SaveForm> ListCopy(List<ItemSlotScript> rawList){
+    public List<SaveForm> ListCopy(List<ItemSlotScript> rawList)
+    {
         List<SaveForm> copyList = new List<SaveForm>();
         int len = rawList.Count;
-        for(int i = 0; i<len; i++){
+        for (int i = 0; i < len; i++)
+        {
             SaveForm form = new SaveForm() { SAccount = rawList[i].PubAccount, Sitemcode = rawList[i].PubItemCode };
             copyList.Add(form);
             //copyList[i].Sitemcode = rawList[i].PubItemCode;
@@ -200,7 +224,8 @@ public class ItemMng : MonoBehaviour{
     //아이템을 습득할때
     //아이템을 옮길때
     //아이템을 버릴때
-    public void inventoryload(string _jsonsaved){
+    public void inventoryload(string _jsonsaved)
+    {
         string key = "inven";
         Inventory = JsonConvert.DeserializeObject<List<SaveForm>>(_jsonsaved);
         Debug.Log("불러옴 : ");
@@ -209,5 +234,5 @@ public class ItemMng : MonoBehaviour{
     }
     #endregion
 
-  
+
 }
