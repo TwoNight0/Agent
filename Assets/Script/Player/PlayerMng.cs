@@ -188,7 +188,7 @@ public class PlayerMng : MonoBehaviour{
     #endregion
 
     // ---- [ Awake, start , Update ] ----
-    private void Awake() {
+    private void Awake(){
         if (Instance == null){
             Instance = this;
         }
