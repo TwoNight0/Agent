@@ -92,6 +92,7 @@ public class PlayerMng : MonoBehaviour{
     [SerializeField] private float hp_cur = 0.0f;
     private float hp_max;
     private float PlayermoveSpeed;
+    private float moveStop;
     private float Playerdefense_physical;
     private float Playerdefense_magic;
 
@@ -281,7 +282,7 @@ public class PlayerMng : MonoBehaviour{
         weapon = GameObject.Find("SwordCollider");
         weaponMeshCollider = weapon.GetComponent<BoxCollider>();
         weaponMeshCollider.enabled = false;
-
+        moveStop = 1.0f;
     }
     #endregion
     
@@ -378,7 +379,7 @@ public class PlayerMng : MonoBehaviour{
             m_characterController.Move(-m_slopeVector * Time.deltaTime);
         }
         else { //기본 움직임
-            m_characterController.Move(transform.rotation * m_moveDir * PlayermoveSpeed * Time.deltaTime);
+            m_characterController.Move(transform.rotation * m_moveDir * PlayermoveSpeed * moveStop * Time.deltaTime);
         }
     }
 
@@ -443,6 +444,8 @@ public class PlayerMng : MonoBehaviour{
 
         return (physic, magic);
     }
+
+    //아이템 장착후 물리,마법데미지에 추가 누적
     public void setPlayerDmgStat(){
         //공격력 적용
         PlayerMng.Instance.PubPlayerDmg_physical = PlayerAttackStat().Item1;
@@ -490,11 +493,13 @@ public class PlayerMng : MonoBehaviour{
     //공격시작 ->칼의 콜라이더를 활성화 ->> 부딫히면 부딫힌  오브젝트 가져옴 -> 그 오브젝트에 내 공격력만큼 피를 깜(playerMng함수이용)
     private void weaponColliderActivate() {
         weaponMeshCollider.enabled = true;
+        
         //Debug.Log(weaponMeshCollider.enabled);
         //Debug.Log("on");
     }
     private void weaponColliderDeActivate(){
         weaponMeshCollider.enabled = false;
+        moveStop = 1.0f;
         //Debug.Log("off");
     }
 
@@ -568,6 +573,7 @@ public class PlayerMng : MonoBehaviour{
         //왼쪽마우스, mixamorig:Sword_joint
         if (Input.GetMouseButtonDown(0) && Can_Attack){// 공격 
             m_animator.Play("Sword And Shield Slash");
+            moveStop = 0.0f;
         }
 
         //오른쪽마우스
@@ -579,23 +585,20 @@ public class PlayerMng : MonoBehaviour{
         // 상호작용
         if (Input.GetKeyDown(KeyCode.E)){
             Debug.Log("e누름");
-
-            if(Physics.Raycast(transform.position + new Vector3(0, m_characterController.height * 0.5f, 0), transform.TransformDirection(Vector3.forward), out RaycastHit hit, 10.0f))
-            {
+            if(Physics.Raycast(transform.position + new Vector3(0, m_characterController.height * 0.5f, 0), transform.TransformDirection(Vector3.forward), out RaycastHit hit, 10.0f)){
                 Debug.Log(hit.collider.name);
-                if (hit.collider.CompareTag("Npc") && hit.collider.name == "Npc_blacksmith")
-                {
+                if (hit.collider.CompareTag("Npc") && hit.collider.name == "Npc_blacksmith"){
                     Debug.Log(hit.collider.name);
+                    //자손찾는법을 좀더연습해야할듯 
+                   
                     //Npc_shop
                 }
-                else if(hit.collider.CompareTag("Npc") && hit.collider.name == "Npc_shop")
-                {
+                else if(hit.collider.CompareTag("Npc") && hit.collider.name == "Npc_shop"){
                     Debug.Log(hit.collider.name);
 
                     //Npc_shop
                 }
-                else if (hit.collider.CompareTag("Npc") && hit.collider.name == "ChestBox")
-                {
+                else if (hit.collider.CompareTag("Npc") && hit.collider.name == "ChestBox"){
                     Debug.Log(hit.collider.name);
 
                     //Npc_shop
