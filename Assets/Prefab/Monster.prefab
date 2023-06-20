@@ -189,8 +189,9 @@ GameObject:
   - component: {fileID: 5745866077942432706}
   - component: {fileID: 6426989954669663341}
   - component: {fileID: 4852981734116310358}
-  - component: {fileID: 1737868626049514652}
   - component: {fileID: 7875460466248403523}
+  - component: {fileID: 9151391473768518352}
+  - component: {fileID: 1377492543710104839}
   m_Layer: 0
   m_Name: Monster
   m_TagString: Monster
@@ -264,19 +265,6 @@ MeshRenderer:
   m_SortingLayer: 0
   m_SortingOrder: 0
   m_AdditionalVertexStreams: {fileID: 0}
---- !u!65 &1737868626049514652
-BoxCollider:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 5924949059275394963}
-  m_Material: {fileID: 0}
-  m_IsTrigger: 0
-  m_Enabled: 1
-  serializedVersion: 2
-  m_Size: {x: 1, y: 1, z: 1}
-  m_Center: {x: 0, y: 0, z: 0}
 --- !u!114 &7875460466248403523
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -289,10 +277,46 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 8ac7cc5db06056246b3d03f44745b3bc, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  target: {fileID: 0}
+  cur_HpImg: {fileID: 0}
+  objectColor: {fileID: 0}
+  uiRectHP: {fileID: 0}
+  rb: {fileID: 9151391473768518352}
+  movespeed: 0.3
   cur_Hp: 0
   max_Hp: 0
   dmg_physical: 0
   dmg_magical: 0
+  attackMode: 0
+--- !u!54 &9151391473768518352
+Rigidbody:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5924949059275394963}
+  serializedVersion: 2
+  m_Mass: 1
+  m_Drag: 0
+  m_AngularDrag: 0.05
+  m_UseGravity: 1
+  m_IsKinematic: 0
+  m_Interpolate: 0
+  m_Constraints: 0
+  m_CollisionDetection: 0
+--- !u!65 &1377492543710104839
+BoxCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5924949059275394963}
+  m_Material: {fileID: 13400000, guid: 52083e02c1a7dd14c9b441da8b5c5e41, type: 2}
+  m_IsTrigger: 0
+  m_Enabled: 1
+  serializedVersion: 2
+  m_Size: {x: 1, y: 1, z: 1}
+  m_Center: {x: 0, y: 0, z: 0}
 --- !u!1 &7481177801767219199
 GameObject:
   m_ObjectHideFlags: 0

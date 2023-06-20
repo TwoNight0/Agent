@@ -16,8 +16,7 @@ public class ItemMng : MonoBehaviour
     public List<DataWeaponItem> WeaponList = new List<DataWeaponItem>();
     #endregion
 
-    private void Awake()
-    {
+    private void Awake(){
         if (Instance == null)
         {
             Instance = this;
@@ -44,8 +43,7 @@ public class ItemMng : MonoBehaviour
     public DataWeaponItem stick = new DataWeaponItem();
     #endregion
 
-    private void Start()
-    {
+    private void Start(){
         DontDestroyOnLoad(this);
         initWeaponData();
         initArmorData();
@@ -55,8 +53,7 @@ public class ItemMng : MonoBehaviour
     }
 
 
-    private void AddItem<T>(List<T> _ItemList, T _item)
-    {
+    private void AddItem<T>(List<T> _ItemList, T _item){
         _ItemList.Add(_item);
     }
 
@@ -146,9 +143,12 @@ public class ItemMng : MonoBehaviour
     }
     #endregion
 
-    private void createItem()
-    {
+    private void createItem(){
         //오브젝트 만들고 코드 부여, 박스(3d), 위치속성
+       // GameObject obj = Instantiate(itemSlot, transform);
+        //ListSlot.Add(obj.GetComponent<ItemSlotScript>()); //listSlot에 등록해서 아이템스크립트들을 등록했음
+                                                          //saveList.Add(obj.GetComponent<SaveForm>()); //저장될리스트도 같은 개수로 만듬 
+        //obj.name = _name + invencount;
     }
 
     public (float, float) giveDmgData(int _itemCode){
@@ -186,7 +186,6 @@ public class ItemMng : MonoBehaviour
         
         return (physic, magic);
     }
-
 
 
     #region Save, Load
@@ -233,6 +232,5 @@ public class ItemMng : MonoBehaviour
         InventoryUIMng.Instance.printInventroy(Inventory); //잘 불러왔나 확인
     }
     #endregion
-
 
 }

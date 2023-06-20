@@ -4,8 +4,8 @@ using UnityEngine;
 using UnityEngine.UI;
 using TMPro;
 
-public class PopupMng : MonoBehaviour{
-    public static PopupMng Instance;
+public class MngPopup : MonoBehaviour{
+    public static MngPopup Instance;
 
     [SerializeField] private GameObject m_objPopup;
     [SerializeField] private TextMeshProUGUI m_textTitle;

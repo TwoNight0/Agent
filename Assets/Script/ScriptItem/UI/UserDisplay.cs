@@ -28,6 +28,7 @@ public class UserDisplay : MonoBehaviour{
 
     [SerializeField] public TextMeshProUGUI whichone;
     [SerializeField] public TextMeshProUGUI BulletTMP;
+ 
 
     // ---- [ start , Update ] ----
     private void Awake(){

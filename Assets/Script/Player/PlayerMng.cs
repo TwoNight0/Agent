@@ -13,7 +13,7 @@ public class PlayerMng : MonoBehaviour{
     //private CameraManager m_cameraMng;
     //private Camera m_camFps;
     //private Rigidbody m_rb;
-    private CharacterController m_characterController;
+    public CharacterController m_characterController;
     private Animator m_animator;
     private Groundcheck m_groundchecker;
     private CharacterData Character = null;
@@ -95,6 +95,8 @@ public class PlayerMng : MonoBehaviour{
     private float moveStop;
     private float Playerdefense_physical;
     private float Playerdefense_magic;
+
+    private int money;
 
     // EqipmentItemCode
     private int MainWeaponCode;
@@ -202,10 +204,12 @@ public class PlayerMng : MonoBehaviour{
         DontDestroyOnLoad(this);
         //캐릭터 선택
         Chosedcharacter = (int)PlayAbleCharacter.Paladin;
+
         //--
         initComponent();
         initCharacterData(Chosedcharacter);
         //Debug.Log(virtualCamera.name);
+        
     }
 
     private void Update() {
@@ -510,6 +514,7 @@ public class PlayerMng : MonoBehaviour{
     // invenflag의 값에 따라 인벤을 열고 닫음
     private void inventoryopen(){
         if (Input.GetKeyDown(KeyCode.Tab)){
+            InventoryUIMng.Instance.transform.parent.parent.position = new Vector3(520, 320, 0);
             invenflag = !invenflag;
             Can_Attack = !Can_Attack;
         }
@@ -525,8 +530,7 @@ public class PlayerMng : MonoBehaviour{
         UI.SetActive(invenflag);
     }
 
-    private void OnDrawGizmos()
-    {
+    private void OnDrawGizmos(){
         Gizmos.color = Color.red;
         //Gizmos.DrawLine(transform.position + new Vector3(0,m_characterController.height * 0.5f,0), transform.TransformDirection(Vector3.forward) * 100.0f);
         //Debug.DrawRay(transform.position, transform.TransformDirection(Vector3.forward) * 100.0f, Color.red);
@@ -589,19 +593,21 @@ public class PlayerMng : MonoBehaviour{
                 Debug.Log(hit.collider.name);
                 if (hit.collider.CompareTag("Npc") && hit.collider.name == "Npc_blacksmith"){
                     Debug.Log(hit.collider.name);
-                    //자손찾는법을 좀더연습해야할듯 
-                   
-                    //Npc_shop
+                    MngDisplay.Instance.UI_forge.SetActive(true);
+                    Can_Attack = false;
+                    
                 }
                 else if(hit.collider.CompareTag("Npc") && hit.collider.name == "Npc_shop"){
                     Debug.Log(hit.collider.name);
-
-                    //Npc_shop
+                    MngDisplay.Instance.UI_Itemshop.SetActive(true);
+                    Can_Attack = false;
+         
                 }
                 else if (hit.collider.CompareTag("Npc") && hit.collider.name == "ChestBox"){
                     Debug.Log(hit.collider.name);
-
-                    //Npc_shop
+                    MngDisplay.Instance.UI_chestBox.SetActive(true);
+                    Can_Attack = false;
+                    
                 }
 
             }
@@ -613,6 +619,7 @@ public class PlayerMng : MonoBehaviour{
             Debug.Log(timer_hill);
             timer_hill = 0;
             UserDisplay.Instance.hillImage.color = Color.white;
+            hp_cur += 50.0f;
         }
         //노말스킬(F)
         if (Input.GetKeyDown(KeyCode.F) && (skill_nomal_cool <= timer_normal)){

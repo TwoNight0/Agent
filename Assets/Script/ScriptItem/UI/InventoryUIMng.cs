@@ -15,7 +15,7 @@ public class InventoryUIMng : MonoBehaviour{
     //public List<SaveForm> saveList = new List<SaveForm>();
     private EventSystem m_eventSystem;
     PlayerMng playerMng;
-    
+ 
     //
 
     //슬롯 선택시 사용하는 변수들
@@ -24,7 +24,7 @@ public class InventoryUIMng : MonoBehaviour{
     
     
     public RectTransform DragImage = new RectTransform();
-    //
+    [Header("슬롯 수")]
     [SerializeField] private int capacity = 20; //인벤토리 칸 추후늘리면됨
     private int invencount = 0;
 
@@ -55,6 +55,7 @@ public class InventoryUIMng : MonoBehaviour{
         playerMng = FindObjectOfType<PlayerMng>();
         initInventory(); //인벤토리 생성
         addbuttonAction(); //버튼액션 지정
+        
     }
 
     private void Update(){

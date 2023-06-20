@@ -10,6 +10,8 @@ public class Monster : MonoBehaviour{
     [SerializeField] private Image cur_HpImg;
     public Renderer objectColor;
     public RectTransform uiRectHP;
+    public Rigidbody rb;
+    public float movespeed;
     #endregion
 
     #region 스탯
@@ -31,7 +33,7 @@ public class Monster : MonoBehaviour{
         Speed = 1.0f;
         objectColor = gameObject.GetComponent<Renderer>();
         target = PlayerMng.Instance.transform;
-        attackMode = false;
+        //attackMode = false;
         gameObject.AddComponent<BoxCollider>();
     }
 
@@ -39,7 +41,7 @@ public class Monster : MonoBehaviour{
         death();
         LookAtTarget();
         hpBarApply();
-        MonsterMove();
+        Invoke("MonsterMove", 1f);
     }
 
 
@@ -66,6 +68,7 @@ public class Monster : MonoBehaviour{
 
     public void LookAtTarget(){      
         Vector3 testPos = new Vector3(target.position.x, uiRectHP.position.y, target.position.z);
+        
         testPos.y = 3; //선생님이 생각하셨던 답은 이거같네
         //Debug.Log(uiRectHP.position.y);
         //Debug.Log(testPos);
@@ -86,10 +89,14 @@ public class Monster : MonoBehaviour{
         if (attackMode){
             vector_target = target.position;
             //transform.Translate(-vector_target * Time.deltaTime);
-            transform.Translate((target.position - transform.position) * Time.deltaTime);
+            transform.Translate((target.position - transform.position) * Time.deltaTime * movespeed);
+            //rb.AddForce(target.transform.position, ForceMode.Impulse);
+
             //transform.position = Vector3.MoveTowards(transform.position, target.position, Speed * Time.deltaTime);
 
         }
+
+
     }
     private void OnCollisionEnter(Collision collision){
         if (collision.transform.tag == "Player"){
