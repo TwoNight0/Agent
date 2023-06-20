@@ -20,4 +20,11 @@ public class NpcBlacksmith : MonoBehaviour{
     {
         
     }
+
+    private void inputarray()
+    {
+
+    }
+
+
 }

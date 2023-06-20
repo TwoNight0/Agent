@@ -45,7 +45,7 @@ public class Monster : MonoBehaviour{
     }
 
 
-    private void createitem(){
+    private void SpawnMonster(){
 
     }
 
@@ -69,7 +69,7 @@ public class Monster : MonoBehaviour{
     public void LookAtTarget(){      
         Vector3 testPos = new Vector3(target.position.x, uiRectHP.position.y, target.position.z);
         
-        testPos.y = 3; //선생님이 생각하셨던 답은 이거같네
+        //testPos.y = 3; //선생님이 생각하셨던 답은 이거같네
         //Debug.Log(uiRectHP.position.y);
         //Debug.Log(testPos);
 

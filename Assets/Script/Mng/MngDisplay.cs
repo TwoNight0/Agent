@@ -8,6 +8,7 @@ public class MngDisplay : MonoBehaviour{
     [SerializeField] public GameObject UI_Itemshop;
     [SerializeField] public GameObject UI_forge;
     [SerializeField] public GameObject UI_chestBox;
+    [SerializeField] public GameObject UI_setting;
 
 
     private void Awake(){
@@ -30,6 +31,8 @@ public class MngDisplay : MonoBehaviour{
         exitForge();
         exitItemShop();
         exitChestBox();
+        exitSetting();
+        openSetting();
     }
 
     /// <summary>
@@ -39,6 +42,8 @@ public class MngDisplay : MonoBehaviour{
         UI_forge.SetActive(false);
         UI_Itemshop.SetActive(false);
         UI_chestBox.SetActive(false);
+        //UI_setting.SetActive(false);
+
     }
 
 
@@ -70,6 +75,23 @@ public class MngDisplay : MonoBehaviour{
         if (UI_chestBox == true && Input.GetKeyDown(KeyCode.Escape)){
             UI_chestBox.SetActive(false);
             PlayerMng.Instance.Can_Attack = true;
+        }
+    }
+
+    public void openSetting(){
+        if (UI_setting == false && Input.GetKeyDown(KeyCode.Escape)){
+            UI_setting.SetActive(true);
+
+        }
+    }
+
+    /// <summary>
+    /// setting ´Ý±â
+    /// </summary>
+    public void exitSetting(){
+        if (UI_setting == true && Input.GetKeyDown(KeyCode.Escape)){
+            UI_setting.SetActive(false);
+            
         }
     }
 }

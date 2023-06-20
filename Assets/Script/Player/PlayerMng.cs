@@ -585,6 +585,12 @@ public class PlayerMng : MonoBehaviour{
             m_animator.Play("Standing Block Idle");
         }
 
+        //esc
+        if (Input.GetKeyDown(KeyCode.Escape))
+        {
+            
+        }
+
 
         // 상호작용
         if (Input.GetKeyDown(KeyCode.E)){
