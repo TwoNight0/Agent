@@ -22,6 +22,13 @@ public class PlayerMng : MonoBehaviour{
     public BoxCollider weaponMeshCollider;
 
     public CinemachineVirtualCamera virtualCamera;
+
+    public void PlayerTeleport(Vector3 _pos){
+        m_characterController.enabled = false;
+        transform.position = _pos;
+        m_characterController.enabled = true;
+    }
+
     // ----
     #endregion
 
@@ -298,8 +305,7 @@ public class PlayerMng : MonoBehaviour{
         m_animator.SetIKRotationWeight(AvatarIKGoal.LeftFoot, 1);
 
         if (Physics.Raycast(m_animator.GetIKPosition(AvatarIKGoal.LeftFoot) + Vector3.up, Vector3.down,
-            out RaycastHit hit, m_fDistanceToGround + 1f, LayerMask.GetMask("Ground")))
-        {
+            out RaycastHit hit, m_fDistanceToGround + 1f, LayerMask.GetMask("Ground"))){
             Vector3 footPos = hit.point;
             footPos.y += m_fDistanceToGround;
             m_animator.SetIKPosition(AvatarIKGoal.LeftFoot, footPos);

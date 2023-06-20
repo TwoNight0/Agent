@@ -57,10 +57,6 @@ public class UserDisplay : MonoBehaviour{
     //UI이미지들을 선택한 캐릭터의 스킬에 맞게 변경해주는 메서드
     private void initDisplay(){
         //오브젝트지정
-        Filter_Hill = transform.Find("Filter/Filter_Hill").GetComponent<Image>();
-        Filter_Dash = transform.Find("Filter/Filter_Dash").GetComponent<Image>();
-        Filter_skill_nomal = transform.Find("Filter/Filter_skill_nomal").GetComponent<Image>(); ;
-        Filter_skill_Ultimate = transform.Find("Filter/Filter_skill_Ultimate").GetComponent<Image>(); ;
 
         //이미지할당 //playerMng가 이미지를 보내주고 그 이미지를 받았음
         hillImage.sprite = PlayerMng.Instance.hillImg; 

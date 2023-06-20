@@ -13,7 +13,7 @@ public class ButtonAction : MonoBehaviour{
 
     private void LoadFieldScene(){
         //Debug.Log("´­¸²");
-        SceneManager.LoadScene("Scenes/TestField");
+        SceneManager.LoadScene("Scenes/Field");
     }
 
 }

@@ -99,8 +99,7 @@ public class InventoryUIMng : MonoBehaviour{
 
     //슬롯생성하는 코드
     private void createItemSlot(string _name = "itemSlot"){
-        if(invencount < capacity) // 슬롯보다 더 많은 양이 생성되지 않도록
-        {
+        if(invencount < capacity){// 슬롯보다 더 많은 양이 생성되지 않도록
             GameObject obj = Instantiate(itemSlot, transform);
             ListSlot.Add(obj.GetComponent<ItemSlotScript>()); //listSlot에 등록해서 아이템스크립트들을 등록했음
             //saveList.Add(obj.GetComponent<SaveForm>()); //저장될리스트도 같은 개수로 만듬 
@@ -188,7 +187,6 @@ public class InventoryUIMng : MonoBehaviour{
                 else{
                     Debug.Log("두번째 슬롯 : " + result);
                     secondItemSlot = result.gameObject.GetComponent<ItemSlotScript>(); // 스크립트 가져왔음
-
                 if ((firstItemSlot != secondItemSlot)){
                     //아이템슬롯의 아이템일때
                     if (secondItemSlot.gameObject.name.Contains("ItemSlot")){

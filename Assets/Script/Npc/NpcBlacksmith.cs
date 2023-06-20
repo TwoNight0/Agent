@@ -21,9 +21,11 @@ public class NpcBlacksmith : MonoBehaviour{
         
     }
 
-    private void inputarray()
-    {
-
+    /// <summary>
+    /// 아이템슬롯에 아이템을 넣으면
+    /// </summary>
+    private void inputarray(){
+        PointerEventData pointEvent = new PointerEventData(m_eventSystem);
     }
 
 
