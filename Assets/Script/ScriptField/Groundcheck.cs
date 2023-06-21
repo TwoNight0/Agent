@@ -11,7 +11,7 @@ public class Groundcheck : MonoBehaviour{
      private bool m_isGround = false;
 
     private void OnTriggerEnter(Collider other){
-        if (other.gameObject.tag == "Ground"){
+        if (other.gameObject.tag == "Ground" || other.gameObject.layer == 6){
             //Debug.Log("출돌중임");
             m_isGround = true;
         }

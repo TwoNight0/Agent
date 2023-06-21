@@ -28,7 +28,7 @@ public class NpcShop : MonoBehaviour{
     /// </summary>
     private void shopisOn() {
         if (shopOn) {
-        
+            
         }
 
     }

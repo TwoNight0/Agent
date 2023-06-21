@@ -36,7 +36,7 @@ public class weaponCollider : MonoBehaviour{
             dmg_magical = PlayerMng.Instance.PubPlayerDmg_magical; // ¸¶µ©
             tempMonster.changeColor(Color.red);
             PlayerMng.Instance.AttackDmg(dmg_physical, dmg_magical, tempMonster);
-
+            tempMonster.hpBarApply();
 
             PlayerMng.Instance.weaponMeshCollider.enabled = false;
         }
@@ -45,6 +45,7 @@ public class weaponCollider : MonoBehaviour{
             //Debug.Log("»÷µå¹é");
             PunchingBagScript punch;
             punch = other.transform.GetComponent<PunchingBagScript>();
+            punch.hpBarApply();
             punch.changeColor(Color.red);
             punch.reset = true;
             punch.timer_reset = 0.0f;

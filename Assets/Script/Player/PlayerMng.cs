@@ -103,7 +103,7 @@ public class PlayerMng : MonoBehaviour{
     private float Playerdefense_physical;
     private float Playerdefense_magic;
 
-    private int money;
+    [SerializeField] private int Gold;
 
     // EqipmentItemCode
     private int MainWeaponCode;
@@ -190,6 +190,11 @@ public class PlayerMng : MonoBehaviour{
     public int PubNecklace{
         get => necklaceCode;
         set => necklaceCode = value;
+    }
+
+    public int PubGold{
+        get => Gold;
+        set => Gold = value;
     }
 
 

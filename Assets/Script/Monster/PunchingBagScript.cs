@@ -20,8 +20,9 @@ public class PunchingBagScript : Monster{
     // Update is called once per frame
     void Update(){
         LookAtTarget();
-        hpBarApply();
         restTimer();
+        hpBarApply();
+        
     }
 
     //reset이 on이면 시간을 돌림 -> timer도 weapon쪽에서 다시 0으로 바꿈 

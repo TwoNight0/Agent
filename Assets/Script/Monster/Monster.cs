@@ -8,6 +8,7 @@ public class Monster : MonoBehaviour{
     public Transform target;
     private Vector3 vector_target;
     [SerializeField] private Image cur_HpImg;
+    [SerializeField] private Image mid_HpImg;
     public Renderer objectColor;
     public RectTransform uiRectHP;
     public Rigidbody rb;
@@ -40,8 +41,9 @@ public class Monster : MonoBehaviour{
     private void Update(){
         death();
         LookAtTarget();
-        hpBarApply();
         Invoke("MonsterMove", 1f);
+        hpBarApply();
+
     }
 
 
@@ -51,7 +53,13 @@ public class Monster : MonoBehaviour{
 
     //체력바 적용
     public void hpBarApply(){
-        cur_HpImg.fillAmount = cur_Hp / max_Hp;
+        cur_HpImg.fillAmount = (cur_Hp / max_Hp);
+        if(cur_HpImg.fillAmount < mid_HpImg.fillAmount){
+            mid_HpImg.fillAmount -= Time.deltaTime * (1 / 5.0f);
+            if(mid_HpImg.fillAmount < cur_HpImg.fillAmount){
+                mid_HpImg.fillAmount = cur_HpImg.fillAmount;
+            }
+        }
     }
 
     private void death(){

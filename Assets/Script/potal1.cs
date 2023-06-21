@@ -2,13 +2,16 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
+/// <summary>
+/// istrigger
+/// </summary>
 public class potal1 : MonoBehaviour{
     [Header("이동할 위치")]
     public Transform where;
     private PlayerMng playerMng; 
 
     void Start(){
-        Debug.Log(where.position);
+        //Debug.Log(where.position);
         playerMng = PlayerMng.Instance;
     }
 
