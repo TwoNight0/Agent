@@ -59,7 +59,7 @@ public class weaponCollider : MonoBehaviour{
         }
 
         if (timer_Hit > 1.0f){
-            tempMonster.changeColor(Color.green);
+            tempMonster.changeColor(Color.white);
             timer_Hit = 0.0f;
             colorOn = false;
         }

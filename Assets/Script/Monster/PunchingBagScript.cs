@@ -2,6 +2,9 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
+/// <summary>
+/// tag : monster, weaponscript -> name change
+/// </summary>
 public class PunchingBagScript : Monster{
 
     public bool reset;
