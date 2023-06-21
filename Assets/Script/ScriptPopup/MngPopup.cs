@@ -4,17 +4,25 @@ using UnityEngine;
 using UnityEngine.UI;
 using TMPro;
 
+/// <summary>
+/// notify message to player   
+/// 사용법 : 
+/// 1. UI_그리는 부분에 PopUp을 만들고
+/// 2. TMP로 text 두개 button 하나를 만들고 각각 title, value, btn_check 할당해줌
+/// 4. Obj PopUp 에는 껏다켰다했을때 안보일 수있도록 맨위에 
+/// </summary>
 public class MngPopup : MonoBehaviour{
     public static MngPopup Instance;
-
+    
     [SerializeField] private GameObject m_objPopup;
-    [SerializeField] private TextMeshProUGUI m_textTitle;
-    [SerializeField] private TextMeshProUGUI m_textValue;
 
-    [SerializeField] private Image m_imgPopup;
-    [SerializeField] private Button m_btnPopup;
+    [SerializeField, Header("알림 제목")] private TextMeshProUGUI m_textTitle;
+    [SerializeField, Header("알림 내용")] private TextMeshProUGUI m_textValue;
 
+    [SerializeField, Tooltip("보여줄 이미지")] private Image m_imgPopup;
+    [SerializeField, Tooltip("확인 누르기용 ")] private Button m_btnPopup;
 
+    //메시지 리스트
     private List<cPopup> m_listMessages = new List<cPopup>();
     [Tooltip("꺼지는 시간 조절")]public float m_fCloseTime = 1.0f;
 
@@ -80,12 +88,18 @@ public class MngPopup : MonoBehaviour{
 
     }
 
-    
+    /// <summary>
+    /// 내용을 리스트에 넣고 / 보여줌 
+    /// </summary>
+    /// <param name="_value"></param>
     public void ShowMessage(cPopup _value){
         m_listMessages.Add(_value);
         showMessage();
     }
 
+    /// <summary>
+    /// 실제 보여주고 보여준 뒤 내용을 삭제하는 코드
+    /// </summary>
     private void showMessage(){
         if (m_listMessages.Count == 0){//0이면 리턴
             return;
@@ -123,9 +137,10 @@ public class MngPopup : MonoBehaviour{
         if(m_listMessages[0].Action != null){
             m_listMessages[0].Action.Invoke();
         }
+        //내용 지워주기
         m_listMessages.RemoveAt(0);
+        //끄기 
         m_objPopup.SetActive(false);
         showMessage();
-
     }
 }

@@ -16,8 +16,15 @@ using UnityEngine;
 public class ItemData{   
     public int itemCode;
     public int maxAmount = 1;
+    private int price = 100;
     public string itemName;
     public Sprite icon;
     public GameObject itemobject;
     [TextArea] public string description;
+
+
+    public int PubPrice{
+        get => price;
+        set => price = value;
+    }
 }

@@ -69,13 +69,13 @@ public class ItemMng : MonoBehaviour
     /// 4001~5000   장신구 : 반지(4001~4500), 목걸이(4501~5000)
     /// 6001~7000   포션 // 세부포션은 나중에 생각하자
     /// </summary>
-    private void initWeaponData()
-    {
+    private void initWeaponData(){
         shotsword.itemCode = 1001;
         shotsword.itemName = "shotsword";
         shotsword.icon = Resources.Load<Sprite>("weapon/shotsword");
         shotsword.PubDmg_physic = 2;
         shotsword.PubAttack_speed = 2;
+        shotsword.PubPrice = 80;
 
 
         longsword.itemCode = 1002;
@@ -83,55 +83,63 @@ public class ItemMng : MonoBehaviour
         longsword.icon = Resources.Load<Sprite>("weapon/longsword");
         longsword.PubDmg_physic = 4;
         longsword.PubAttack_speed = 1;
-
+        longsword.PubPrice = 110;
 
         wand.itemCode = 1501;
         wand.itemName = "wand";
         wand.icon = Resources.Load<Sprite>("weapon/wand");
         wand.PubDmg_magic = 8;
         wand.PubAttack_speed = 3;
+        wand.PubPrice = 85;
 
 
         stick.itemCode = 1502;
         stick.itemName = "stick";
         stick.PubDmg_magic = 6;
         stick.PubAttack_speed = 2;
+        stick.PubPrice = 90;
 
         AddItem(WeaponList, shotsword);
         AddItem(WeaponList, longsword);
         AddItem(WeaponList, wand);
         AddItem(WeaponList, stick);
     }
-    private void initArmorData()
-    {
+    private void initArmorData(){
         fabric_up.itemCode = 3201;
         fabric_up.itemName = "fabric_up";
         fabric_up.icon = Resources.Load<Sprite>("armor/fabric_up");
         fabric_up.PubDefense_magical = 6.0f;
+        fabric_up.PubPrice = 60;
 
         fabric_down.itemCode = 3401;
         fabric_down.itemName = "fabric_down";
         fabric_down.PubDefense_magical = 4.0f;
+        fabric_down.PubPrice = 50;
+
 
         leather_up.itemCode = 3202;
         leather_up.itemName = "leather_up";
         leather_up.icon = Resources.Load<Sprite>("armor/leather_up");
         leather_up.PubDefense_physical = 4.0f;
         leather_up.PubDefense_magical = 4.0f;
+        leather_up.PubPrice = 65;
 
         leather_down.itemCode = 3402;
         leather_down.itemName = "leather_down";
         leather_down.PubDefense_physical = 3.0f;
         leather_down.PubDefense_magical = 3.0f;
+        leather_down.PubPrice = 60;
 
         metal_up.itemCode = 3203;
         metal_up.itemName = "metal_top";
         metal_up.icon = Resources.Load<Sprite>("armor/metal_up");
         metal_up.PubDefense_physical = 10.0f;
+        metal_up.PubPrice = 120;
 
         metal_down.itemCode = 3403;
         metal_down.itemName = "metal_bottom";
         metal_down.PubDefense_physical = 8.0f;
+        metal_down.PubPrice = 110;
 
         AddItem(ArmorList, fabric_up);
         AddItem(ArmorList, fabric_down);
