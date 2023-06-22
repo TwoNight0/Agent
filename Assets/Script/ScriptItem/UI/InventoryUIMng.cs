@@ -153,7 +153,7 @@ public class InventoryUIMng : MonoBehaviour{
     // 레이케스트를 쏨 -> 슬롯을 선택 슬롯에 대한 스크립트를 가져옴 -> 선택된슬롯이라는 곳에 잠시저장. 이후선택된 오브젝트를 교환
     private void slotMove(){     
             PointerEventData pointEvent = new PointerEventData(m_eventSystem);
-
+            
             //첫번째 슬롯
             if (Input.GetMouseButtonDown(0)){
                 RaycastResult result = findRaycastObject(pointEvent, "ItemSlot");//리스트 중에서 tag가 ItemSlot인것을 찾음
