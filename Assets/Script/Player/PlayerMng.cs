@@ -301,37 +301,6 @@ public class PlayerMng : MonoBehaviour{
         moveStop = 1.0f;
     }
     #endregion
-    
-    private void OnAnimatorIK(int layerIndex) {
-        m_animator.SetLookAtWeight(1); //0~1������ �켱����
-        //m_animator.SetLookAtPosition(m_trsLookAtObj.position);
-
-        m_animator.SetIKPositionWeight(AvatarIKGoal.LeftFoot, 1);
-        m_animator.SetIKRotationWeight(AvatarIKGoal.LeftFoot, 1);
-
-        if (Physics.Raycast(m_animator.GetIKPosition(AvatarIKGoal.LeftFoot) + Vector3.up, Vector3.down,
-            out RaycastHit hit, m_fDistanceToGround + 1f, LayerMask.GetMask("Ground"))){
-            Vector3 footPos = hit.point;
-            footPos.y += m_fDistanceToGround;
-            m_animator.SetIKPosition(AvatarIKGoal.LeftFoot, footPos);
-
-            m_animator.SetIKRotation(AvatarIKGoal.LeftFoot,
-                Quaternion.LookRotation(Vector3.ProjectOnPlane(transform.forward, hit.normal), hit.normal));
-        }
-
-        m_animator.SetIKPositionWeight(AvatarIKGoal.RightFoot, 1);
-        m_animator.SetIKRotationWeight(AvatarIKGoal.RightFoot, 1);
-
-        if (Physics.Raycast(m_animator.GetIKPosition(AvatarIKGoal.RightFoot) + Vector3.up, Vector3.down,
-            out RaycastHit hit2, m_fDistanceToGround + 1f, LayerMask.GetMask("Ground"))){
-            Vector3 footPos = hit2.point;
-            footPos.y += m_fDistanceToGround;
-            m_animator.SetIKPosition(AvatarIKGoal.RightFoot, footPos);
-
-            m_animator.SetIKRotation(AvatarIKGoal.RightFoot,
-                Quaternion.LookRotation(Vector3.ProjectOnPlane(transform.forward, hit2.normal), hit2.normal));
-        }
-    }// 3D 부착 컴포넌트
 
     #region checker(그라운드, 그래비티, 슬로프)
     //그라운드 체커
