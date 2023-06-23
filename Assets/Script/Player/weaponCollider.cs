@@ -25,8 +25,17 @@ public class weaponCollider : MonoBehaviour{
         if (other.tag == "Player"){
             return;
         }
-
         Debug.Log($"충돌 = {other.name}");
+        if (other.name == "punching bag"){
+            //Debug.Log("샌드백");
+            PunchingBagScript punch;
+            punch = other.transform.GetComponent<PunchingBagScript>();
+            punch.hpBarApply();
+            punch.changeColor(Color.red);
+            punch.reset = true;
+            punch.timer_reset = 0.0f;
+        }
+        
         if (other.CompareTag("Monster")){
             //Debug.Log("몬스터 인식");
             colorOn = true;
@@ -41,15 +50,6 @@ public class weaponCollider : MonoBehaviour{
             PlayerMng.Instance.weaponMeshCollider.enabled = false;
         }
 
-        if(other.name == "punching bag"){
-            //Debug.Log("샌드백");
-            PunchingBagScript punch;
-            punch = other.transform.GetComponent<PunchingBagScript>();
-            punch.hpBarApply();
-            punch.changeColor(Color.red);
-            punch.reset = true;
-            punch.timer_reset = 0.0f;
-        }
 
     }
 
@@ -60,7 +60,7 @@ public class weaponCollider : MonoBehaviour{
         }
 
         if (timer_Hit > 1.0f){
-            tempMonster.changeColor(Color.white);
+            tempMonster.changeColor(Color.white); // 닿은 물체의 렌더러를 가져와서 그 렌더러의 메테리얼을 컬러로 바꿈
             timer_Hit = 0.0f;
             colorOn = false;
         }

@@ -15,6 +15,7 @@ public class PunchingBagScript : Monster{
         max_Hp = 100.0f;
         cur_Hp = max_Hp;
         reset = false;
+        //render = GetComponent<MeshRenderer>();
     }
 
     // Update is called once per frame

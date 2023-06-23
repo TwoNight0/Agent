@@ -10,7 +10,8 @@ public class Monster : MonoBehaviour{
     private Vector3 vector_target;
     [SerializeField] private Image cur_HpImg;
     [SerializeField] private Image mid_HpImg;
-    public Material mat;
+    //protected MeshRenderer[] render;
+    protected Material[] mats;
     public RectTransform uiRectHP;
     public Rigidbody rb;
     public float movespeed;
@@ -34,9 +35,19 @@ public class Monster : MonoBehaviour{
         dmg_magical = 10.0f;
         dmg_physical = 10.0f;
         Speed = 1.0f;
-        mat = GetComponentInChildren<MeshRenderer>().material;
+        //render = GetComponentInChildren<MeshRenderer>();
+
         target = PlayerMng.Instance.transform;
         nav = GetComponent<NavMeshAgent>();
+
+        List<Material> listMats = new List<Material>();
+        Renderer[] rens = GetComponentsInChildren<Renderer>();
+        for (int i = 0; i < rens.Length; i++)
+        {
+            Renderer ren = rens[i];
+            listMats.Add(ren.material);
+        }
+        mats = listMats.ToArray();
     }
 
     private void Update(){
@@ -44,7 +55,11 @@ public class Monster : MonoBehaviour{
         LookAtTarget();
         hpBarApply();
         MonsterMove();
-
+        if (nav != null)
+        { 
+            string value = (nav.velocity.magnitude).ToString();
+            Debug.Log(value);
+        }
     }
 
     //체력바 적용
@@ -66,7 +81,18 @@ public class Monster : MonoBehaviour{
     }
 
     public void changeColor(Color color){
-        mat.color = color;
+
+        //
+        //for (int i = 0; i < render.Length; i++) {
+        //    render[i] = GetComponentsInChildren<MeshRenderer>()[i]; //메쉬 랜더러를 받아옴
+        //    render[i].material.color = color;
+        //}
+        //
+        int count = mats.Length;
+        for (int iNum = 0; iNum < count; ++iNum)
+        {
+            mats[iNum].color = color;
+        }
     }
 
     public void LookAtTarget(){      
@@ -89,9 +115,8 @@ public class Monster : MonoBehaviour{
     }
 
     private void MonsterMove(){
-        if (attackMode){
+        if (attackMode && nav != null &&  nav.enabled){
             nav.SetDestination(target.position);
-            
         }
 
 

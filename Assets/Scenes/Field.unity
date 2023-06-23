@@ -14462,7 +14462,6 @@ GameObject:
   - component: {fileID: 757952017}
   - component: {fileID: 757952016}
   - component: {fileID: 757952015}
-  - component: {fileID: 757952014}
   - component: {fileID: 757952019}
   m_Layer: 0
   m_Name: Npc_blacksmith
@@ -14471,18 +14470,6 @@ GameObject:
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
   m_IsActive: 1
---- !u!114 &757952014
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 757952013}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: db3ae9294a438c045a93890d5f6e5ba2, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
 --- !u!135 &757952015
 SphereCollider:
   m_ObjectHideFlags: 0
@@ -37042,33 +37029,6 @@ Transform:
   m_CorrespondingSourceObject: {fileID: -8679921383154817045, guid: f01f226db818888409adf35c625578a4, type: 3}
   m_PrefabInstance: {fileID: 700318863}
   m_PrefabAsset: {fileID: 0}
---- !u!1 &1799026321 stripped
-GameObject:
-  m_CorrespondingSourceObject: {fileID: 8011661137356887793, guid: 06522f82d5c075648a70efab7f07ba26, type: 3}
-  m_PrefabInstance: {fileID: 4263013466815450730}
-  m_PrefabAsset: {fileID: 0}
---- !u!195 &1799026322
-NavMeshAgent:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1799026321}
-  m_Enabled: 1
-  m_AgentTypeID: 0
-  m_Radius: 0.5
-  m_Speed: 3.5
-  m_Acceleration: 8
-  avoidancePriority: 50
-  m_AngularSpeed: 120
-  m_StoppingDistance: 0
-  m_AutoTraverseOffMeshLink: 1
-  m_AutoBraking: 1
-  m_AutoRepath: 1
-  m_Height: 2
-  m_BaseOffset: 0
-  m_WalkableMask: 4294967295
-  m_ObstacleAvoidanceType: 4
 --- !u!4 &1799048020 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: -8679921383154817045, guid: f01f226db818888409adf35c625578a4, type: 3}
@@ -40062,7 +40022,7 @@ MonoBehaviour:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1944908003}
-  m_Enabled: 1
+  m_Enabled: 0
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: ebc0d1fd93f29d748a8a97f484d26973, type: 3}
   m_Name: 
@@ -40070,7 +40030,6 @@ MonoBehaviour:
   target: {fileID: 157460460}
   cur_HpImg: {fileID: 1552984965}
   mid_HpImg: {fileID: 284046367}
-  mat: {fileID: 0}
   uiRectHP: {fileID: 1677903646}
   rb: {fileID: 1944908006}
   movespeed: 0
@@ -42844,6 +42803,22 @@ PrefabInstance:
       propertyPath: m_TagString
       value: Monster
       objectReference: {fileID: 0}
+    - target: {fileID: 7285633445063554133, guid: 247b37eb48ad15145902f85c61d10674, type: 3}
+      propertyPath: target
+      value: 
+      objectReference: {fileID: 157460460}
+    - target: {fileID: 7285633445063554133, guid: 247b37eb48ad15145902f85c61d10674, type: 3}
+      propertyPath: uiRectHP
+      value: 
+      objectReference: {fileID: 1677903646}
+    - target: {fileID: 7285633445063554133, guid: 247b37eb48ad15145902f85c61d10674, type: 3}
+      propertyPath: cur_HpImg
+      value: 
+      objectReference: {fileID: 1552984965}
+    - target: {fileID: 7285633445063554133, guid: 247b37eb48ad15145902f85c61d10674, type: 3}
+      propertyPath: mid_HpImg
+      value: 
+      objectReference: {fileID: 284046367}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 247b37eb48ad15145902f85c61d10674, type: 3}
 --- !u!1 &2098291629 stripped
@@ -44112,6 +44087,10 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 0}
     m_Modifications:
+    - target: {fileID: -5528153467844118013, guid: 06522f82d5c075648a70efab7f07ba26, type: 3}
+      propertyPath: m_Enabled
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 7234175146905685064, guid: 06522f82d5c075648a70efab7f07ba26, type: 3}
       propertyPath: target
       value: 
@@ -44164,5 +44143,6 @@ PrefabInstance:
       propertyPath: m_Name
       value: Skeleton
       objectReference: {fileID: 0}
-    m_RemovedComponents: []
+    m_RemovedComponents:
+    - {fileID: -5528153467844118013, guid: 06522f82d5c075648a70efab7f07ba26, type: 3}
   m_SourcePrefab: {fileID: 100100000, guid: 06522f82d5c075648a70efab7f07ba26, type: 3}

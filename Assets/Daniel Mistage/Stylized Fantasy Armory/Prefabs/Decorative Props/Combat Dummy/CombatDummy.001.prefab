@@ -12,6 +12,7 @@ GameObject:
   - component: {fileID: 7081878461258682687}
   - component: {fileID: 5017878296344438261}
   - component: {fileID: 7909288675644964003}
+  - component: {fileID: 7285633445063554133}
   m_Layer: 0
   m_Name: CombatDummy.001
   m_TagString: Untagged
@@ -97,3 +98,28 @@ BoxCollider:
   serializedVersion: 2
   m_Size: {x: 0.6476321, y: 1.32262, z: 0.46190894}
   m_Center: {x: 0, y: 0.66131, z: 0}
+--- !u!114 &7285633445063554133
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6819551313310712864}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ebc0d1fd93f29d748a8a97f484d26973, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  target: {fileID: 0}
+  cur_HpImg: {fileID: 0}
+  mid_HpImg: {fileID: 0}
+  uiRectHP: {fileID: 0}
+  rb: {fileID: 0}
+  movespeed: 0
+  cur_Hp: 0
+  max_Hp: 0
+  dmg_physical: 0
+  dmg_magical: 0
+  attackMode: 0
+  reset: 0
+  timer_reset: 0

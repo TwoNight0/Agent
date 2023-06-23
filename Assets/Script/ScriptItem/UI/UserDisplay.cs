@@ -42,7 +42,6 @@ public class UserDisplay : MonoBehaviour{
     void Start(){
         DontDestroyOnLoad(this);
         initDisplay();
-        
     }
     
     void Update(){
