@@ -77,7 +77,6 @@ public class ItemMng : MonoBehaviour
         shotsword.PubAttack_speed = 2;
         shotsword.PubPrice = 80;
 
-
         longsword.itemCode = 1002;
         longsword.itemName = "longsword";
         longsword.icon = Resources.Load<Sprite>("weapon/longsword");
@@ -153,7 +152,7 @@ public class ItemMng : MonoBehaviour
 
     private void createItem(){
         //오브젝트 만들고 코드 부여, 박스(3d), 위치속성
-       // GameObject obj = Instantiate(itemSlot, transform);
+        //GameObject obj = Instantiate(itemSlot, transform);
         //ListSlot.Add(obj.GetComponent<ItemSlotScript>()); //listSlot에 등록해서 아이템스크립트들을 등록했음
                                                           //saveList.Add(obj.GetComponent<SaveForm>()); //저장될리스트도 같은 개수로 만듬 
         //obj.name = _name + invencount;
@@ -194,6 +193,8 @@ public class ItemMng : MonoBehaviour
         
         return (physic, magic);
     }
+
+   
 
 
     #region Save, Load

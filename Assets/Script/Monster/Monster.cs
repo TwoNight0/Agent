@@ -2,6 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
+using UnityEngine.AI;
 
 public class Monster : MonoBehaviour{
     #region 컴포넌트
@@ -9,10 +10,11 @@ public class Monster : MonoBehaviour{
     private Vector3 vector_target;
     [SerializeField] private Image cur_HpImg;
     [SerializeField] private Image mid_HpImg;
-    public Renderer objectColor;
+    public Material mat;
     public RectTransform uiRectHP;
     public Rigidbody rb;
     public float movespeed;
+    NavMeshAgent nav;
     #endregion
 
     #region 스탯
@@ -32,22 +34,16 @@ public class Monster : MonoBehaviour{
         dmg_magical = 10.0f;
         dmg_physical = 10.0f;
         Speed = 1.0f;
-        objectColor = gameObject.GetComponent<Renderer>();
+        mat = GetComponentInChildren<MeshRenderer>().material;
         target = PlayerMng.Instance.transform;
-        //attackMode = false;
-        gameObject.AddComponent<BoxCollider>();
+        nav = GetComponent<NavMeshAgent>();
     }
 
     private void Update(){
         death();
         LookAtTarget();
-        Invoke("MonsterMove", 1f);
         hpBarApply();
-
-    }
-
-
-    private void SpawnMonster(){
+        MonsterMove();
 
     }
 
@@ -64,14 +60,13 @@ public class Monster : MonoBehaviour{
 
     private void death(){
         // 현재이미지.fillAmount = 닳는것 / 최대치 ;
-       
         if (cur_Hp <= 0){
             transform.gameObject.SetActive(false);
         }
     }
 
     public void changeColor(Color color){
-        objectColor.material.color = color;
+        mat.color = color;
     }
 
     public void LookAtTarget(){      
@@ -95,13 +90,8 @@ public class Monster : MonoBehaviour{
 
     private void MonsterMove(){
         if (attackMode){
-            vector_target = target.position;
-            //transform.Translate(-vector_target * Time.deltaTime);
-            transform.Translate((target.position - transform.position) * Time.deltaTime * movespeed);
-            //rb.AddForce(target.transform.position, ForceMode.Impulse);
-
-            //transform.position = Vector3.MoveTowards(transform.position, target.position, Speed * Time.deltaTime);
-
+            nav.SetDestination(target.position);
+            
         }
 
 
@@ -113,5 +103,13 @@ public class Monster : MonoBehaviour{
 
 
         }
+    }
+
+
+    void FreezeVelocity()
+    {
+        //물리력이 NavAgent의 이동을 방해하지 않도록함
+        rb.velocity = Vector3.zero;
+        rb.angularVelocity = Vector3.zero;
     }
 }

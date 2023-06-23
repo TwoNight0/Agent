@@ -9,6 +9,12 @@ public class NpcBlacksmith : MonoBehaviour{
     ItemSlotScript firstItemSlot = null;
     ItemSlotScript secondItemSlot = null;
 
+    [SerializeField] public ItemSlotScript slot1;
+    [SerializeField] public ItemSlotScript slot2;
+    [SerializeField] public ItemSlotScript slot3;
+
+
+
     [SerializeField] private ItemSlotScript slot_result;
 
     private int tmpCode;
@@ -91,20 +97,26 @@ public class NpcBlacksmith : MonoBehaviour{
             //Debug.Log(itemarray[2]);
             if (itemarray[0] == 1001 && itemarray[1] == 1501 && itemarray[2] == 3201) {
                 //Debug.Log("합체!");
+                //채워넣기
+                
+                //넣은 데이터 초기화
+                InventoryUIMng.Instance.removeSlot(slot1);
+                InventoryUIMng.Instance.removeSlot(slot2);
+                InventoryUIMng.Instance.removeSlot(slot3);
                 slot_result.PubItemCode = 3203;
-                //slot_result.icon = ItemMng.Instance.
+                slot_result.PubAccount = 1;
+                slot_result.PubText.text = slot_result.PubAccount.ToString();
+                (DataWeaponItem,  DataArmorItem) temp = InventoryUIMng.Instance.findObjData(3203);
+                slot_result.icon.sprite = temp.Item2.icon;
+
+                count = -99;
             }
 
 
         }
     }
 
-    /// <summary>
-    /// 어레이에 추가
-    /// </summary>
-    private void addarray(){
-
-    }
+    
 
     /// <summary>
     /// 레이캐스트를 쏘고 태그를 찾음
@@ -120,12 +132,6 @@ public class NpcBlacksmith : MonoBehaviour{
         return raycastResults.Find(x => x.gameObject.tag == tag_name);//리스트 중에서 tag가 ItemSlot인것을 찾음
     }
 
-    /// <summary>
-    /// 아이템슬롯에 아이템을 넣으면
-    /// </summary>
-    private void inputarray(){
-        PointerEventData pointEvent = new PointerEventData(m_eventSystem);
-    }
 
 
 }

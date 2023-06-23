@@ -25,13 +25,16 @@ public class potal1 : MonoBehaviour{
         teleport();
     }
 
-    private void teleport()
-    {
+    private void teleport(){
         //other.transform.position = where.position;
 
         playerMng.PlayerTeleport(where.position);
+        MngMonster.Instance.spawnOn = true;
+        
         //playerObj.transform.position = where.transform.position;
     }
+
+
 
 
 
