@@ -89,9 +89,9 @@ public class Monster : MonoBehaviour{
         //}
         //
         int count = mats.Length;
-        for (int iNum = 0; iNum < count; ++iNum)
+        for (int i = 0; i < count; i++)
         {
-            mats[iNum].color = color;
+            mats[i].color = color;
         }
     }
 

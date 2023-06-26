@@ -61,7 +61,6 @@ public class PlayerMng : MonoBehaviour{
     public bool m_isSlope = false;
     public bool invenflag = false;
     public bool Can_Attack = true;
-    private bool flagShop = false;
     // ----
     #endregion
 
@@ -570,22 +569,6 @@ public class PlayerMng : MonoBehaviour{
             m_animator.Play("Standing Block Idle");
         }
 
-        //esc
-        if (Input.GetKeyDown(KeyCode.Escape)){
-            flagShop = !flagShop;
-            Debug.Log(flagShop);
-            if (flagShop)
-            {
-                Debug.Log("dd");
-                MngDisplay.Instance.UI_setting.SetActive(true);
-            }
-            else
-            {
-                MngDisplay.Instance.UI_setting.SetActive(false);
-            }
-        }
-
-
         // 상호작용
         if (Input.GetKeyDown(KeyCode.E)){
             Debug.Log("e누름");
@@ -593,18 +576,21 @@ public class PlayerMng : MonoBehaviour{
                 Debug.Log(hit.collider.name);
                 if (hit.collider.CompareTag("Npc") && hit.collider.name == "Npc_blacksmith"){
                     Debug.Log(hit.collider.name);
+                    MngDisplay.Instance.isforge = true;
                     MngDisplay.Instance.UI_forge.SetActive(true);
                     Can_Attack = false;
                     
                 }
                 else if(hit.collider.CompareTag("Npc") && hit.collider.name == "Npc_shop"){
                     Debug.Log(hit.collider.name);
+                    MngDisplay.Instance.isItemShop = true;
                     MngDisplay.Instance.UI_Itemshop.SetActive(true);
                     Can_Attack = false;
                     
                 }
                 else if (hit.collider.CompareTag("Npc") && hit.collider.name == "ChestBox"){
                     Debug.Log(hit.collider.name);
+                    MngDisplay.Instance.ischest = true;
                     MngDisplay.Instance.UI_chestBox.SetActive(true);
                     Can_Attack = false;
                     

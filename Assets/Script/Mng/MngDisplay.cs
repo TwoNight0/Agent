@@ -10,6 +10,10 @@ public class MngDisplay : MonoBehaviour{
     [SerializeField] public GameObject UI_chestBox;
     [SerializeField] public GameObject UI_setting;
 
+    public bool isforge;
+    public bool isItemShop;
+    public bool ischest;
+    public bool issetting;
 
     private void Awake(){
         if (Instance == null){
@@ -27,12 +31,7 @@ public class MngDisplay : MonoBehaviour{
     }
 
     private void Update(){
-        
-        exitForge();
-        exitItemShop();
-        exitChestBox();
-        exitSetting();
-        openSetting();
+        Setting();
     }
 
     /// <summary>
@@ -42,8 +41,11 @@ public class MngDisplay : MonoBehaviour{
         UI_forge.SetActive(false);
         UI_Itemshop.SetActive(false);
         UI_chestBox.SetActive(false);
-        //UI_setting.SetActive(false);
-
+        UI_setting.SetActive(false);
+        isforge = false;
+        ischest = false;
+        issetting = false;
+        isItemShop = false;
     }
 
 
@@ -51,8 +53,12 @@ public class MngDisplay : MonoBehaviour{
     /// ¥Î¿Â∞£ √¢ ¥›±‚
     /// </summary>
     public void exitForge(){
-        UI_forge.SetActive(false);
-        PlayerMng.Instance.Can_Attack = true;
+        if (isforge)
+        {
+            isforge = false;
+            UI_forge.SetActive(false);
+            PlayerMng.Instance.Can_Attack = true;
+        }
     }
 
     /// <summary>
@@ -60,32 +66,38 @@ public class MngDisplay : MonoBehaviour{
     /// </summary>
 
     public void exitItemShop(){
-        UI_Itemshop.SetActive(false);
-        PlayerMng.Instance.Can_Attack = true;
+        if (isItemShop) {
+            isItemShop = false;
+            UI_Itemshop.SetActive(false);
+            PlayerMng.Instance.Can_Attack = true;
+        }
     }
 
     /// <summary>
     /// chestBox ¥›±‚
     /// </summary>
     public void exitChestBox(){
-        UI_chestBox.SetActive(false);
-        PlayerMng.Instance.Can_Attack = true;  
-    }
-
-    public void openSetting(){
-        if (UI_setting == false && Input.GetKeyDown(KeyCode.Escape)){
-            UI_setting.SetActive(true);
-
+        if (ischest) {
+            ischest = false;
+            UI_chestBox.SetActive(false);
+            PlayerMng.Instance.Can_Attack = true;
         }
+        
     }
+
 
     /// <summary>
     /// setting ¥›±‚
     /// </summary>
-    public void exitSetting(){
-        if (UI_setting == true && Input.GetKeyDown(KeyCode.Escape)){
+    public void Setting(){
+        if (issetting && Input.GetKeyDown(KeyCode.Escape) && !isforge && !ischest && !isItemShop){
+            issetting=false;
             UI_setting.SetActive(false);
-            
+        }
+        else if (!issetting && Input.GetKeyDown(KeyCode.Escape) && !isforge && !ischest && !isItemShop)
+        {
+            issetting = true;
+            UI_setting.SetActive(true);
         }
     }
 }
