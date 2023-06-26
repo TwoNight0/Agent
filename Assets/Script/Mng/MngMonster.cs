@@ -21,7 +21,6 @@ public class MngMonster : MonoBehaviour{
         }
     }
     private void Start(){
-        DontDestroyOnLoad(this);
         countMonster = 0;
     }
 

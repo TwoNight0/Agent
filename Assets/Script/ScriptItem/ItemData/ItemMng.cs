@@ -44,7 +44,6 @@ public class ItemMng : MonoBehaviour
     #endregion
 
     private void Start(){
-        DontDestroyOnLoad(this);
         initWeaponData();
         initArmorData();
         // ----

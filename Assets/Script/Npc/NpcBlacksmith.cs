@@ -74,7 +74,6 @@ public class NpcBlacksmith : MonoBehaviour{
                             itemarray[count] = firstItemSlot.PubItemCode;
                             Debug.Log(count);
                             count++;
-                            mixItem();
                         }
                     }
                 }
@@ -85,7 +84,7 @@ public class NpcBlacksmith : MonoBehaviour{
     /// <summary>
     /// 아이템 조합
     /// </summary>
-    private void mixItem(){
+    public void mixItem(){
         if(count == 3){
             System.Array.Sort(itemarray);
             //Debug.Log(itemarray[0]);

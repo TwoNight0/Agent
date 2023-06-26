@@ -4,6 +4,7 @@ using UnityEngine;
 using System.IO;
 using UnityEngine.EventSystems;
 using UnityEngine.UI;
+using TMPro;
 
 // 클래스 설명 : 인벤토리에있는 UI를 관리
 // (보여지는 부분) inventory와 상호작용하는 스크립트
@@ -15,7 +16,7 @@ public class InventoryUIMng : MonoBehaviour{
     //public List<SaveForm> saveList = new List<SaveForm>();
     private EventSystem m_eventSystem;
     PlayerMng playerMng;
- 
+    [SerializeField] public TextMeshProUGUI gold;
     //
 
     //슬롯 선택시 사용하는 변수들
@@ -32,9 +33,6 @@ public class InventoryUIMng : MonoBehaviour{
 
     #region (Button)(inven,stat,skill,Exit)
     //버튼
-    [SerializeField] public Button btn_inven;
-    [SerializeField] public Button btn_stat;
-    [SerializeField] public Button btn_skill;
     [SerializeField] public Button btn_Exit;
     #endregion
 
@@ -50,8 +48,6 @@ public class InventoryUIMng : MonoBehaviour{
 
     // 산하에 capacity
     private void Start(){
-        DontDestroyOnLoad(this);
-
         playerMng = FindObjectOfType<PlayerMng>();
         initInventory(); //인벤토리 생성
         addbuttonAction(); //버튼액션 지정

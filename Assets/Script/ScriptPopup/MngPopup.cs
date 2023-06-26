@@ -14,7 +14,7 @@ using TMPro;
 public class MngPopup : MonoBehaviour{
     public static MngPopup Instance;
     
-    [SerializeField] private GameObject m_objPopup;
+    [SerializeField] public GameObject m_objPopup;
 
     [SerializeField, Header("알림 제목")] private TextMeshProUGUI m_textTitle;
     [SerializeField, Header("알림 내용")] private TextMeshProUGUI m_textValue;
@@ -41,16 +41,6 @@ public class MngPopup : MonoBehaviour{
     // Start is called before the first frame update
     private void Start(){
         init();
-        ShowMessage(new cPopup("제목1", "내용1", null));
-        ShowMessage(new cPopup("제목2", "내용2", null));
-        ShowMessage(new cPopup("제목3", "내용3", () => {
-#if UNITY_EDITOR
-            UnityEditor.EditorApplication.isPlaying = false;
-#else
-            Application.Quit();
-#endif
-        }));
-
     }
 
     private void init(){

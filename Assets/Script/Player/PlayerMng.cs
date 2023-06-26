@@ -130,7 +130,6 @@ public class PlayerMng : MonoBehaviour{
         get => hp_cur;
         set => hp_cur = value;
     }
-
     public float GetMaxHp{
         get => hp_max;
         set => hp_max = value;
@@ -143,6 +142,11 @@ public class PlayerMng : MonoBehaviour{
     public float PubPlayerDmg_magical{
         get => PlayerDmg_magical;
         set => PlayerDmg_magical = value;
+    }
+    public float PubSpeed
+    {
+        get => PlayermoveSpeed;
+        set => PlayermoveSpeed = value;
     }
 
 
@@ -301,7 +305,7 @@ public class PlayerMng : MonoBehaviour{
         weaponMeshCollider = weapon.GetComponent<BoxCollider>();
         weaponMeshCollider.enabled = false;
         moveStop = 1.0f;
-        Gold = 100;
+        Gold = 300;
         killcount = 0;
     }
     #endregion

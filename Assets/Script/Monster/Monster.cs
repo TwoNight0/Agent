@@ -76,7 +76,12 @@ public class Monster : MonoBehaviour{
     private void death(){
         // 현재이미지.fillAmount = 닳는것 / 최대치 ;
         if (cur_Hp <= 0){
+            PlayerMng.Instance.killcount++;
+            UserDisplay.Instance.killcount.text = "잡은 몬스터 : " + PlayerMng.Instance.killcount + "/ 5";
             transform.gameObject.SetActive(false);
+            if (PlayerMng.Instance.killcount >= 5) {
+                MngPopup.Instance.ShowMessage(new cPopup("성공","", null));
+            }
         }
     }
 
@@ -115,7 +120,7 @@ public class Monster : MonoBehaviour{
     }
 
     private void MonsterMove(){
-        if (attackMode && nav != null &&  nav.enabled){
+        if (attackMode && nav != null &&  nav.enabled && nav.enabled == true){
             nav.SetDestination(target.position);
         }
 
@@ -125,8 +130,6 @@ public class Monster : MonoBehaviour{
         if (collision.transform.tag == "Player"){
             Debug.Log("플레이어와 충돌함");
             PlayerMng.Instance.TakeDmg(dmg_physical, dmg_physical);
-
-
         }
     }
 

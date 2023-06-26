@@ -8,6 +8,7 @@ using TMPro;
 public class UserDisplay : MonoBehaviour{
     public static UserDisplay Instance;
 
+    public TextMeshProUGUI killcount;
 
     #region (Image)(UI æ∆¿Ãƒ‹)
     [SerializeField] public Image hp_cur;
@@ -40,7 +41,6 @@ public class UserDisplay : MonoBehaviour{
         }
     }
     void Start(){
-        DontDestroyOnLoad(this);
         initDisplay();
     }
     
@@ -72,7 +72,4 @@ public class UserDisplay : MonoBehaviour{
         bullet = 0;
     }
 
-    private void CrossHairUI(){
-
-    }
 }

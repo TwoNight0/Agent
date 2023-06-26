@@ -25,13 +25,15 @@ public class MngDisplay : MonoBehaviour{
     }
 
     private void Start(){
-        DontDestroyOnLoad(this);
         initComponent();
         Cursor.lockState = CursorLockMode.Confined;
     }
 
     private void Update(){
         Setting();
+        exitForge();
+        exitItemShop();
+        exitChestBox();
     }
 
     /// <summary>
@@ -53,7 +55,7 @@ public class MngDisplay : MonoBehaviour{
     /// ¥Î¿Â∞£ √¢ ¥›±‚
     /// </summary>
     public void exitForge(){
-        if (isforge)
+        if (isforge && Input.GetKeyDown(KeyCode.Escape))
         {
             isforge = false;
             UI_forge.SetActive(false);
@@ -66,7 +68,7 @@ public class MngDisplay : MonoBehaviour{
     /// </summary>
 
     public void exitItemShop(){
-        if (isItemShop) {
+        if (isItemShop && Input.GetKeyDown(KeyCode.Escape)) {
             isItemShop = false;
             UI_Itemshop.SetActive(false);
             PlayerMng.Instance.Can_Attack = true;
@@ -77,7 +79,7 @@ public class MngDisplay : MonoBehaviour{
     /// chestBox ¥›±‚
     /// </summary>
     public void exitChestBox(){
-        if (ischest) {
+        if (ischest && Input.GetKeyDown(KeyCode.Escape)) {
             ischest = false;
             UI_chestBox.SetActive(false);
             PlayerMng.Instance.Can_Attack = true;
