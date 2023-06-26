@@ -28,7 +28,6 @@ public class NpcBlacksmith : MonoBehaviour{
     // Update is called once per frame
     void Update(){
         inputItem();
-        mixItem();
     }
 
     /// <summary>
@@ -75,12 +74,9 @@ public class NpcBlacksmith : MonoBehaviour{
                             itemarray[count] = firstItemSlot.PubItemCode;
                             Debug.Log(count);
                             count++;
+                            mixItem();
                         }
-                        
-
                     }
-                    
-                    //firstItemSlot = null;
                 }
             }
         }
@@ -108,8 +104,7 @@ public class NpcBlacksmith : MonoBehaviour{
                 slot_result.PubText.text = slot_result.PubAccount.ToString();
                 (DataWeaponItem,  DataArmorItem) temp = InventoryUIMng.Instance.findObjData(3203);
                 slot_result.icon.sprite = temp.Item2.icon;
-
-                count = -99;
+                count = 0;
             }
 
 

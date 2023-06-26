@@ -58,7 +58,7 @@ public class Monster : MonoBehaviour{
         if (nav != null)
         { 
             string value = (nav.velocity.magnitude).ToString();
-            Debug.Log(value);
+            //Debug.Log(value);
         }
     }
 

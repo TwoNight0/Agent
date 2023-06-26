@@ -7,7 +7,6 @@ using UnityEngine;
 /// </summary>
 public class NpcShop : MonoBehaviour{
 
-    public bool shopOn = false;
 
 
     // Start is called before the first frame update
@@ -17,7 +16,7 @@ public class NpcShop : MonoBehaviour{
 
     // Update is called once per frame
     void Update(){
-        shopisOn();
+        Buy_shop();
     }
 
 
@@ -26,10 +25,8 @@ public class NpcShop : MonoBehaviour{
     /// 플레이어의 골드를 확인 -> 사려고하는 물건의 가격을 확인(부족시)popup 돈부족 -> 공간적 여유가되는지 확인 -> (안될시)popup 공간부족,
     /// 
     /// </summary>
-    private void shopisOn() {
-        if (shopOn) {
-            
-        }
+    private void Buy_shop() {
+        
 
     }
 

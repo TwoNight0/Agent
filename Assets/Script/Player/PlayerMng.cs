@@ -20,6 +20,7 @@ public class PlayerMng : MonoBehaviour{
     private GameObject UI;
     private GameObject weapon;
     public BoxCollider weaponMeshCollider;
+    
 
     public CinemachineVirtualCamera virtualCamera;
 
@@ -60,6 +61,7 @@ public class PlayerMng : MonoBehaviour{
     public bool m_isSlope = false;
     public bool invenflag = false;
     public bool Can_Attack = true;
+    private bool flagShop = false;
     // ----
     #endregion
 
@@ -102,6 +104,7 @@ public class PlayerMng : MonoBehaviour{
     private float moveStop;
     private float Playerdefense_physical;
     private float Playerdefense_magic;
+    public int killcount;
 
     [SerializeField] private int Gold;
 
@@ -299,6 +302,8 @@ public class PlayerMng : MonoBehaviour{
         weaponMeshCollider = weapon.GetComponent<BoxCollider>();
         weaponMeshCollider.enabled = false;
         moveStop = 1.0f;
+        Gold = 100;
+        killcount = 0;
     }
     #endregion
 
@@ -566,9 +571,18 @@ public class PlayerMng : MonoBehaviour{
         }
 
         //esc
-        if (Input.GetKeyDown(KeyCode.Escape))
-        {
-            
+        if (Input.GetKeyDown(KeyCode.Escape)){
+            flagShop = !flagShop;
+            Debug.Log(flagShop);
+            if (flagShop)
+            {
+                Debug.Log("dd");
+                MngDisplay.Instance.UI_setting.SetActive(true);
+            }
+            else
+            {
+                MngDisplay.Instance.UI_setting.SetActive(false);
+            }
         }
 
 
@@ -587,7 +601,7 @@ public class PlayerMng : MonoBehaviour{
                     Debug.Log(hit.collider.name);
                     MngDisplay.Instance.UI_Itemshop.SetActive(true);
                     Can_Attack = false;
-         
+                    
                 }
                 else if (hit.collider.CompareTag("Npc") && hit.collider.name == "ChestBox"){
                     Debug.Log(hit.collider.name);

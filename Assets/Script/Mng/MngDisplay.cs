@@ -51,10 +51,8 @@ public class MngDisplay : MonoBehaviour{
     /// ¥Î¿Â∞£ √¢ ¥›±‚
     /// </summary>
     public void exitForge(){
-        if (UI_forge == true && Input.GetKeyDown(KeyCode.Escape)){
-            UI_forge.SetActive(false);
-            PlayerMng.Instance.Can_Attack = true;
-        }
+        UI_forge.SetActive(false);
+        PlayerMng.Instance.Can_Attack = true;
     }
 
     /// <summary>
@@ -62,20 +60,16 @@ public class MngDisplay : MonoBehaviour{
     /// </summary>
 
     public void exitItemShop(){
-        if (UI_Itemshop == true && Input.GetKeyDown(KeyCode.Escape)){
-            UI_Itemshop.SetActive(false);
-            PlayerMng.Instance.Can_Attack = true;
-        }
+        UI_Itemshop.SetActive(false);
+        PlayerMng.Instance.Can_Attack = true;
     }
 
     /// <summary>
     /// chestBox ¥›±‚
     /// </summary>
     public void exitChestBox(){
-        if (UI_chestBox == true && Input.GetKeyDown(KeyCode.Escape)){
-            UI_chestBox.SetActive(false);
-            PlayerMng.Instance.Can_Attack = true;
-        }
+        UI_chestBox.SetActive(false);
+        PlayerMng.Instance.Can_Attack = true;  
     }
 
     public void openSetting(){
