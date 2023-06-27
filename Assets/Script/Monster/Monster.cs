@@ -29,7 +29,8 @@ public class Monster : MonoBehaviour{
     [SerializeField] private bool attackMode;//몬스터 공격 모드
 
 
-    private void Start(){
+    private void Start()
+    {
         max_Hp = 50;
         cur_Hp = max_Hp;
         dmg_magical = 10.0f;
@@ -39,7 +40,7 @@ public class Monster : MonoBehaviour{
 
         target = PlayerMng.Instance.transform;
         nav = GetComponent<NavMeshAgent>();
-
+       
         List<Material> listMats = new List<Material>();
         Renderer[] rens = GetComponentsInChildren<Renderer>();
         for (int i = 0; i < rens.Length; i++)
@@ -56,36 +57,45 @@ public class Monster : MonoBehaviour{
         hpBarApply();
         MonsterMove();
         if (nav != null)
-        { 
+        {
             string value = (nav.velocity.magnitude).ToString();
             //Debug.Log(value);
         }
     }
 
     //체력바 적용
-    public void hpBarApply(){
+    public void hpBarApply()
+    {
         cur_HpImg.fillAmount = (cur_Hp / max_Hp);
-        if(cur_HpImg.fillAmount < mid_HpImg.fillAmount){
+        if (cur_HpImg.fillAmount < mid_HpImg.fillAmount)
+        {
             mid_HpImg.fillAmount -= Time.deltaTime * (1 / 5.0f);
-            if(mid_HpImg.fillAmount < cur_HpImg.fillAmount){
+            if (mid_HpImg.fillAmount < cur_HpImg.fillAmount)
+            {
                 mid_HpImg.fillAmount = cur_HpImg.fillAmount;
             }
         }
     }
 
-    private void death(){
+    private void death()
+    {
         // 현재이미지.fillAmount = 닳는것 / 최대치 ;
-        if (cur_Hp <= 0){
+        if (cur_Hp <= 0)
+        {
             PlayerMng.Instance.killcount++;
             UserDisplay.Instance.killcount.text = "잡은 몬스터 : " + PlayerMng.Instance.killcount + "/ 5";
             transform.gameObject.SetActive(false);
-            if (PlayerMng.Instance.killcount >= 5) {
-                MngPopup.Instance.ShowMessage(new cPopup("성공","", null));
+            nav.enabled = false;
+            if (PlayerMng.Instance.killcount >= 5)
+            {
+                
+                MngPopup.Instance.ShowMessage(new cPopup("성공", "", null));
             }
         }
     }
 
-    public void changeColor(Color color){
+    public void changeColor(Color color)
+    {
 
         //
         //for (int i = 0; i < render.Length; i++) {
@@ -100,34 +110,38 @@ public class Monster : MonoBehaviour{
         }
     }
 
-    public void LookAtTarget(){      
+    public void LookAtTarget()
+    {
         Vector3 testPos = new Vector3(target.position.x, uiRectHP.position.y, target.position.z);
-        
+
         //testPos.y = 3; //선생님이 생각하셨던 답은 이거같네
         //Debug.Log(uiRectHP.position.y);
         //Debug.Log(testPos);
 
         //2. 룩엣할때 y좌표를 상수로 바꾸기 안됨.
-        
+
         uiRectHP.LookAt(testPos);
 
 
         //uiRectHP.LookAt(target.position);
-        
+
 
         //1. 특정각도로 회전하기 
         //uiRectHP.rotation = Quaternion.Euler(0, 200, 0);
     }
 
-    private void MonsterMove(){
-        if (attackMode && nav != null &&  nav.enabled && nav.enabled == true){
+    private void MonsterMove()
+    {
+        if (attackMode && nav != null && nav.enabled)
+        {
             nav.SetDestination(target.position);
         }
-
-
     }
-    private void OnCollisionEnter(Collision collision){
-        if (collision.transform.tag == "Player"){
+
+    private void OnCollisionEnter(Collision collision)
+    {
+        if (collision.transform.tag == "Player")
+        {
             Debug.Log("플레이어와 충돌함");
             PlayerMng.Instance.TakeDmg(dmg_physical, dmg_physical);
         }
